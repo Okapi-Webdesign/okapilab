@@ -1,0 +1,197 @@
+$breadcrumb-divider: quote("»");
+
+@import "../../bootstrap/scss/bootstrap.scss";
+
+// --- 1. SIDEBAR ---
+body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+}
+
+html {
+    height: -webkit-fill-available;
+}
+
+main {
+    height: 100vh;
+    height: -webkit-fill-available;
+    max-height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    top: 0;
+}
+
+.dropdown-toggle {
+    outline: 0;
+}
+
+.btn-toggle {
+    padding: .25rem .5rem;
+    font-weight: 600;
+    color: var(--bs-emphasis-color);
+    background-color: transparent;
+}
+
+.btn-toggle:hover,
+.btn-toggle:focus {
+    color: rgba(var(--bs-emphasis-color-rgb), .85);
+    background-color: var(--bs-tertiary-bg);
+}
+
+.btn-toggle::before {
+    width: 1.25em;
+    line-height: 0;
+    content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+    transition: transform .35s ease;
+    transform-origin: .5em 50%;
+}
+
+[data-bs-theme="dark"] .btn-toggle::before {
+    content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%28255,255,255,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+}
+
+.btn-toggle[aria-expanded="true"] {
+    color: rgba(var(--bs-emphasis-color-rgb), .85);
+}
+
+.btn-toggle[aria-expanded="true"]::before {
+    transform: rotate(90deg);
+}
+
+.btn-toggle-nav a {
+    padding: .1875rem .5rem;
+    margin-top: .125rem;
+    margin-left: 1.25rem;
+}
+
+.btn-toggle-nav a:hover,
+.btn-toggle-nav a:focus {
+    background-color: var(--bs-tertiary-bg);
+}
+
+.scrollarea {
+    overflow-y: auto;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 280px;
+}
+
+.btn-toggle-nav a {
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-toggle-nav a:hover {
+    background-color: #495057;
+    color: #ffffff;
+}
+
+.nav-item a:hover {
+    background-color: #495057;
+}
+
+.sidebar {
+    transition: transform 0.3s ease;
+}
+
+.sidebar-collapsed {
+    transform: translateX(-100vw);
+}
+
+.main-content {
+    transition: margin-left 0.3s ease;
+}
+
+.main-content-expanded {
+    margin-left: 0;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100vw;
+        transform: translateX(-100vw);
+        position: fixed;
+        z-index: 1030;
+    }
+
+    .sidebar.sidebar-open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+    }
+}
+
+.sidebarToggler {
+    cursor: pointer;
+    margin: 0 10px;
+    padding: 10px;
+    background: #212529;
+    color: #fff;
+    border: none;
+}
+
+.sidebarProfileUsername {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+// --- 2. MAIN CONTENT ---
+
+.main-content {
+    margin-left: 280px;
+    /* Matches the sidebar width */
+    padding: 20px;
+    min-height: 100vh;
+}
+
+// --- 3. TABLES ---
+.table tr,
+.table th,
+.table td {
+    vertical-align: middle;
+}
+
+.action-buttons {
+    display: flex;
+    // végére igazítja a gombokat
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.action-buttons button {
+    white-space: nowrap;
+    /* Megakadályozza a szöveg törését */
+}
+
+// --- 4. FORMS ---
+span.req {
+    color: var(--bs-danger);
+}
+
+// --- 5. CARDS ---
+.card {
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    border: none;
+
+    h5.card-title {
+        margin-bottom: 0;
+    }
+}
+
+// --- RESPONSIVE ---
+@media (max-width: 992px) {
+    .bordercol {
+        border-right: none !important;
+    }
+}

@@ -1,0 +1,11 @@
+RewriteEngine On
+
+# Ha létezik a .php fájl, akkor azt szolgáltasd ki
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)/?$ /$1.php [L]
+
+# Ha nincs .php végződés, átirányítjuk az URL-t index.php-ra GET paraméterrel
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.php?url=$1 [PT,L]
