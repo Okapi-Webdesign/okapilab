@@ -32,7 +32,7 @@ if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE (email = ? or
             setcookie('password', $dbpassword, time() + 60 * 60 * 24 * 30, '/');
             setcookie('platform', 'admin', time() + 60 * 60 * 24 * 30, '/');
 
-            if ($stmt2 = $con->prepare('UPDATE accounts SET lastlogin = ? WHERE id = ?')) {
+            if ($stmt2 = $con->prepare('UPDATE accounts SET lastlogin_date = ? WHERE id = ?')) {
                 $stmt2->bind_param('si', date('Y-m-d H:i:s'), $id);
                 $stmt2->execute();
                 $stmt2->close();

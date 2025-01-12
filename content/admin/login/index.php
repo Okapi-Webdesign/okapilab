@@ -33,12 +33,12 @@ if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
     <main class="form-signin w-100 m-auto">
         <form method="post" action="<?= URL ?>admin/belepes/auth">
             <img class="mb-4" src="../../assets/img/logo.png" alt="" width="72" height="72">
-            <h1 class="h3 mb-0 fw-normal">Jelentkezzen be</h1>
+            <h1 class="h3 mb-0 fw-normal">Jelentkezz be</h1>
             <p>a további információk eléréséhez!</p>
 
             <div class="form-floating">
-                <input name="email" type="text" placeholder=" " class="form-control" id="floatingInput" required>
-                <label for="floatingInput">Felhasználónév</label>
+                <input name="email" type="email" placeholder=" " class="form-control" id="floatingInput" required>
+                <label for="floatingInput">E-mail cím</label>
             </div>
             <div class="form-floating">
                 <input name="password" type="password" placeholder=" " class="form-control" id="floatingPassword" required>

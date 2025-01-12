@@ -4,7 +4,7 @@ class User
     private int $id;
     private string|null $email;
     private int $role;
-    private int $client_id;
+    private Client|null $client_id;
 
     public function __construct($id)
     {
@@ -22,7 +22,8 @@ class User
         $this->id = $id;
         $this->email = $email;
         $this->role = $role;
-        $this->client_id = $link;
+        if ($link != null) $this->client_id = new Client($link);
+        else $this->client_id = null;
         return true;
     }
 
