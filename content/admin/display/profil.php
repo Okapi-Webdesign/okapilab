@@ -2,7 +2,7 @@
 $pageMeta = [
     'title' => 'Profil',
     'role' => 2,
-    'description' => 'Ezen az oldalon szerkesztheti a profiladatait.'
+    'description' => 'Ezen az oldalon szerkesztheted a profiladataidat.'
 ];
 ?>
 
