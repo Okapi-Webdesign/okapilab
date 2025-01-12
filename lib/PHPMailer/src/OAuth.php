@@ -100,6 +100,7 @@ class OAuth
      */
     protected function getGrant()
     {
+        /** @disregard P1009 Undefined type */
         return new RefreshToken();
     }
 
@@ -130,10 +131,10 @@ class OAuth
 
         return base64_encode(
             'user=' .
-            $this->oauthUserEmail .
-            "\001auth=Bearer " .
-            $this->oauthToken .
-            "\001\001"
+                $this->oauthUserEmail .
+                "\001auth=Bearer " .
+                $this->oauthToken .
+                "\001\001"
         );
     }
 }
