@@ -3,7 +3,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === 'client') {
     redirect(URL . 'ugyfel/faliujsag');
     exit;
 }
-if (isset($_COOKIE['username']) && isset($_COOKIE['password']) && $_COOKIE['platform'] === 'client') {
+if (isset($_COOKIE['email']) && isset($_COOKIE['password']) && $_COOKIE['platform'] === 'client') {
     redirect(URL . 'ugyfel/belepes/auth');
 }
 ?>
@@ -40,8 +40,8 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['password']) && $_COOKIE['plat
         </div>
         <form class="needs-validation" novalidate action="<?= URL ?>ugyfel/belepes/auth" method="post">
             <div class="form-group">
-                <label for="username">Felhasználónév</label>
-                <input type="text" class="form-control" id="username" placeholder="Add meg a felhasználóneved" required name="username">
+                <label for="email">Felhasználónév</label>
+                <input type="text" class="form-control" id="email" placeholder="Add meg a felhasználóneved" required name="email">
             </div>
             <div class="form-group">
                 <label for="password">Jelszó</label>

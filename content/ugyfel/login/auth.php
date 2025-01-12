@@ -4,17 +4,17 @@ if (!defined('ABS_PATH')) {
 }
 
 // Cookie lekérdezése
-if (isset($_COOKIE['username']) && isset($_COOKIE['password'])) {
-    $username = $_COOKIE['username'];
+if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
+    $email = $_COOKIE['email'];
     $password = $_COOKIE['password'];
 } else {
-    $username = $_POST['username'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
 }
 
 // Adatok lekérdezése
-if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE (username = ? or email = ?) and role = 1 LIMIT 1')) {
-    $stmt->bind_param('ss', $username, $username);
+if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE (email = ? or email = ?) and role = 1 LIMIT 1')) {
+    $stmt->bind_param('ss', $email, $email);
     $stmt->execute();
     $stmt->store_result();
 
@@ -25,11 +25,11 @@ if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE (username = ?
         if (password_verify($password, $dbpassword) || $password == $dbpassword) {
             session_regenerate_id();
             $_SESSION['loggedin'] = 'client';
-            $_SESSION['name'] = $username;
+            $_SESSION['name'] = $email;
             $_SESSION['id'] = $id;
 
             if (isset($_POST['rememberMe'])) {
-                setcookie('username', $username, time() + 60 * 60 * 24 * 30, '/');
+                setcookie('email', $email, time() + 60 * 60 * 24 * 30, '/');
                 setcookie('password', $password, time() + 60 * 60 * 24 * 30, '/');
                 setcookie('platform', 'client', time() + 60 * 60 * 24 * 30, '/');
             }
@@ -51,7 +51,7 @@ if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE (username = ?
     $stmt->close();
 }
 
-setcookie('username', '', time() - 3600, '/');
+setcookie('email', '', time() - 3600, '/');
 setcookie('password', '', time() - 3600, '/');
 setcookie('platform', '', time() - 3600, '/');
 

@@ -4,13 +4,13 @@ class User
     private int $id;
     private string|null $email;
     private int $role;
-    private int $link;
+    private int $client_id;
 
     public function __construct($id)
     {
         global $con;
         $email = $role = $link = null;
-        if ($stmt = $con->prepare('SELECT `email`, `role`, `link` FROM `accounts` WHERE `id` = ?')) {
+        if ($stmt = $con->prepare('SELECT `email`, `role`, `client_id` FROM `accounts` WHERE `id` = ?')) {
             $stmt->bind_param('i', $id);
             if (!$stmt->execute()) return false;
             $stmt->store_result();
@@ -22,7 +22,7 @@ class User
         $this->id = $id;
         $this->email = $email;
         $this->role = $role;
-        $this->link = $link;
+        $this->client_id = $link;
         return true;
     }
 
@@ -65,23 +65,6 @@ class User
         }
         if ($last_login == null) return 'Soha';
         return $last_login;
-    }
-
-    function getUsername(): string
-    {
-        global $con;
-        $id = $this->id;
-        $username = null;
-        if ($stmt = $con->prepare('SELECT `username` FROM `accounts` WHERE `id` = ?')) {
-            $stmt->bind_param('i', $id);
-            if (!$stmt->execute()) return false;
-            $stmt->store_result();
-            $stmt->bind_result($username);
-            if (!$stmt->fetch()) return false;
-            if ($stmt->num_rows == 0) return false;
-            $stmt->close();
-        }
-        return $username;
     }
 
     function getId(): int

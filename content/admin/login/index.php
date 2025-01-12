@@ -3,7 +3,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === 'admin') {
     redirect(URL . 'admin/iranyitopult');
     exit;
 }
-if (isset($_COOKIE['username']) && isset($_COOKIE['password'])) {
+if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
     redirect(URL . 'admin/belepes/auth');
 }
 ?>
@@ -37,7 +37,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['password'])) {
             <p>a további információk eléréséhez!</p>
 
             <div class="form-floating">
-                <input name="username" type="text" placeholder=" " class="form-control" id="floatingInput" required>
+                <input name="email" type="text" placeholder=" " class="form-control" id="floatingInput" required>
                 <label for="floatingInput">Felhasználónév</label>
             </div>
             <div class="form-floating">
