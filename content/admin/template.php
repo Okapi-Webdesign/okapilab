@@ -69,58 +69,13 @@ if (!isset($pageMeta['packages']) || $pageMeta['packages'] == null || !is_array(
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
             <?php
-            addMenuItem('Irányítópult', 'iranyitopult', 'fa fa-tachometer', 2);
-            ?>
-            <li class="nav-item">
-                <a class="nav-link text-white <?= strpos($_GET['url'], 'bejegyzesek') ? 'active' : '' ?>" data-bs-toggle="collapse" href="#postsMenu" role="button" aria-expanded="false" aria-controls="postsMenu">
-                    <i class="fa fa-fw fa-list me-2"></i>Bejegyzések
-                </a>
-                <div class="collapse <?= strpos($_GET['url'], 'bejegyzesek') ? 'show' : '' ?>" id="postsMenu">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li><a href="<?= URL ?>admin/bejegyzesek/uj" class="nav-link text-light ps-4">Új bejegyzés</a></li>
-                        <li><a href="<?= URL ?>admin/bejegyzesek" class="nav-link text-light ps-4">Összes bejegyzés</a></li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white  <?= strpos($_GET['url'], 'esemenyek') ? 'active' : '' ?>" data-bs-toggle="collapse" href="#eventsMenu" role="button" aria-expanded="false" aria-controls="eventsMenu">
-                    <i class="fa fa-fw fa-calendar me-2"></i>Események
-                </a>
-                <div class="collapse <?= strpos($_GET['url'], 'esemenyek') ? 'show' : '' ?>" id="eventsMenu">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li><a href="<?= URL ?>admin/esemenyek/uj" class="nav-link text-light ps-4">Új esemény</a></li>
-                        <li><a href="<?= URL ?>admin/esemenyek" class="nav-link text-light ps-4">Összes esemény</a></li>
-                        <li><a href="<?= URL ?>admin/esemenyek/jelentkezesilapok " class="nav-link text-light ps-4">Jelentkezési lapok</a></li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white  <?= strpos($_GET['url'], 'fogadoorak') ? 'active' : '' ?>" data-bs-toggle="collapse" href="#ohMenu" role="button" aria-expanded="false" aria-controls="ohMenu">
-                    <i class="fa fa-fw fa-handshake me-2"></i>Fogadóórák
-                </a>
-                <div class="collapse <?= strpos($_GET['url'], 'fogadoorak') ? 'show' : '' ?>" id="ohMenu">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li><a href="<?= URL ?>admin/fogadoorak/jelentkezesek" class="nav-link text-light ps-4">Jelentkezések</a></li>
-                        <li><a href="<?= URL ?>admin/fogadoorak" class="nav-link text-light ps-4">Fogadóórák</a></li>
-                        <li><a href="<?= URL ?>admin/profil/fogadoorak" class="nav-link text-light ps-4">Saját fogadóóráim</a></li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white <?= strpos($_GET['url'], 'diakok') ? 'active' : '' ?>" data-bs-toggle="collapse" href="#studentsMenu" role="button" aria-expanded="false" aria-controls="studentsMenu">
-                    <i class="fa fa-fw fa-user-graduate me-2"></i>Diákok
-                </a>
-                <div class="collapse <?= strpos($_GET['url'], 'diakok') ? 'show' : '' ?>" id="studentsMenu">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li><a href="<?= URL ?>admin/diakok" class="nav-link text-light ps-4">Összes diák</a></li>
-                        <li><a href="<?= URL ?>admin/diakok/csoportok" class="nav-link text-light ps-4">Csoportok</a></li>
-                        <li><a href="<?= URL ?>admin/diakok/osztalyok" class="nav-link text-light ps-4">Osztályok</a></li>
-                    </ul>
-                </div>
-            </li>
-            <?php
-            addMenuItem('Tanárok', 'tanarok', 'fa-solid fa-fw fa-chalkboard-user', 3);
-            addMenuItem('Beállítások', 'beallitasok', 'fa fa-fw fa-cog', 4);
+            addMenuItem('Irányítópult', 'iranyitopult', 'fa fa-tachometer');
+            addMenuItem('Ügyfelek', 'ugyfelek', 'fa fa-users');
+            addMenuItem('Projektek', 'projektek', 'fa fa-project-diagram');
+            addMenuItem('Dokumentumok', 'dokumentumok', 'fa fa-file-alt');
+            addMenuItem('Pénzügyek', 'penzugyek', 'fa fa-money-bill-wave');
+            addMenuItem('Feladatok', 'feladatok', 'fa fa-tasks');
+            addMenuItem('Beállítások', 'beallitasok', 'fa fa-cogs');
             ?>
         </ul>
         <hr>
@@ -130,8 +85,6 @@ if (!isset($pageMeta['packages']) || $pageMeta['packages'] == null || !is_array(
                 <strong class="sidebarProfileUsername"><?= $user->getFullname() ?></strong>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                <li><a class="dropdown-item" href="<?= URL ?>admin/profil/fogadoorak">Fogadóórák</a></li>
-                <li><a class="dropdown-item" href="<?= URL ?>admin/profil/sajat">Saját tartalmak</a></li>
                 <li><a class="dropdown-item" href="<?= URL ?>admin/profil">Profil</a></li>
                 <li>
                     <hr class="dropdown-divider">

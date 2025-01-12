@@ -271,10 +271,9 @@ function alert_redirect($type, $target, $message = null, $title = null, $popup =
 // --- 5. MENÜK --- //
 
 // 5.1. Menü elem hozzáadása
-function addMenuItem($name, $url, $icon, $role)
+function addMenuItem($name, $url, $icon)
 {
     global $user;
-    if (!$user->role($role)) return;
     if (isset($_GET['url'])) $active = strpos($_GET['url'], $url) !== false;
     else $active = false;
     if ($url == 'iranyitopult' && !isset($_GET['url'])) $active = true;

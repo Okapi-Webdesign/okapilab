@@ -27,23 +27,52 @@ class User
         return true;
     }
 
+    function getFullname(): string
+    {
+        global $con;
+        $lastname = $firstname = null;
+        if ($stmt = $con->prepare('SELECT `lastname`, `firstname` FROM `accounts` WHERE `id` = ?')) {
+            $stmt->bind_param('i', $this->id);
+            if (!$stmt->execute()) return false;
+            $stmt->store_result();
+            $stmt->bind_result($lastname, $firstname);
+            if (!$stmt->fetch()) return false;
+            if ($stmt->num_rows == 0) return false;
+            $stmt->close();
+        }
+        return $lastname . ' ' . $firstname;
+    }
+
     function role(int $role = 0): bool|int
     {
         if ($role == 0) return $this->role;
         return $this->role >= $role;
     }
 
-    function getProfilePicture(): string
+    function getProfilePicture(int $size = 150): string
     {
-        // Ha létezik $this-id nevű jpg, png vagy jpeg kiterjesztésű fájl az assets/img/profile mappában, adja vissza
-        $extensions = ['jpg', 'png', 'jpeg'];
-        foreach ($extensions as $ext) {
-            $path = ABS_PATH . 'assets/img/profile/' . $this->id . '.' . $ext;
-            if (file_exists($path)) return URL . 'assets/img/profile/' . $this->id . '.' . $ext;
+        $def = URL . 'assets/img/profile/default.png';
+
+        // Check if the user has a profile picture
+        $url = ABS_PATH . 'assets/img/profile/' . $this->id . '.png';
+        if (file_exists($url)) {
+            $url = URL . 'assets/img/profile/' . $this->id . '.png';
+            return $url;
         }
 
-        // Ha nem létezik, adja vissza az assets/img/profile/default.jpg fájlt
-        return URL . 'assets/img/profile/default.jpg';
+        $url = ABS_PATH . 'assets/img/profile/' . $this->id . '.jpg';
+        if (file_exists($url)) {
+            $url = URL . 'assets/img/profile/' . $this->id . '.jpg';
+            return $url;
+        }
+
+        $url = ABS_PATH . 'assets/img/profile/' . $this->id . '.jpeg';
+        if (file_exists($url)) {
+            $url = URL . 'assets/img/profile/' . $this->id . '.jpeg';
+            return $url;
+        }
+
+        return $def;
     }
 
     function getEmail(): string|null
