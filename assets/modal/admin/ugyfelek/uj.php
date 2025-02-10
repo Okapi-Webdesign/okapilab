@@ -13,13 +13,6 @@ require_once '../../../../inc/import.php';
 <form action="<?= URL ?>admin/process/clients/add" method="post" class="needs-validation" novalidate>
     <div class="modal-body">
         <div class="row">
-            <div class="col-12 col-md-8 mb-3">
-                <label for="lastname" class="form-label">Teljes név</label>
-                <div class="input-group">
-                    <input type="text" id="lastname" name="lastname" class="form-control" placeholder="Vezetéknév" required>
-                    <input type="text" id="firstname" name="firstname" class="form-control" placeholder="Keresztnév" required>
-                </div>
-            </div>
             <div class="col-12 col-md-4 mb-3">
                 <label for="type" class="form-label">Típus</label>
                 <select id="type" name="type" class="form-select" required>
@@ -27,6 +20,16 @@ require_once '../../../../inc/import.php';
                     <option value="1">Természetes személy</option>
                     <option value="2">Jogi személy</option>
                 </select>
+            </div>
+            <div class="col-12 col-md-8 mb-3 secondary-data">
+                <label for="lastname" class="form-label">Név</label>
+                <div class="input-group" id="name_1">
+                    <input type="text" id="lastname" name="lastname" class="form-control" placeholder="Vezetéknév" required>
+                    <input type="text" id="firstname" name="firstname" class="form-control" placeholder="Keresztnév" required>
+                </div>
+                <div id="name_2">
+                    <input type="text" id="name" name="name" class="form-control" required>
+                </div>
             </div>
 
             <div class="col-12 col-md-4 mb-3 secondary-data">
@@ -55,11 +58,14 @@ require_once '../../../../inc/import.php';
             </div>
             <div class="col-12 col-md-6 mb-3 secondary-data" id="company_form_col">
                 <label for="company_form" class="form-label">Cégforma</label>
-                <input type="text" id="company_form" name="company_form" class="form-control">
+                <input type="text" id="company_form" name="company_form" class="form-control text-uppercase">
             </div>
             <div class="col-12 mb-3 secondary-data" id="contact_name_col">
                 <label for="contact_name" class="form-label">Kapcsolattartó neve</label>
-                <input type="text" id="contact_name" name="contact_name" class="form-control">
+                <div class="input-group">
+                    <input type="text" id="contact_lastname" name="contact_lastname" class="form-control" placeholder="Vezetéknév">
+                    <input type="text" id="contact_firstname" name="contact_firstname" class="form-control" placeholder="Keresztnév">
+                </div>
             </div>
             <div class="col-12 col-md-6 mb-3 secondary-data">
                 <label for="email" class="form-label">E-mail cím</label>
@@ -104,19 +110,20 @@ require_once '../../../../inc/import.php';
                 $('#tax_number_col').hide();
                 $('#company_form_col').hide();
                 $('#contact_name_col').hide();
+                $('#name_1').show();
+                $('#name_2').hide();
+                $('#name_1 input').prop('required', true);
+                $('#name_2 input').prop('required', false);
             } else if ($(this).val() == 2) {
                 $('#registration_number_col .form-label').text('Cégjegyzékszám');
                 $('#tax_number_col').show();
                 $('#company_form_col').show();
                 $('#contact_name_col').show();
+                $('#name_1').hide();
+                $('#name_2').show();
+                $('#name_2 input').prop('required', true);
+                $('#name_1 input').prop('required', false);
             }
-        });
-
-        $('#lastname, #firstname').keyup(function() {
-            var lastname = $('#lastname').val();
-            var firstname = $('#firstname').val();
-            var fullname = lastname + ' ' + firstname;
-            $('#contact_name').val(fullname);
         });
 
         $('.secondary-data').hide();
