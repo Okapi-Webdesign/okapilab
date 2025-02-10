@@ -40,7 +40,7 @@ if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE (email = ? or
                 $stmt2->close();
             }
 
-            redirect(URL . 'ugyfel/faliujsag');
+            redirect(URL . 'ugyfelfaliujsag');
         } else {
             $error = 'Hibás felhasználónév vagy jelszó! (2)';
         }
@@ -55,4 +55,4 @@ setcookie('email', '', time() - 3600, '/');
 setcookie('password', '', time() - 3600, '/');
 setcookie('platform', '', time() - 3600, '/');
 
-redirect(URL . 'ugyfel/belepes');
+redirect(URL . 'ugyfelbelepes');

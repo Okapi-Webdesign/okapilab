@@ -16,11 +16,11 @@ $data = !empty($datastring) ? explode("/", $datastring) : [];
 if (strpos($url, "admin/") !== false || $url == 'admin') {
     require_once 'content/admin/handler.php';
     exit;
-} elseif (strpos($url, "ugyfel/") !== false || $url == 'ugyfel') {
-    require_once 'content/ugyfel/handler.php';
+} elseif (strpos($url, "ugyfel") !== false || $url == 'ugyfel') {
+    require_once 'content/ugyfelhandler.php';
     exit;
-} elseif (strpos($url, "assets") === false) {
-    redirect(URL . 'ugyfel/' . $url);
+} elseif (strpos($url, "assets") === false && strpos($url, 'favicon.ico') === false) {
+    redirect(URL . 'ugyfel' . $url);
 }
 
 if (!file_exists("content/" . $url . '.php') && $url != '404' && $url != $default_url) {

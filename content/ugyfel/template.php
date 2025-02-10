@@ -1,5 +1,5 @@
 <?php
-$pageMeta = extractPageMeta(ABS_PATH . 'content/ugyfel/display/' . $url . '.php');
+$pageMeta = extractPageMeta(ABS_PATH . 'content/ugyfeldisplay/' . $url . '.php');
 $title = $pageMeta['title'] ?? APP_NAME;
 
 if (!isset($pageMeta['packages']) || $pageMeta['packages'] == null || !is_array($pageMeta['packages'])) {

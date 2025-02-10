@@ -13,4 +13,4 @@ if (isset($_SESSION['loggedin'])) {
     setcookie('platform', '', time() - 3600, '/');
 }
 
-redirect(URL . 'ugyfel/belepes');
+redirect(URL . 'ugyfelbelepes');

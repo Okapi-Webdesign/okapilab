@@ -1,10 +1,9 @@
 <?php
 $url = str_replace('admin', '', $url);
 $url = ltrim($url, '/');
-
 if ((!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != 'admin') && strpos($url, 'belepes') === false) {
     session_regenerate_id();
-    $_SESSION['loggedin'] = '';
+    $_SESSION['loggedin'] = 'admin';
     redirect(URL . 'admin/belepes');
 }
 
