@@ -12,6 +12,11 @@ if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
     $password = $_POST['password'];
 }
 
+// Email cím?
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $email .= '@okapiweb.hu';
+}
+
 // Adatok lekérdezése
 if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE (email = ? or email = ?) and role >= 2 LIMIT 1')) {
     $stmt->bind_param('ss', $email, $email);

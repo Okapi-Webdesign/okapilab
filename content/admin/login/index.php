@@ -37,7 +37,7 @@ if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
             <p>a további információk eléréséhez!</p>
 
             <div class="form-floating">
-                <input name="email" type="email" placeholder=" " class="form-control" id="floatingInput" required>
+                <input name="email" type="text" placeholder=" " class="form-control" id="floatingInput" required>
                 <label for="floatingInput">E-mail cím</label>
             </div>
             <div class="form-floating">
