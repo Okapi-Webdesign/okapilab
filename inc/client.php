@@ -145,6 +145,23 @@ class Client
         return $this->contact_lastname . ' ' . $this->contact_firstname;
     }
 
+    public function getAccountId(): int
+    {
+        global $con;
+        $id = 0;
+        if ($stmt = $con->prepare('SELECT `id` FROM `accounts` WHERE `client_id` = ?')) {
+            $stmt->bind_param('i', $this->id);
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id);
+            if (!$stmt->fetch()) {
+                throw new Exception('Az ügyfélhez nem tartozik felhasználó!');
+            }
+            $stmt->close();
+        }
+        return $id;
+    }
+
     public function getAllProjects(): array
     {
         global $con;
