@@ -1,13 +1,13 @@
 <?php
 $url = str_replace('admin', '', $url);
 $url = ltrim($url, '/');
-if ((!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != 'admin') && strpos($url, 'belepes') === false) {
+if ((!isset($_SESSION['id']) || $_SESSION['loggedin'] !== 'admin') && strpos($url, 'belepes') === false) {
     session_regenerate_id();
-    $_SESSION['loggedin'] = 'admin';
+    $_SESSION['loggedin'] = '';
     redirect(URL . 'admin/belepes');
 }
 
-if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === 'admin') {
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === 'admin' && isset($_SESSION['id'])) {
     $user = new User($_SESSION['id']);
 }
 
