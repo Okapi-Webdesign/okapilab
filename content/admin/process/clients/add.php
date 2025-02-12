@@ -30,6 +30,15 @@ if ($_POST['type'] == 1) {
     $phone = $_POST['phone'];
 }
 
+$fulladdress = [
+    'zip' => $zip,
+    'city' => $city,
+    'address' => $address,
+    'address2' => $address2
+];
+
+$fulladdress = json_encode($fulladdress);
+
 // Ellenőrizzük az e-mail cím meglétét az adatbázisban
 if ($stmt = $con->prepare('SELECT id FROM accounts WHERE email = ?')) {
     $stmt->bind_param('s', $email);
@@ -44,7 +53,7 @@ if ($stmt = $con->prepare('SELECT id FROM accounts WHERE email = ?')) {
 
 // Regisztráljuk az ügyfelet
 if ($stmt = $con->prepare('INSERT INTO `clients`(`id`, `type`, `name`, `address`, `tax_number`, `registration_number`, `company_form`, `contact_lastname`, `contact_firstname`, `contact_email`, `contact_phone`, `create_date`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())')) {
-    $stmt->bind_param('isssssssss', $type, $name, $address, $tax_number, $registration_number, $company_form, $contact_lastname, $contact_firstname, $email, $phone);
+    $stmt->bind_param('isssssssss', $type, $name, $fulladdress, $tax_number, $registration_number, $company_form, $contact_lastname, $contact_firstname, $email, $phone);
     if (!$stmt->execute()) {
         alert_redirect('error', URL . 'admin/ugyfelek');
     }

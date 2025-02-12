@@ -14,13 +14,13 @@ define("DB_PASS", "viewonly1!");
 // Az adatbázis neve
 define("DB_NAME", "okapilab");
 
-// Az SMTP szerver címe
-define("SMTP_HOST", "smtp.example.com");
-// Az SMTP szerver portja
-define("SMTP_PORT", 587);
-// Az SMTP szerver felhasználóneve
+// Az e-mail szerver elérési útvonala
+define("SMTP_HOST", "");
+// Az e-mail szerver portja
+define("SMTP_PORT", 465);
+// Az e-mail szerver felhasználóneve
 define("SMTP_USER", "");
-// Az SMTP szerver jelszava
+// Az e-mail szerver jelszava
 define("SMTP_PASS", "");
 
 // A webapp elérési útvonala
