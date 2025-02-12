@@ -94,7 +94,6 @@ require_once '../../../../inc/import.php';
                     url: 'https://hur.webmania.cc/zips/' + $(this).val() + '.json',
                     type: 'GET',
                     success: function(data) {
-                        console.log(data);
                         $('#city').val(data.zips[0].name);
                     }
                 });

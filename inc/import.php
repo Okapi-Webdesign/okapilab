@@ -30,3 +30,4 @@ require_once ABS_PATH . 'inc/db.php';
 // Felhasználó betöltése
 require_once ABS_PATH . 'inc/user.php';
 require_once ABS_PATH . 'inc/client.php';
+require_once ABS_PATH . 'inc/project.php';

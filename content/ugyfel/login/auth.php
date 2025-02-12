@@ -55,4 +55,4 @@ setcookie('email', '', time() - 3600, '/');
 setcookie('password', '', time() - 3600, '/');
 setcookie('platform', '', time() - 3600, '/');
 
-redirect(URL . 'ugyfelbelepes');
+redirect(URL . 'ugyfel/belepes');

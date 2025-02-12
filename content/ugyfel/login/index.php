@@ -4,7 +4,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === 'client') {
     exit;
 }
 if (isset($_COOKIE['email']) && isset($_COOKIE['password']) && $_COOKIE['platform'] === 'client') {
-    redirect(URL . 'ugyfelbelepes/auth');
+    redirect(URL . 'ugyfel/belepes/auth');
 }
 ?>
 
@@ -38,7 +38,7 @@ if (isset($_COOKIE['email']) && isset($_COOKIE['password']) && $_COOKIE['platfor
             <h1 class="h4 mb-0">Jelentkezz be</h1>
             <p class="text-muted">a további információk eléréséhez!</p>
         </div>
-        <form class="needs-validation" novalidate action="<?= URL ?>ugyfelbelepes/auth" method="post">
+        <form class="needs-validation" novalidate action="<?= URL ?>ugyfel/belepes/auth" method="post">
             <div class="form-group">
                 <label for="email">Felhasználónév</label>
                 <input type="text" class="form-control" id="email" placeholder="Add meg a felhasználóneved" required name="email">
@@ -52,7 +52,7 @@ if (isset($_COOKIE['email']) && isset($_COOKIE['password']) && $_COOKIE['platfor
                     <input type="checkbox" class="form-check-input" id="rememberMe">
                     <label class="form-check-label" for="rememberMe">Emlékezz rám</label>
                 </div>
-                <a href="<?= URL ?>ugyfelbelepes/forgot-password" class="btn btn-link">Elfelejtett jelszó?</a>
+                <a href="<?= URL ?>ugyfel/belepes/forgot-password" class="btn btn-link">Elfelejtett jelszó?</a>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Bejelentkezés</button>
         </form>

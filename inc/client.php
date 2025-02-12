@@ -19,7 +19,8 @@ class Client
     {
         global $con;
         $this->id = $id;
-        $type = $name = $tax_number = $registration_number = $company_form = $contact_lastname = $contact_firstname = $email = $phone = $create_date = '';
+        $type = $name = $address = $tax_number = $registration_number = $company_form = $contact_lastname = $contact_firstname = $email = $phone = $create_date = '';
+        $active = false;
         if ($stmt = $con->prepare('SELECT `id`, `type`, `name`, `address`, `tax_number`, `registration_number`, `company_form`, `contact_lastname`, `contact_firstname`, `contact_email`, `contact_phone`, `active`, `create_date` FROM `clients` WHERE `id` = ?')) {
             $stmt->bind_param('i', $id);
             $stmt->execute();
@@ -56,6 +57,7 @@ class Client
     public static function getAll(bool $activeonly = true): array
     {
         global $con;
+        $id = 0;
         if ($activeonly) $sql = 'SELECT `id` FROM `clients` WHERE `active` = 1 ORDER BY `name`';
         else $sql = 'SELECT `id` FROM `clients` ORDER BY `name`';
         $clients = [];
@@ -104,5 +106,60 @@ class Client
         } else {
             return $this->phone;
         }
+    }
+
+    public function getTaxNumber(): string|null
+    {
+        return $this->tax_number;
+    }
+
+    public function getAddress(string $key = ''): string
+    {
+        if (empty($key)) {
+            return $this->address['zip'] . ' ' . $this->address['city'] . ', ' . $this->address['address'] . ' ' . $this->address['address2'];
+        } else {
+            return $this->address[$key];
+        }
+    }
+
+    public function getCompanyType(): string|null
+    {
+        return $this->company_form;
+    }
+
+    public function getCreateDate(bool $formatted = true): string
+    {
+        if ($formatted) {
+            return date('Y. m. d.', strtotime($this->create_date));
+        }
+        return $this->create_date;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function getContactName(): string
+    {
+        return $this->contact_lastname . ' ' . $this->contact_firstname;
+    }
+
+    public function getAllProjects(): array
+    {
+        global $con;
+        $id = 0;
+        $projects = [];
+        if ($stmt = $con->prepare('SELECT `id` FROM `projects` WHERE `client_id` = ?')) {
+            $stmt->bind_param('i', $this->id);
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id);
+            while ($stmt->fetch()) {
+                $projects[] = new Project($id);
+            }
+            $stmt->close();
+        }
+        return $projects;
     }
 }

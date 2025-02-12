@@ -30,12 +30,12 @@ $pageMeta = [
                         echo '<tr>';
                         echo '<td>' . $client->getId() . '</td>';
                         if ($client->getType() == 1) echo '<td><span title="Magánszemély" data-bs-toggle="tooltip" class="text-primary fw-bold">M</span></td>';
-                        else echo '<td><span title="Cég" data-bs-toggle="tooltip" class="text-primary fw-bold">C</span></td>';
+                        else echo '<td><span title="Jogi személy" data-bs-toggle="tooltip" class="text-primary fw-bold">C</span></td>';
                         echo '<td>' . $client->getName() . '</td>';
                         echo '<td>' . $client->getRegistrationNumber() . '</td>';
                         echo '<td><a href="mailto:' . $client->getEmail() . '">' . $client->getEmail() . '</a></td>';
                         echo '<td><a href="tel:' . $client->getPhone() . '">' . $client->getPhone(true) . '</a></td>';
-                        echo '<td><button class="btn btn-sm btn-primary" onclick="modal_open(\'ugyfelek/reszletek\', {id: ' . $client->getId() . '})"><i class="fa fa-eye"></i></button></td>';
+                        echo '<td><a href="' . URL . 'admin/ugyfelek/adatlap/d/' . $client->getId() . '" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a></td>';
                     }
                     ?>
                 </tbody>
@@ -67,6 +67,14 @@ $pageMeta = [
                 {
                     width: '200px',
                     targets: [3]
+                },
+                {
+                    className: 'text-center',
+                    targets: [1]
+                },
+                {
+                    className: 'text-end',
+                    targets: [6]
                 }
             ],
             order: [2, 'asc'],
