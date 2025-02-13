@@ -62,4 +62,10 @@ if ($stmt = $con->prepare('UPDATE `clients` SET `name` = ?, `address` = ?, `tax_
     $stmt->close();
 }
 
+if ($stmt = $con->prepare('UPDATE `accounts` SET `email` = ? WHERE `client_id` = ?')) {
+    $stmt->bind_param('si', $email, $cid);
+    $stmt->execute();
+    $stmt->close();
+}
+
 alert_redirect('success', URL . 'admin/ugyfelek/adatlap/d/' . $cid);

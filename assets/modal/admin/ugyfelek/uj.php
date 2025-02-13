@@ -73,7 +73,7 @@ require_once '../../../../inc/import.php';
             </div>
             <div class="col-12 col-md-6 mb-3 secondary-data">
                 <label for="phone" class="form-label">Telefonszám</label>
-                <input type="tel" id="phone" name="phone" class="form-control" required>
+                <input type="tel" id="phone" name="phone" class="form-control" required value="+36">
             </div>
         </div>
     </div>
