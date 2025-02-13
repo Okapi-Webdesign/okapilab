@@ -140,9 +140,11 @@ class Client
         return $this->active;
     }
 
-    public function getContactName(): string
+    public function getContactName(string $format = ''): string
     {
-        return $this->contact_lastname . ' ' . $this->contact_firstname;
+        if ($format == '') return $this->contact_lastname . ' ' . $this->contact_firstname;
+        if ($format == 'l') return $this->contact_lastname;
+        if ($format == 'f') return $this->contact_firstname;
     }
 
     public function getAccountId(): int

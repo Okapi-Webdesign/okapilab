@@ -29,13 +29,15 @@ $pageMeta = [
                     foreach ($clients as $client) {
                         echo '<tr>';
                         echo '<td>' . $client->getId() . '</td>';
-                        if ($client->getType() == 1) echo '<td><span title="Magánszemély" data-bs-toggle="tooltip" class="text-primary fw-bold">M</span></td>';
-                        else echo '<td><span title="Jogi személy" data-bs-toggle="tooltip" class="text-primary fw-bold">C</span></td>';
+                        $class = $client->isActive() ? 'text-primary' : 'text-secondary';
+                        if ($client->getType() == 1) echo '<td><span title="Magánszemély" data-bs-toggle="tooltip" class="' . $class . ' fw-bold">M</span></td>';
+                        else echo '<td><span title="Jogi személy" data-bs-toggle="tooltip" class="' . $class . ' fw-bold">C</span></td>';
                         echo '<td>' . $client->getName() . '</td>';
                         echo '<td>' . $client->getRegistrationNumber() . '</td>';
                         echo '<td><a href="mailto:' . $client->getEmail() . '">' . $client->getEmail() . '</a></td>';
                         echo '<td><a href="tel:' . $client->getPhone() . '">' . $client->getPhone(true) . '</a></td>';
                         echo '<td><a href="' . URL . 'admin/ugyfelek/adatlap/d/' . $client->getId() . '" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a></td>';
+                        echo '</tr>';
                     }
                     ?>
                 </tbody>

@@ -41,7 +41,7 @@ $client = new Client($data[0]);
                         <b>Ügyféltípus</b> <br>
                         <span class="text-primary text-uppercase">
                             <?= $client->getType() == 1 ? 'Magánszemély' : 'Jogi személy' ?>
-                        </span>
+                        </span> <?= empty($client->getCompanyType()) ? '' : '(' . $client->getCompanyType() . ')' ?>
                     </div>
                     <div class="col">
                         <b><?= $client->getType() == 1 ? 'Személyiigazolvány-szám' : 'Cégjegyzékszám' ?></b> <br>
@@ -55,10 +55,6 @@ $client = new Client($data[0]);
                         <b>Számlázási cím</b> <br>
                         <?= $client->getAddress('zip') ?> <?= $client->getAddress('city') ?> <br>
                         <?= $client->getAddress('address') ?> <br> <?= $client->getAddress('address2') ?>
-                    </div>
-                    <div class="col">
-                        <b>Cégforma</b> <br>
-                        <?= empty($client->getCompanyType()) ? '<span class="text-muted">Nincs megadva</span>' : $client->getCompanyType() ?>
                     </div>
                     <div class="col">
                         <b>Státusz</b> <br>

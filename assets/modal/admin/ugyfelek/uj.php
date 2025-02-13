@@ -17,7 +17,7 @@ require_once '../../../../inc/import.php';
                 <label for="type" class="form-label">Típus</label>
                 <select id="type" name="type" class="form-select" required>
                     <option value="" selected disabled>Válasszon...</option>
-                    <option value="1">Természetes személy</option>
+                    <option value="1">Magánszemély</option>
                     <option value="2">Jogi személy</option>
                 </select>
             </div>
