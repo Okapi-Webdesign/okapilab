@@ -10,6 +10,7 @@ class Project
     private array|null $services;
     private User|null $manager;
     private string|null $comment;
+    private string|null $deadline;
     private string|null $warranty;
     private bool $is_wordpress;
     private bool $is_active;
@@ -20,13 +21,13 @@ class Project
     {
         global $con;
         $this->id = $id;
-        $name = $url = $comment = $warranty = $image_uri = $create_date = $client_id = $status = $tags = $services = $manager_id = $is_wordpress = $is_active = null;
+        $name = $url = $comment = $warranty = $image_uri = $create_date = $client_id = $status = $tags = $services = $manager_id = $is_wordpress = $is_active = $deadline = null;
 
-        if ($stmt = $con->prepare('SELECT `id`, `client_id`, `name`, `url`, `status`, `tags`, `services`, `manager_id`, `comment`, `warranty`, `is_wordpress`, `active`, `image_uri`, `create_date` FROM `projects` WHERE `id` = ?')) {
+        if ($stmt = $con->prepare('SELECT `id`, `client_id`, `name`, `url`, `status`, `tags`, `deadline`, `services`, `manager_id`, `comment`, `warranty`, `is_wordpress`, `active`, `image_uri`, `create_date` FROM `projects` WHERE `id` = ?')) {
             $stmt->bind_param('i', $id);
             $stmt->execute();
             $stmt->store_result();
-            $stmt->bind_result($id, $client_id, $name, $url, $status, $tags, $services, $manager_id, $comment, $warranty, $is_wordpress, $is_active, $image_uri, $create_date);
+            $stmt->bind_result($id, $client_id, $name, $url, $status, $tags, $deadline, $services, $manager_id, $comment, $warranty, $is_wordpress, $is_active, $image_uri, $create_date);
             if (!$stmt->fetch() || $stmt->num_rows === 0) {
                 throw new Exception('A projekt nem található!');
             }
@@ -36,6 +37,7 @@ class Project
         $this->name = $name;
         $this->url = $url;
         $this->comment = $comment;
+        $this->deadline = $deadline;
         $this->warranty = $warranty;
         $this->is_wordpress = $is_wordpress;
         $this->is_active = $is_active;
@@ -211,5 +213,13 @@ class Project
     public function getComment(): string|null
     {
         return $this->comment;
+    }
+
+    public function getDeadline(): string|null
+    {
+        if ($this->deadline == NULL) {
+            return null;
+        }
+        return date('Y. m. d.', strtotime($this->deadline));
     }
 }

@@ -32,10 +32,10 @@ $client = $project->getClient();
                                                         }
                                                         echo '<a href="' . $displayUrl . '" target="_blank" class="text-decoration-none">' . $displayUrl . '</a>';
                                                     } else {
-                                                        echo '-';
+                                                        echo 'Nincs megadva.';
                                                     }
                                                     ?></span>
-                <span><b>Státusz:</b> <span id="statusLabel"><?= $project->getStatus()->getName() ?></span></span>
+                <span class="me-3"><b>Határidő:</b> <?= $project->getDeadline() == NULL ? 'Nincs megadva.' : $project->getDeadline() ?></span>
             </span>
             <div>
                 <button class="btn btn-sm btn-warning" onclick="modal_open('projektek/szerkeszt', {id: <?= $project->getId() ?>})"><i class="fa fa-pencil"></i></button>
@@ -47,7 +47,7 @@ $client = $project->getClient();
             <div class="col-4 d-none d-xl-block">
                 <img src="<?php
                             if ($project->getImageUri() === NULL) {
-                                echo 'https://placehold.co/300x200?text=' . str_replace(' ', '+', $project->getName());
+                                echo 'https://placehold.co/300x200/FF9E00/FEFEFE?font=raleway&text=' . str_replace(' ', '+', $project->getName());
                             } else {
                                 echo $project->getImageUri();
                             }
@@ -195,8 +195,6 @@ $client = $project->getClient();
                             icon: 'success',
                             title: 'Sikeres művelet!'
                         });
-
-                        $('#statusLabel').text($('#statusSelect option:selected').text());
                     } else {
                         Toast.fire({
                             icon: 'error',
