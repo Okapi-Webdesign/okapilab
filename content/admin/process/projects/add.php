@@ -18,7 +18,7 @@ if ($stmt = $con->prepare('SELECT `id` FROM `projects` WHERE `name` = ?')) {
 }
 
 // Új projekt hozzáadása az adatbázishoz
-if ($stmt = $con->prepare('INSERT INTO `projects`(`id`, `client_id`, `name`, `url`, `status`, `labels`, `services`, `manager_id`, `comment`, `warranty`, `is_wordpress`, `active`, `image_uri`) VALUES (NULL, ?, ?, ?, ?, NULL, NULL, ?, NULL, NULL, 0, 1, NULL)')) {
+if ($stmt = $con->prepare('INSERT INTO `projects`(`id`, `client_id`, `name`, `url`, `status`, `tags`, `services`, `manager_id`, `comment`, `warranty`, `is_wordpress`, `active`, `image_uri`) VALUES (NULL, ?, ?, ?, ?, NULL, NULL, ?, NULL, NULL, 0, 1, NULL)')) {
     $stmt->bind_param('issii', $client, $name, $url, $status, $manager);
     if (!$stmt->execute()) {
         alert_redirect('error', URL . 'admin/projektek', 'Hiba történt a projekt hozzáadása közben!');

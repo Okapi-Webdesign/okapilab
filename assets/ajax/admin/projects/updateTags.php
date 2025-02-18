@@ -6,6 +6,10 @@ $project = new Project($_POST['project']);
 $tags = $_POST['tags'];
 $new_tags = [];
 
+if ($tags == null) {
+    $tags = [];
+}
+
 foreach ($tags as $key => $tag) {
     if ($stmt = $con->prepare('SELECT `name` FROM `projects_tags` WHERE `id` = ?')) {
         $stmt->bind_param('i', $tag);

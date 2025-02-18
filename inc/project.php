@@ -119,7 +119,7 @@ class Project
         return false;
     }
 
-    public function getTags(): array
+    public function getTags(): array|null
     {
         return $this->tags;
     }
@@ -175,6 +175,9 @@ class Project
 
     public function getImageUri(): string|null
     {
+        if ($this->image_uri == NULL) {
+            return null;
+        }
         return URL . $this->image_uri;
     }
 

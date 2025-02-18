@@ -1,12 +1,9 @@
 <?php
-define('FILE_IMPORT', true);
-require_once '../../../../inc/import.php';
-
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== 'admin') {
     exit('Hozzáférés megtagadva!');
 }
 
-$project = new Project($_POST['project']);
+$project = new Project($data[0]);
 
 $dir = ABS_PATH . 'storage/' . $project->getId() . '/';
 $filename = $dir . 'screenshot.jpeg';
@@ -23,9 +20,9 @@ if (!file_exists($dir)) {
 }
 
 if (!file_put_contents($filename, $image_data)) {
-    echo 'error';
+    alert_redirect('error', URL . 'admin/projektek/adatlap/d/' . $project->getId());
 }
 
 $project->updateImageUrl('storage/' . $project->getId() . '/screenshot.jpeg');
 
-echo URL . 'storage/' . $project->getId() . '/screenshot.jpeg';
+alert_redirect('success', URL . 'admin/projektek/adatlap/d/' . $project->getId());

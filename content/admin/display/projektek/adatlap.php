@@ -39,8 +39,14 @@ $client = $project->getClient();
         <hr>
 
         <div class="row">
-            <div class="col-4 d-none d-lg-block">
-                <img class="w-100 d-none rounded shadow-sm" id="websiteScreenshot">
+            <div class="col-4 d-none d-xl-block">
+                <img src="<?php
+                            if ($project->getImageUri() === NULL) {
+                                echo 'https://placehold.co/300x200?text=' . str_replace(' ', '+', $project->getName());
+                            } else {
+                                echo $project->getImageUri();
+                            }
+                            ?>" class="w-100 rounded shadow-sm <?= $project->getUrl() == NULL ? '' : 'webOpener" style="cursor:pointer;' ?>" id="websiteScreenshot">
                 <?php
                 // access key
                 $access_key = '82a2812f2d0143f7b0b6d8298a25f965';
@@ -52,14 +58,14 @@ $client = $project->getClient();
                 ?>
                     <p class="text-center mt-2 mb-0">
                         <small>
-                            <a href="#" title="<?= $json['remaining'] ?> lehetőség maradt a hónapban." data-bs-toggle="tooltip" class="text-decoration-none text-small" id="websiteScreenshotRegenerate"><i class="fa fa-rotate me-1"></i> Kép újragenerálása</a>
+                            <a href="<?= URL ?>admin/process/projects/regenerateScreenshot/d/<?= $project->getId() ?>" title="<?= $json['remaining'] ?> lehetőség maradt a hónapban." data-bs-toggle="tooltip" class="text-decoration-none text-small" id="websiteScreenshotRegenerate"><i class="fa fa-rotate me-1"></i> Kép újragenerálása</a>
                         </small>
                     </p>
                 <?php
                 }
                 ?>
             </div>
-            <div class="col-12 col-lg-8">
+            <div class="col-12 col-xl-8">
                 <h3 class="h6">Adatok</h3>
                 <div class="row mb-3 g-3">
                     <div class="col-12 col-md-6 col-lg-4">
@@ -100,8 +106,12 @@ $client = $project->getClient();
                                 $stmt->execute();
                                 $stmt->store_result();
                                 $stmt->bind_result($id, $name);
+                                $current_tags = $project->getTags();
+                                if ($current_tags == NULL) {
+                                    $current_tags = [];
+                                }
                                 while ($stmt->fetch()) {
-                                    echo '<option value="' . $id . '" ' . (in_array($id, $project->getTags()) ? 'selected' : '') . '>' . $name . '</option>';
+                                    echo '<option value="' . $id . '" ' . (in_array($id, $current_tags) ? 'selected' : '') . '>' . $name . '</option>';
                                 }
                                 $stmt->close();
                             }
@@ -147,36 +157,8 @@ $client = $project->getClient();
 
 <script>
     $('document').ready(function() {
-        $.ajax({
-            url: '<?= URL ?>assets/ajax/admin/projects/getScreenshot.php',
-            type: 'POST',
-            data: {
-                project: '<?= $project->getId() ?>'
-            },
-            success: function(response) {
-                $('#websiteScreenshot').attr('src', response);
-                $('#websiteScreenshot').removeClass('d-none');
-            }
-        });
-
-        $('#websiteScreenshotRegenerate').click(function() {
-            $.ajax({
-                url: '<?= URL ?>assets/ajax/admin/projects/regenerateScreenshot.php',
-                type: 'POST',
-                data: {
-                    project: '<?= $project->getId() ?>'
-                },
-                success: function(response) {
-                    if (response == 'error') {
-                        Toast.fire({
-                            icon: 'error',
-                            title: 'Hiba történt a kép generálása során!'
-                        });
-                        return;
-                    }
-                    $('#websiteScreenshot').attr('src', response);
-                }
-            });
+        $('#websiteScreenshot.webOpener').click(function() {
+            window.open('<?= $project->getUrl() ?>', '_blank');
         });
 
         $('#statusSelect').change(function() {
