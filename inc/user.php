@@ -9,7 +9,7 @@ class User
     public function __construct($id)
     {
         global $con;
-        $email = $role = $link = null;
+        $email = $role = $link = 0;
         if ($stmt = $con->prepare('SELECT `email`, `role`, `client_id` FROM `accounts` WHERE `id` = ?')) {
             $stmt->bind_param('i', $id);
             if (!$stmt->execute()) return false;
@@ -105,5 +105,27 @@ class User
     function loggedin(): bool
     {
         return $this->role > 0 && isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === 'admin';
+    }
+
+    function getClient(): Client|null
+    {
+        return $this->client_id;
+    }
+
+    static function getAll(): array
+    {
+        global $con;
+        $users = [];
+        $id = 0;
+        if ($stmt = $con->prepare('SELECT `id` FROM `accounts` WHERE `role` >= 2 ORDER BY `lastname`, `firstname`')) {
+            if (!$stmt->execute()) return [];
+            $stmt->store_result();
+            $stmt->bind_result($id);
+            while ($stmt->fetch()) {
+                $users[] = new User($id);
+            }
+            $stmt->close();
+        }
+        return $users;
     }
 }

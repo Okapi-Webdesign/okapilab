@@ -36,7 +36,7 @@ if (strpos($url, 'belepes/') === false && $url != 'belepes') {
             exit('A keresett oldal nem található!');
         }
         $url = '404';
-        require_once ABS_PATH . 'content/ugyfeltemplate.php';
+        require_once ABS_PATH . 'content/ugyfel/template.php';
     }
 } else {
     $modified_url = str_replace('belepes', '', $url);

@@ -1,7 +1,7 @@
 <?php
 $pageMeta = [
     'title' => 'Projektek',
-    'packages' => ['datatables'],
+    'packages' => ['datatables', 'select2'],
 ];
 ?>
 
@@ -18,6 +18,20 @@ $pageMeta = [
                         <th></th>
                     </tr>
                 </thead>
+                <tbody>
+                    <?php
+                    $projects = Project::getAll();
+
+                    foreach ($projects as $project) {
+                        echo '<tr>';
+                        echo '<td>' . $project->getId() . '</td>';
+                        echo '<td>' . $project->getName() . '</td>';
+                        echo '<td>' . $project->getClient()->getName() . '</td>';
+                        echo '<td>' . $project->getStatus()->print() . '</td>';
+                        echo '<td><a href="projektek/adatlap/d/' . $project->getId() . '" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a></td>';
+                    }
+                    ?>
+                </tbody>
             </table>
         </div>
     </div>
@@ -40,17 +54,23 @@ $pageMeta = [
                 "sZeroRecords": "Nincs a keresésnek megfelelő találat",
             },
             columnDefs: [{
-                orderable: false,
-                targets: [0]
-            }, ],
+                    orderable: false,
+                    targets: [0]
+                },
+                {
+                    className: 'text-end',
+                    orderable: false,
+                    targets: [4]
+                }
+            ],
             order: [2, 'asc'],
             layout: {
                 topStart: {
                     buttons: [{
-                        text: 'Új ügyfél',
+                        text: 'Új projekt',
                         className: 'btn-primary',
                         action: function() {
-                            modal_open('ugyfelek/uj');
+                            modal_open('projektek/uj');
                         },
                         init: function(api, node, config) {
                             $(node).removeClass('btn-secondary')

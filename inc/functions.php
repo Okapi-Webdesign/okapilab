@@ -349,3 +349,14 @@ function updateSetting(string $key, string $value)
         $stmt->close();
     }
 }
+
+// 6.7. Világos szín?
+function isLightColor(string $color)
+{
+    $color = str_replace('#', '', $color);
+    $r = hexdec(substr($color, 0, 2));
+    $g = hexdec(substr($color, 2, 2));
+    $b = hexdec(substr($color, 4, 2));
+    $brightness = (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
+    return $brightness > 155;
+}
