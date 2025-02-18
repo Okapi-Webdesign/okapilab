@@ -55,6 +55,9 @@ if (!isset($pageMeta['packages']) || $pageMeta['packages'] == null || !is_array(
 
 <body>
     <script src="<?= URL ?>assets/js/admin/start.js"></script>
+    <div id="loader">
+        <span id="loader_spinner"></span>
+    </div>
     <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark sidebar" id="sidebar">
         <a href="<?= URL ?>admin" class="align-items-center me-md-auto text-white text-decoration-none d-md-flex d-none">
             <img src="<?= URL ?>assets/img/logo.png" alt="Logo" width="32" class="me-3">

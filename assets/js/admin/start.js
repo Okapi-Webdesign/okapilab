@@ -22,3 +22,13 @@ function modal_open(modal_slug, attr) {
         }
     });
 }
+
+function loader_start() {
+    $('#loader').css('display', 'flex');
+    $('body').css('overflow', 'hidden');
+}
+
+function loader_stop() {
+    $('#loader').css('display', 'none');
+    $('body').css('overflow', 'auto');
+}

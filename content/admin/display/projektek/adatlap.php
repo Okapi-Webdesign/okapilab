@@ -10,7 +10,7 @@ $client = $project->getClient();
 
 <div class="card">
     <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex justify-content-between align-items-center">
             <h2 class="display-6">
                 <i class="fa-brands fa-wordpress me-2 <?= $project->isWordpress() == false ? 'd-none' : '' ?>"></i> <?= $project->getName() ?>
             </h2>
@@ -18,24 +18,29 @@ $client = $project->getClient();
                 <span class="visually-hidden">Betöltés...</span>
             </div>
         </div>
-        <p>
-            <span class="me-3"><b>Ügyfél:</b> <a href="<?= URL ?>admin/ugyfelek/adatlap/d/<?= $project->getClient()->getId() ?>" class="text-decoration-none"><?= $project->getClient()->getName() ?></a></span>
-            <span class="me-3"><b>Weboldal:</b> <?php
-                                                $displayUrl = $project->getUrl();
-                                                if ($displayUrl !== NULL) {
-                                                    $displayUrl = str_replace('http://', '', $displayUrl);
-                                                    $displayUrl = str_replace('https://', '', $displayUrl);
-                                                    // URL végéről / eltávolítása
-                                                    if (substr($displayUrl, -1) == '/') {
-                                                        $displayUrl = substr($displayUrl, 0, -1);
+        <div class="d-flex justify-content-between align-items-center">
+            <span>
+                <span class="me-3"><b>Ügyfél:</b> <a href="<?= URL ?>admin/ugyfelek/adatlap/d/<?= $project->getClient()->getId() ?>" class="text-decoration-none"><?= $project->getClient()->getName() ?></a></span>
+                <span class="me-3"><b>Weboldal:</b> <?php
+                                                    $displayUrl = $project->getUrl();
+                                                    if ($displayUrl !== NULL) {
+                                                        $displayUrl = str_replace('http://', '', $displayUrl);
+                                                        $displayUrl = str_replace('https://', '', $displayUrl);
+                                                        // URL végéről / eltávolítása
+                                                        if (substr($displayUrl, -1) == '/') {
+                                                            $displayUrl = substr($displayUrl, 0, -1);
+                                                        }
+                                                        echo '<a href="' . $displayUrl . '" target="_blank" class="text-decoration-none">' . $displayUrl . '</a>';
+                                                    } else {
+                                                        echo '-';
                                                     }
-                                                    echo '<a href="' . $displayUrl . '" target="_blank" class="text-decoration-none">' . $displayUrl . '</a>';
-                                                } else {
-                                                    echo '-';
-                                                }
-                                                ?></span>
-            <span><b>Státusz:</b> <span id="statusLabel"><?= $project->getStatus()->getName() ?></span></span>
-        </p>
+                                                    ?></span>
+                <span><b>Státusz:</b> <span id="statusLabel"><?= $project->getStatus()->getName() ?></span></span>
+            </span>
+            <div>
+                <button class="btn btn-sm btn-warning" onclick="modal_open('projektek/szerkeszt', {id: <?= $project->getId() ?>})"><i class="fa fa-pencil"></i></button>
+            </div>
+        </div>
         <hr>
 
         <div class="row">
@@ -66,7 +71,7 @@ $client = $project->getClient();
                 ?>
             </div>
             <div class="col-12 col-xl-8">
-                <h3 class="h6">Adatok</h3>
+                <h3 class="h4">Adatok</h3>
                 <div class="row mb-3 g-3">
                     <div class="col-12 col-md-6 col-lg-4">
                         <b>Ügyfél</b> <br>
@@ -149,9 +154,17 @@ $client = $project->getClient();
                             ?>
                         </select>
                     </div>
+                    <div class="col-12">
+                        <b>Megjegyzés</b> <br>
+                        <textarea id="comment" class="form-control"><?= $project->getComment() ?></textarea>
+                    </div>
                 </div>
             </div>
         </div>
+        <hr>
+        <h3 class="h4">
+            Bejelentkezési adatok
+        </h3>
     </div>
 </div>
 
@@ -159,6 +172,10 @@ $client = $project->getClient();
     $('document').ready(function() {
         $('#websiteScreenshot.webOpener').click(function() {
             window.open('<?= $project->getUrl() ?>', '_blank');
+        });
+
+        $("#websiteScreenshotRegenerate").click(function() {
+            loader_start();
         });
 
         $('#statusSelect').change(function() {
@@ -230,6 +247,34 @@ $client = $project->getClient();
                 data: {
                     project: '<?= $project->getId() ?>',
                     services: $(this).val()
+                },
+                success: function(response) {
+                    $('#loadingSpinner').addClass('d-none');
+                    if (response == 'success') {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Sikeres művelet!'
+                        });
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Hiba történt!',
+                            text: response
+                        });
+                    }
+                }
+            });
+        });
+
+        $('#comment').change(function() {
+            $('#loadingSpinner').removeClass('d-none');
+
+            $.ajax({
+                url: '<?= URL ?>assets/ajax/admin/projects/updateComment.php',
+                type: 'POST',
+                data: {
+                    project: '<?= $project->getId() ?>',
+                    comment: $(this).val()
                 },
                 success: function(response) {
                     $('#loadingSpinner').addClass('d-none');
