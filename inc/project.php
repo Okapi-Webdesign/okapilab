@@ -104,6 +104,65 @@ class Project
         return $this->status;
     }
 
+    public function setStatus(int $status): bool
+    {
+        global $con;
+        $this->status = new Status($status);
+
+        if ($stmt = $con->prepare('UPDATE `projects` SET `status` = ? WHERE `id` = ?')) {
+            $stmt->bind_param('ii', $status, $this->id);
+            $stmt->execute();
+            $stmt->close();
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getTags(): array
+    {
+        return $this->tags;
+    }
+
+    public function setTags(array $tags): bool
+    {
+        global $con;
+        $this->tags = $tags;
+
+        $tags = json_encode($tags);
+
+        if ($stmt = $con->prepare('UPDATE `projects` SET `tags` = ? WHERE `id` = ?')) {
+            $stmt->bind_param('si', $tags, $this->id);
+            $stmt->execute();
+            $stmt->close();
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getServices(): array|null
+    {
+        return $this->services;
+    }
+
+    public function setServices(array $services): bool
+    {
+        global $con;
+        $this->services = $services;
+
+        $services = json_encode($services);
+
+        if ($stmt = $con->prepare('UPDATE `projects` SET `services` = ? WHERE `id` = ?')) {
+            $stmt->bind_param('si', $services, $this->id);
+            $stmt->execute();
+            $stmt->close();
+            return true;
+        }
+
+        return false;
+    }
+
     public function getUrl(): string|null
     {
         return $this->url;
@@ -134,5 +193,20 @@ class Project
     public function isWordpress(): bool
     {
         return $this->is_wordpress;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->is_active;
+    }
+
+    public function getCreateDate(): string
+    {
+        return $this->create_date;
+    }
+
+    public function getComment(): string|null
+    {
+        return $this->comment;
     }
 }

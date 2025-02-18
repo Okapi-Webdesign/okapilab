@@ -4,6 +4,13 @@ $('document').ready(function () {
         width: '100%',
     });
 
+    $('.select2-tags').not('.modal .select2-tags').select2({
+        theme: 'bootstrap-5',
+        width: '100%',
+        tags: true,
+
+    });
+
     $('.select2-api').not('.modal .select2-api').each(function () {
         target = $(this).data('api-target');
 

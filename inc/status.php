@@ -64,4 +64,23 @@ class Status
         }
         return '<span class="badge" style="color:' . $color . ';background-color: ' . $this->color . '">' . $this->name . '</span>';
     }
+
+    public static function getAll(): array
+    {
+        global $con;
+        $statuses = [];
+        $id = 0;
+
+        if ($stmt = $con->prepare('SELECT `id` FROM `projects_status` WHERE `active` = 1 ORDER BY id ASC')) {
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id);
+            while ($stmt->fetch()) {
+                $statuses[] = new Status($id);
+            }
+            $stmt->close();
+        }
+
+        return $statuses;
+    }
 }
