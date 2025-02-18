@@ -13,20 +13,20 @@ class Project
     private string|null $warranty;
     private bool $is_wordpress;
     private bool $is_active;
-    private string|null $logo_url;
+    private string|null $image_uri;
     private string $create_date;
 
     public function __construct(int $id)
     {
         global $con;
         $this->id = $id;
-        $name = $url = $comment = $warranty = $logo_url = $create_date = $client_id = $status = $tags = $services = $manager_id = $is_wordpress = $is_active = null;
+        $name = $url = $comment = $warranty = $image_uri = $create_date = $client_id = $status = $tags = $services = $manager_id = $is_wordpress = $is_active = null;
 
-        if ($stmt = $con->prepare('SELECT `id`, `client_id`, `name`, `url`, `status`, `tags`, `services`, `manager_id`, `comment`, `warranty`, `is_wordpress`, `active`, `logo_url`, `create_date` FROM `projects` WHERE `id` = ?')) {
+        if ($stmt = $con->prepare('SELECT `id`, `client_id`, `name`, `url`, `status`, `tags`, `services`, `manager_id`, `comment`, `warranty`, `is_wordpress`, `active`, `image_uri`, `create_date` FROM `projects` WHERE `id` = ?')) {
             $stmt->bind_param('i', $id);
             $stmt->execute();
             $stmt->store_result();
-            $stmt->bind_result($id, $client_id, $name, $url, $status, $tags, $services, $manager_id, $comment, $warranty, $is_wordpress, $is_active, $logo_url, $create_date);
+            $stmt->bind_result($id, $client_id, $name, $url, $status, $tags, $services, $manager_id, $comment, $warranty, $is_wordpress, $is_active, $image_uri, $create_date);
             if (!$stmt->fetch() || $stmt->num_rows === 0) {
                 throw new Exception('A projekt nem található!');
             }
@@ -39,7 +39,7 @@ class Project
         $this->warranty = $warranty;
         $this->is_wordpress = $is_wordpress;
         $this->is_active = $is_active;
-        $this->logo_url = $logo_url;
+        $this->image_uri = $image_uri;
         $this->create_date = $create_date;
 
         if ($client_id) {
@@ -62,11 +62,7 @@ class Project
             $this->services = null;
         }
 
-        if ($manager_id) {
-            $this->manager = new User($manager_id);
-        } else {
-            $this->manager = null;
-        }
+        $this->manager = new User($manager_id);
     }
 
     public static function getAll(): array
@@ -106,5 +102,37 @@ class Project
     public function getStatus(): Status
     {
         return $this->status;
+    }
+
+    public function getUrl(): string|null
+    {
+        return $this->url;
+    }
+
+    public function getManager(): User
+    {
+        return $this->manager;
+    }
+
+    public function getImageUri(): string|null
+    {
+        return URL . $this->image_uri;
+    }
+
+    public function updateImageUrl(string $filename): void
+    {
+        global $con;
+        $this->image_uri = $filename;
+
+        if ($stmt = $con->prepare('UPDATE `projects` SET `image_uri` = ? WHERE `id` = ?')) {
+            $stmt->bind_param('si', $filename, $this->id);
+            $stmt->execute();
+            $stmt->close();
+        }
+    }
+
+    public function isWordpress(): bool
+    {
+        return $this->is_wordpress;
     }
 }

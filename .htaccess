@@ -1,5 +1,9 @@
 RewriteEngine On
 
+# Engedélyezzük a storage mappa közvetlen elérését
+RewriteCond %{REQUEST_URI} ^/storage/ [NC]
+RewriteRule .* - [L]
+
 # Ha létezik a .php fájl, akkor azt szolgáltasd ki
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f

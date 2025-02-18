@@ -13,8 +13,8 @@ $client = new Client($data[0]);
             <?= $client->getName() ?>
         </h2>
         <p>
-            <span class="me-3"><b>E-mail cím:</b> <a href="mailto:<?= $client->getEmail() ?>"><?= $client->getEmail() ?></a></span>
-            <span class="me-3"><b>Telefonszám:</b> <a href="tel:<?= $client->getPhone() ?>"><?= $client->getPhone(true) ?></a></span>
+            <span class="me-3"><b>E-mail cím:</b> <a class="text-decoration-none" href="mailto:<?= $client->getEmail() ?>"><?= $client->getEmail() ?></a></span>
+            <span class="me-3"><b>Telefonszám:</b> <a class="text-decoration-none" href="tel:<?= $client->getPhone() ?>"><?= $client->getPhone(true) ?></a></span>
             <span><b>Kapcsolattartó:</b> <?= $client->getContactName() ?></span>
         </p>
         <hr>
