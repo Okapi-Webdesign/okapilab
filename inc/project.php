@@ -73,7 +73,26 @@ class Project
         $projects = [];
         $id = 0;
 
-        if ($stmt = $con->prepare('SELECT `id` FROM `projects` WHERE status != (SELECT MAX(id) FROM projects_status) ORDER BY `name` ASC')) {
+        if ($stmt = $con->prepare('SELECT `id` FROM `projects` WHERE active = 1 ORDER BY `name` ASC')) {
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id);
+            while ($stmt->fetch()) {
+                $projects[] = new Project($id);
+            }
+            $stmt->close();
+        }
+
+        return $projects;
+    }
+
+    public static function getArchive(): array
+    {
+        global $con;
+        $projects = [];
+        $id = 0;
+
+        if ($stmt = $con->prepare('SELECT `id` FROM `projects` WHERE active = 0 ORDER BY `name` ASC')) {
             $stmt->execute();
             $stmt->store_result();
             $stmt->bind_result($id);
@@ -221,5 +240,13 @@ class Project
             return null;
         }
         return date('Y. m. d.', strtotime($this->deadline));
+    }
+
+    public function getWarranty(): string|null
+    {
+        if ($this->warranty == NULL) {
+            return null;
+        }
+        return date('Y. m. d.', strtotime($this->warranty));
     }
 }

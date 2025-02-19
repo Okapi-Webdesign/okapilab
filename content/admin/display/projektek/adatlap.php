@@ -11,8 +11,8 @@ $client = $project->getClient();
 <div class="card">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
-            <h2 class="display-6">
-                <i class="fa-brands fa-wordpress me-2 <?= $project->isWordpress() == false ? 'd-none' : '' ?>"></i> <?= $project->getName() ?>
+            <h2 class="display-4">
+                <i class="fa-brands fa-wordpress me-1 <?= $project->isWordpress() == false ? 'd-none' : '' ?>"></i> <?= $project->getName() ?>
             </h2>
             <div class="text-muted spinner-border float-end d-none" role="status" id="loadingSpinner">
                 <span class="visually-hidden">Betöltés...</span>
@@ -35,10 +35,17 @@ $client = $project->getClient();
                                                         echo 'Nincs megadva.';
                                                     }
                                                     ?></span>
-                <span class="me-3"><b>Határidő:</b> <?= $project->getDeadline() == NULL ? 'Nincs megadva.' : $project->getDeadline() ?></span>
+                <?php if ($project->isActive()) { ?> <span class="me-3"><b>Határidő:</b> <?= $project->getDeadline() == NULL ? 'Nincs megadva.' : $project->getDeadline() ?></span> <?php } else { ?> <span class="me-3"><b>Garancia határideje:</b> <?= $project->getWarranty() == NULL ? 'Nincs megadva.' : $project->getWarranty() ?></span> <?php } ?>
             </span>
-            <div>
-                <button class="btn btn-sm btn-warning" onclick="modal_open('projektek/szerkeszt', {id: <?= $project->getId() ?>})"><i class="fa fa-pencil"></i></button>
+            <div class="action-buttons">
+                <?php
+                if ($project->isActive()) {
+                ?>
+                    <button class="btn btn-sm btn-warning" onclick="modal_open('projektek/szerkeszt', {id: <?= $project->getId() ?>})"><i class="fa fa-pencil"></i></button>
+                    <button class="btn btn-sm btn-secondary" onclick="modal_open('projektek/archival', {id: <?= $project->getId() ?>})"><i class="fa fa-archive"></i></button>
+                <?php } else { ?>
+                    <button class="btn btn-sm btn-danger" onclick="modal_open('projektek/torol', {id: <?= $project->getId() ?>})"><i class="fa fa-trash"></i></button>
+                <?php } ?>
             </div>
         </div>
         <hr>
@@ -89,8 +96,8 @@ $client = $project->getClient();
                         } ?>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
-                        <b>Aktív</b> <br>
-                        <?= $project->isActive() ? '<span class="badge bg-success">Igen</span>' : '<span class="badge bg-danger">Nem</span>' ?>
+                        <b>Státusz</b> <br>
+                        <?= $project->isActive() ? '<span class="badge bg-success"><i class="fa fa-check me-1"></i> Aktív</span>' : '<span class="badge bg-secondary"><i class="fa fa-archive me-1"></i> Archív</span>' ?>
                     </div>
                     <div class="col-12">
                         <b>Státusz</b> <br>

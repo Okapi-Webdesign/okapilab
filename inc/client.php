@@ -169,7 +169,7 @@ class Client
         global $con;
         $id = 0;
         $projects = [];
-        if ($stmt = $con->prepare('SELECT `id` FROM `projects` WHERE `client_id` = ?')) {
+        if ($stmt = $con->prepare('SELECT `id` FROM `projects` WHERE `client_id` = ? ORDER BY active DESC, name ASC')) {
             $stmt->bind_param('i', $this->id);
             $stmt->execute();
             $stmt->store_result();

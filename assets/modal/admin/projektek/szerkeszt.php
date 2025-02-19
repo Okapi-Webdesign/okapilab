@@ -47,7 +47,7 @@ $project = new Project($_POST['id']);
             </div>
             <div class="col-12 col-md-6">
                 <label for="deadline" class="form-label">Határidő</label>
-                <input type="date" id="deadline" name="deadline" class="form-control" value="<?= $project->getDeadline() ?>">
+                <input type="date" id="deadline" name="deadline" class="form-control" value="<?= $project->getDeadline() ?>" max="9999-12-31">
             </div>
         </div>
     </div>

@@ -9,7 +9,7 @@ $client = new Client($data[0]);
 
 <div class="card">
     <div class="card-body">
-        <h2 class="display-6">
+        <h2 class="display-4">
             <?= $client->getName() ?>
         </h2>
         <p>
@@ -26,7 +26,9 @@ $client = new Client($data[0]);
                 if (count($projects) > 0) {
                     echo '<div class="list-group">';
                     foreach ($projects as $project) {
-                        echo '<a href="' . URL . 'admin/projektek/adatlap/d/' . $project->getId() . '" class="list-group-item list-group-item-action">' . $project->getName() . '</a>';
+                        $archiveicon = !$project->isActive() ? '<i class="fa fa-archive me-1"></i> ' : '';
+                        $mutedclass = !$project->isActive() ? 'text-muted' : '';
+                        echo '<a href="' . URL . 'admin/projektek/adatlap/d/' . $project->getId() . '" class="' . $mutedclass . ' list-group-item list-group-item-action">' . $archiveicon . $project->getName() . '</a>';
                     }
                     echo '</div>';
                 } else {

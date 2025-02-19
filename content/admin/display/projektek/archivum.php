@@ -1,7 +1,7 @@
 <?php
 $pageMeta = [
-    'title' => 'Projektek',
-    'packages' => ['datatables', 'select2'],
+    'title' => 'Archív projektek',
+    'packages' => ['datatables'],
 ];
 ?>
 
@@ -14,21 +14,23 @@ $pageMeta = [
                         <th>#</th>
                         <th>Név</th>
                         <th>Ügyfél</th>
-                        <th>Státusz</th>
+                        <th>Garancia lejárata</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    $projects = Project::getAll();
+                    $projects = Project::getArchive();
 
                     foreach ($projects as $project) {
+                        $warranty = $project->getWarranty();
+                        $warranty = $warranty == NULL ? '-' : $warranty;
                         echo '<tr>';
                         echo '<td>' . $project->getId() . '</td>';
                         echo '<td>' . $project->getName() . '</td>';
                         echo '<td>' . $project->getClient()->getName() . '</td>';
-                        echo '<td>' . $project->getStatus()->print() . '</td>';
-                        echo '<td><a href="projektek/adatlap/d/' . $project->getId() . '" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a></td>';
+                        echo '<td>' . $warranty . '</td>';
+                        echo '<td><a href="' . URL . 'admin/projektek/adatlap/d/' . $project->getId() . '" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a></td>';
                     }
                     ?>
                 </tbody>
@@ -67,26 +69,15 @@ $pageMeta = [
             layout: {
                 topStart: {
                     buttons: [{
-                            text: 'Új projekt',
-                            className: 'btn-primary',
-                            action: function() {
-                                modal_open('projektek/uj');
-                            },
-                            init: function(api, node, config) {
-                                $(node).removeClass('btn-secondary')
-                            },
+                        text: 'Aktív projektek',
+                        className: 'btn-primary',
+                        action: function() {
+                            window.location.href = '<?= URL ?>admin/projektek';
                         },
-                        {
-                            text: 'Archív projektek',
-                            className: 'btn-secondary',
-                            action: function() {
-                                window.location.href = 'projektek/archivum';
-                            },
-                            init: function(api, node, config) {
-                                $(node).removeClass('btn-primary')
-                            },
-                        }
-                    ]
+                        init: function(api, node, config) {
+                            $(node).removeClass('btn-secondary')
+                        },
+                    }]
                 },
             }
         });
