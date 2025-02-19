@@ -101,7 +101,7 @@ $client = $project->getClient();
                     </div>
                     <div class="col-12">
                         <b>Státusz</b> <br>
-                        <select id="statusSelect" class="select2">
+                        <select id="statusSelect" class="select2" <?= $project->isActive() ? '' : 'disabled' ?>>
                             <?php
                             $statuses = Status::getAll();
                             foreach ($statuses as $status) {
@@ -112,7 +112,7 @@ $client = $project->getClient();
                     </div>
                     <div class="col-12 col-md-6">
                         <b>Címkék</b>
-                        <select name="tagsSelect" id="tagsSelect" class="select2-tags" multiple>
+                        <select name="tagsSelect" id="tagsSelect" class="select2-tags" multiple <?= $project->isActive() ? '' : 'disabled' ?>>
                             <?php
                             if ($stmt = $con->prepare('SELECT `id`, `name` FROM `projects_tags` ORDER BY `name` ASC')) {
                                 $stmt->execute();
@@ -132,7 +132,7 @@ $client = $project->getClient();
                     </div>
                     <div class="col-12 col-md-6">
                         <b>Szolgáltatás</b>
-                        <select name="servicesSelect" id="servicesSelect" class="select2-tags" multiple>
+                        <select name="servicesSelect" id="servicesSelect" class="select2-tags" multiple <?= $project->isActive() ? '' : 'disabled' ?>>
                             <?php
                             $services = [
                                 'Arculattervezés',
@@ -163,7 +163,7 @@ $client = $project->getClient();
                     </div>
                     <div class="col-12">
                         <b>Megjegyzés</b> <br>
-                        <textarea id="comment" class="form-control"><?= $project->getComment() ?></textarea>
+                        <textarea id="comment" class="form-control" <?= $project->isActive() ? '' : 'disabled' ?>><?= $project->getComment() ?></textarea>
                     </div>
                 </div>
             </div>
