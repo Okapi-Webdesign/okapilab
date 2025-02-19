@@ -41,10 +41,10 @@ $client = $project->getClient();
                 <?php
                 if ($project->isActive()) {
                 ?>
-                    <button class="btn btn-sm btn-warning" onclick="modal_open('projektek/szerkeszt', {id: <?= $project->getId() ?>})"><i class="fa fa-pencil"></i></button>
-                    <button class="btn btn-sm btn-secondary" onclick="modal_open('projektek/archival', {id: <?= $project->getId() ?>})"><i class="fa fa-archive"></i></button>
+                    <button title="Szerkesztés" data-bs-toggle="tooltip" class="btn btn-sm btn-warning" onclick="modal_open('projektek/szerkeszt', {id: <?= $project->getId() ?>})"><i class="fa fa-pencil"></i></button>
+                    <button title="Archiválás" data-bs-toggle="tooltip" class="btn btn-sm btn-secondary" onclick="modal_open('projektek/archival', {id: <?= $project->getId() ?>})"><i class="fa fa-archive"></i></button>
                 <?php } else { ?>
-                    <button class="btn btn-sm btn-danger" onclick="modal_open('projektek/torol', {id: <?= $project->getId() ?>})"><i class="fa fa-trash"></i></button>
+                    <button title="Törlés" data-bs-toggle="tooltip" class="btn btn-sm btn-danger" onclick="modal_open('projektek/torol', {id: <?= $project->getId() ?>})"><i class="fa fa-trash"></i></button>
                 <?php } ?>
             </div>
         </div>
@@ -56,7 +56,7 @@ $client = $project->getClient();
                             if ($project->getImageUri() === NULL) {
                                 echo 'https://placehold.co/300x200/FF9E00/FEFEFE?font=raleway&text=' . str_replace(' ', '+', $project->getName());
                             } else {
-                                echo $project->getImageUri();
+                                echo $project->getImageUri() . '?a=' . time();
                             }
                             ?>" class="w-100 rounded shadow-sm <?= $project->getUrl() == NULL ? '' : 'webOpener" style="cursor:pointer;' ?>" id="websiteScreenshot">
                 <?php
@@ -103,7 +103,7 @@ $client = $project->getClient();
                         <b>Státusz</b> <br>
                         <select id="statusSelect" class="select2" <?= $project->isActive() ? '' : 'disabled' ?>>
                             <?php
-                            $statuses = Status::getAll();
+                            $statuses = ProjectStatus::getAll();
                             foreach ($statuses as $status) {
                                 echo '<option value="' . $status->getId() . '" ' . ($status->getId() == $project->getStatus()->getId() ? 'selected' : '') . '>' . $status->getName() . '</option>';
                             }
@@ -169,9 +169,48 @@ $client = $project->getClient();
             </div>
         </div>
         <hr>
-        <h3 class="h4">
+        <h3 class="h4 mb-3">
             Bejelentkezési adatok
         </h3>
+        <button class="btn btn-primary" onclick="modal_open('projektek/hozzaferesHozzaad', {id: <?= $project->getId() ?>})">
+            Új rekord
+        </button>
+
+        <div class="table-responsive mt-2">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width:25%;">Felület</th>
+                        <th style="width:25%;">Felhasználónév</th>
+                        <th style="width:25%;">Jelszó</th>
+                        <th style="width:25%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if ($project->isWordpress() && $project->getWordpressLogin() === NULL) {
+                        echo '<tr><td colspan="4"><a href="#" onclick="modal_open(\'projektek/hozzaferesHozzaad\', {id: ' . $project->getId() . ', wp: 1})">WordPress belépési adat hozzáadása</a></td></tr>';
+                    }
+
+                    if (count($project->getLogins()) == 0) {
+                        echo '<tr><td colspan="4">Nincs rögzített bejelentkezési adat.</td></tr>';
+                    } else {
+                        foreach ($project->getLogins() as $login) {
+                            echo '<tr>';
+                            echo '<td><a href="' . $login->getUrl() . '" target="_blank" class="text-decoration-none">' . $login->getName() . '</a></td>';
+                            echo '<td>' . $login->getUsername() . '</td>';
+                            echo '<td class="passwordTd" data-pw="' . $login->getPassword() . '" style="cursor:pointer;">********</td>';
+                            echo '<td class="text-end"><div class="action-buttons">';
+                            echo '<button class="btn btn-sm btn-warning" onclick="modal_open(\'projektek/hozzaferesSzerkeszt\', {id: ' . $login->getId() . '})"><i class="fa fa-pencil"></i></button> ';
+                            echo '<button class="btn btn-sm btn-danger" onclick="modal_open(\'projektek/hozzaferesTorol\', {id: ' . $login->getId() . '})"><i class="fa fa-trash"></i></button>';
+                            echo '</div></td>';
+                            echo '</tr>';
+                        }
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -297,6 +336,15 @@ $client = $project->getClient();
                     }
                 }
             });
+        });
+
+        $('.passwordTd').click(function() {
+            pw = $(this).data('pw');
+            if ($(this).text() == pw) {
+                $(this).text('********');
+            } else {
+                $(this).text(pw);
+            }
         });
     });
 </script>

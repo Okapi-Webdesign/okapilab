@@ -1,5 +1,5 @@
 <?php
-class Status
+class ProjectStatus
 {
     private int $id;
     private string $name;
@@ -76,7 +76,7 @@ class Status
             $stmt->store_result();
             $stmt->bind_result($id);
             while ($stmt->fetch()) {
-                $statuses[] = new Status($id);
+                $statuses[] = new ProjectStatus($id);
             }
             $stmt->close();
         }

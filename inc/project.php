@@ -4,7 +4,7 @@ class Project
     private int $id;
     private string $name;
     private Client $client;
-    private Status $status;
+    private ProjectStatus $status;
     private string|null $url;
     private array|null $tags;
     private array|null $services;
@@ -50,7 +50,7 @@ class Project
             $this->client = null;
         }
 
-        $this->status = new Status($status);
+        $this->status = new ProjectStatus($status);
 
         if ($tags) {
             $this->tags = json_decode($tags, true);
@@ -120,7 +120,7 @@ class Project
         return $this->client;
     }
 
-    public function getStatus(): Status
+    public function getStatus(): ProjectStatus
     {
         return $this->status;
     }
@@ -128,7 +128,7 @@ class Project
     public function setStatus(int $status): bool
     {
         global $con;
-        $this->status = new Status($status);
+        $this->status = new ProjectStatus($status);
 
         if ($stmt = $con->prepare('UPDATE `projects` SET `status` = ? WHERE `id` = ?')) {
             $stmt->bind_param('ii', $status, $this->id);
@@ -248,5 +248,60 @@ class Project
             return null;
         }
         return date('Y. m. d.', strtotime($this->warranty));
+    }
+
+    public function addLogin(string $name, string $url, string $username, string $password, bool $private): bool
+    {
+        global $con, $user;
+        $private = $private ? 1 : 0;
+        $uid = $user->getId();
+
+        if ($stmt = $con->prepare('INSERT INTO `projects_logins`(`id`, `project_id`, `name`, `url`, `username`, `password`,`author`,`private`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)')) {
+            $stmt->bind_param('issssii', $this->id, $name, $url, $username, $password, $uid, $private);
+            if (!$stmt->execute()) return false;
+            $stmt->close();
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getLogins(): array
+    {
+        global $con;
+        $logins = [];
+        $id = 0;
+
+        if ($stmt = $con->prepare('SELECT `id` FROM `projects_logins` WHERE `project_id` = ?')) {
+            $stmt->bind_param('i', $this->id);
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id);
+            while ($stmt->fetch()) {
+                $logins[] = new ProjectLogin($id);
+            }
+            $stmt->close();
+        }
+
+        return $logins;
+    }
+
+    public function getWordpressLogin(): ProjectLogin|null
+    {
+        global $con;
+        $id = 0;
+
+        if ($stmt = $con->prepare('SELECT `id` FROM `projects_logins` WHERE `project_id` = ? AND `name` = "WordPress"')) {
+            $stmt->bind_param('i', $this->id);
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id);
+            if ($stmt->fetch()) {
+                return new ProjectLogin($id);
+            }
+            $stmt->close();
+        }
+
+        return null;
     }
 }
