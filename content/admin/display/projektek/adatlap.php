@@ -10,7 +10,7 @@ $client = $project->getClient();
 
 <div class="card">
     <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-xl-row flex-column justify-content-xl-between justify-content-center">
             <h2 class="display-4">
                 <i class="fa-brands fa-wordpress me-1 <?= $project->isWordpress() == false ? 'd-none' : '' ?>"></i> <?= $project->getName() ?>
             </h2>
@@ -18,27 +18,32 @@ $client = $project->getClient();
                 <span class="visually-hidden">Betöltés...</span>
             </div>
         </div>
-        <div class="d-flex justify-content-between align-items-center">
-            <span>
-                <span class="me-3"><b>Ügyfél:</b> <a href="<?= URL ?>admin/ugyfelek/adatlap/d/<?= $project->getClient()->getId() ?>" class="text-decoration-none"><?= $project->getClient()->getName() ?></a></span>
-                <span class="me-3"><b>Weboldal:</b> <?php
-                                                    $displayUrl = $project->getUrl();
-                                                    if ($displayUrl !== NULL) {
-                                                        $displayUrl = str_replace('http://', '', $displayUrl);
-                                                        $displayUrl = str_replace('https://', '', $displayUrl);
-                                                        // URL végéről / eltávolítása
-                                                        if (substr($displayUrl, -1) == '/') {
-                                                            $displayUrl = substr($displayUrl, 0, -1);
-                                                        }
-                                                        echo '<a href="' . $displayUrl . '" target="_blank" class="text-decoration-none">' . $displayUrl . '</a>';
-                                                    } else {
-                                                        echo 'Nincs megadva.';
-                                                    }
-                                                    ?></span>
-                <?php if ($project->isActive()) { ?> <span class="me-3"><b>Határidő:</b> <?= $project->getDeadline() == NULL ? 'Nincs megadva.' : $project->getDeadline() ?></span> <?php } else { ?> <span class="me-3"><b>Garancia határideje:</b> <?= $project->getWarranty() == NULL ? 'Nincs megadva.' : $project->getWarranty() ?></span> <?php } ?>
+        <div class="d-flex justify-content-between align-items-center flex-xl-row flex-column">
+            <span class="my-3 my-xl-0 text-center text-xl-start">
+                <span class="me-3 d-inline-block"><b>Ügyfél:</b> <a href="<?= URL ?>admin/ugyfelek/adatlap/d/<?= $project->getClient()->getId() ?>" class="text-decoration-none"><?= $project->getClient()->getName() ?></a></span>
+                <span class="me-3 d-inline-block"><b>Weboldal:</b> <?php
+                                                                    $displayUrl = $project->getUrl();
+                                                                    if ($displayUrl !== NULL) {
+                                                                        $displayUrl = str_replace('http://', '', $displayUrl);
+                                                                        $displayUrl = str_replace('https://', '', $displayUrl);
+                                                                        // URL végéről / eltávolítása
+                                                                        if (substr($displayUrl, -1) == '/') {
+                                                                            $displayUrl = substr($displayUrl, 0, -1);
+                                                                        }
+                                                                        echo '<a href="' . $displayUrl . '" target="_blank" class="text-decoration-none">' . $displayUrl . '</a>';
+                                                                    } else {
+                                                                        echo 'Nincs megadva.';
+                                                                    }
+                                                                    ?></span>
+                <?php if ($project->isActive()) { ?> <span class="me-3 d-inline-block"><b>Határidő:</b> <?= $project->getDeadline() == NULL ? 'Nincs megadva.' : $project->getDeadline() ?></span> <?php } else { ?> <span class="me-3 d-inline-block"><b>Garancia határideje:</b> <?= $project->getWarranty() == NULL ? 'Nincs megadva.' : $project->getWarranty() ?></span> <?php } ?>
             </span>
             <div class="action-buttons">
                 <?php
+                if ($project->getWordpressLogin() !== NULL && $project->isWordpress()) {
+                ?>
+                    <a target="blank" href="<?= URL ?>admin/process/projects/wpAdmin/d/<?= $project->getId() ?>" title="<i class='fa-solid fa-up-right-from-square me-2'></i>Automatikus belépés a WordPress kezelőfelületére" data-bs-html="true" data-bs-toggle="tooltip" class="btn btn-sm btn-primary"><i class="fa fa-wordpress me-2"></i> WordPress panel</a>
+                <?php
+                }
                 if ($project->isActive()) {
                 ?>
                     <button title="Szerkesztés" data-bs-toggle="tooltip" class="btn btn-sm btn-warning" onclick="modal_open('projektek/szerkeszt', {id: <?= $project->getId() ?>})"><i class="fa fa-pencil"></i></button>
