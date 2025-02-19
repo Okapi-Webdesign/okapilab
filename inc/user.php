@@ -16,7 +16,10 @@ class User
             $stmt->store_result();
             $stmt->bind_result($email, $role, $link);
             if (!$stmt->fetch()) return false;
-            if ($stmt->num_rows == 0) return false;
+            if ($stmt->num_rows == 0) {
+                $this->id = 0;
+                return;
+            }
             $stmt->close();
         }
         $this->id = $id;

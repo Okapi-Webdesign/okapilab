@@ -1,5 +1,5 @@
 <?php
-if (!$user->role(4)) {
+if (!$user->role(2)) {
     alert_redirect('error', URL . 'admin', 'Hozzáférés megtagadva!');
 }
 

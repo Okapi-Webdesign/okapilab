@@ -38,9 +38,9 @@ $project = new Project($_POST['id']);
                 <label for="manager" class="form-label">Projektvezető</label>
                 <select id="manager" name="manager" class="form-select" required>
                     <option value="">Válassz...</option>
-                    <?php foreach (User::getAll() as $user) : ?>
-                        <option value="<?= $user->getId() ?>" <?= $project->getManager()->getId() == $user->getId() ? 'selected' : '' ?>>
-                            <?= $user->getFullName() ?>
+                    <?php foreach (User::getAll() as $_user) : ?>
+                        <option value="<?= $_user->getId() ?>" <?= $project->getManager()->getId() == $_user->getId() ? 'selected' : '' ?>>
+                            <?= $_user->getFullName() ?>
                         </option>
                     <?php endforeach; ?>
                 </select>

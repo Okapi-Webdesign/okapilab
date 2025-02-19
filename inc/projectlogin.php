@@ -12,7 +12,7 @@ class ProjectLogin
 
     public function __construct(int $id)
     {
-        global $con, $user;
+        global $con;
         $this->id = $id;
         $project = $name = $url = $username = $password = $author = $private = 0;
 
@@ -27,7 +27,7 @@ class ProjectLogin
             $stmt->close();
         }
 
-        if ($private == 1 && $user->getId() !== $author) {
+        if ($private == 1 && $_SESSION['id'] !== $author) {
             throw new Exception('Nincs jogosultságod az adatpár megtekintéséhez!');
         }
 

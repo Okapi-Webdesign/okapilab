@@ -51,8 +51,8 @@ require_once '../../../../inc/import.php';
                 <select name="manager" id="manager" class="form-select" required>
                     <?php
                     $users = User::getAll();
-                    foreach ($users as $user) {
-                        echo '<option value="' . $user->getId() . '">' . $user->getFullName() . '</option>';
+                    foreach ($users as $_user) {
+                        echo '<option value="' . $_user->getId() . '">' . $_user->getFullName() . '</option>';
                     }
                     ?>
                 </select>
