@@ -256,6 +256,17 @@ class Project
         $private = $private ? 1 : 0;
         $uid = $user->getId();
 
+        if ($stmt = $con->prepare('SELECT `id` FROM `projects_logins` WHERE `project_id` = ? AND `name` = ? AND (private = 0 OR author = ?)')) {
+            $stmt->bind_param('isi', $this->id, $name, $uid);
+            $stmt->execute();
+            $stmt->store_result();
+            if ($stmt->num_rows > 0) {
+                $stmt->close();
+                return false;
+            }
+            $stmt->close();
+        }
+
         if ($stmt = $con->prepare('INSERT INTO `projects_logins`(`id`, `project_id`, `name`, `url`, `username`, `password`,`author`,`private`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)')) {
             $stmt->bind_param('issssii', $this->id, $name, $url, $username, $password, $uid, $private);
             if (!$stmt->execute()) return false;
@@ -268,12 +279,13 @@ class Project
 
     public function getLogins(): array
     {
-        global $con;
+        global $con, $user;
         $logins = [];
         $id = 0;
+        $uid = $user->getId();
 
-        if ($stmt = $con->prepare('SELECT `id` FROM `projects_logins` WHERE `project_id` = ?')) {
-            $stmt->bind_param('i', $this->id);
+        if ($stmt = $con->prepare('SELECT `id` FROM `projects_logins` WHERE `project_id` = ? AND (`private` = 0 OR `author` = ?)')) {
+            $stmt->bind_param('ii', $this->id, $uid);
             $stmt->execute();
             $stmt->store_result();
             $stmt->bind_result($id);
@@ -288,11 +300,12 @@ class Project
 
     public function getWordpressLogin(): ProjectLogin|null
     {
-        global $con;
+        global $con, $user;
         $id = 0;
+        $uid = $user->getId();
 
-        if ($stmt = $con->prepare('SELECT `id` FROM `projects_logins` WHERE `project_id` = ? AND `name` = "WordPress"')) {
-            $stmt->bind_param('i', $this->id);
+        if ($stmt = $con->prepare('SELECT `id` FROM `projects_logins` WHERE `project_id` = ? AND `name` = "WordPress" AND (`private` = 0 OR `author` = ?)')) {
+            $stmt->bind_param('ii', $this->id, $uid);
             $stmt->execute();
             $stmt->store_result();
             $stmt->bind_result($id);

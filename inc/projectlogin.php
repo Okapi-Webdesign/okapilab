@@ -12,7 +12,7 @@ class ProjectLogin
 
     public function __construct(int $id)
     {
-        global $con;
+        global $con, $user;
         $this->id = $id;
         $project = $name = $url = $username = $password = $author = $private = 0;
 
@@ -25,6 +25,10 @@ class ProjectLogin
                 throw new Exception('A login nem található!');
             }
             $stmt->close();
+        }
+
+        if ($private == 1 && $user->getId() !== $author) {
+            throw new Exception('Nincs jogosultságod az adatpár megtekintéséhez!');
         }
 
         $this->project = new Project($project);
