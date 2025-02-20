@@ -186,47 +186,56 @@ $client = $project->getClient();
             </div>
         </div>
         <hr>
-        <h3 class="h4 mb-3">
-            Bejelentkezési adatok
-        </h3>
-        <button class="btn btn-primary" onclick="modal_open('projektek/hozzaferesHozzaad', {id: <?= $project->getId() ?>})">
-            Új rekord
-        </button>
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <h3 class="h4 mb-3">
+                    Bejelentkezési adatok
+                </h3>
+                <button class="btn btn-primary" onclick="modal_open('projektek/hozzaferesHozzaad', {id: <?= $project->getId() ?>})">
+                    Új rekord
+                </button>
 
-        <div class="table-responsive mt-2">
-            <table class="table table-striped table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th style="width:25%;">Felület</th>
-                        <th style="width:25%;">Felhasználónév</th>
-                        <th style="width:25%;">Jelszó</th>
-                        <th style="width:25%;"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if ($project->isWordpress() && $project->getWordpressLogin() === NULL) {
-                        echo '<tr><td colspan="4"><a href="#" onclick="modal_open(\'projektek/hozzaferesHozzaad\', {id: ' . $project->getId() . ', wp: 1})">WordPress belépési adat hozzáadása</a></td></tr>';
-                    }
+                <div class="table-responsive mt-2">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th style="width:25%;">Felület</th>
+                                <th style="width:25%;">Felhasználónév</th>
+                                <th style="width:25%;">Jelszó</th>
+                                <th style="width:25%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if ($project->isWordpress() && $project->getWordpressLogin() === NULL) {
+                                echo '<tr><td colspan="4"><a href="#" onclick="modal_open(\'projektek/hozzaferesHozzaad\', {id: ' . $project->getId() . ', wp: 1})">WordPress belépési adat hozzáadása</a></td></tr>';
+                            }
 
-                    if (count($project->getLogins()) == 0) {
-                        echo '<tr><td colspan="4">Nincs rögzített bejelentkezési adat.</td></tr>';
-                    } else {
-                        foreach ($project->getLogins() as $login) {
-                            echo '<tr>';
-                            echo '<td><a href="' . $login->getUrl() . '" target="_blank" class="text-decoration-none">' . $login->getName() . '</a></td>';
-                            echo '<td>' . $login->getUsername() . '</td>';
-                            echo '<td class="passwordTd" data-pw="' . $login->getPassword() . '" style="cursor:pointer;">********</td>';
-                            echo '<td class="text-end"><div class="action-buttons">';
-                            echo '<button class="btn btn-sm btn-warning" onclick="modal_open(\'projektek/hozzaferesSzerkeszt\', {id: ' . $login->getId() . '})"><i class="fa fa-pencil"></i></button> ';
-                            echo '<a href="' . URL . 'admin/process/projects/loginDelete/d/' . $login->getId() . '" onclick="loader_start();" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
-                            echo '</div></td>';
-                            echo '</tr>';
-                        }
-                    }
-                    ?>
-                </tbody>
-            </table>
+                            if (count($project->getLogins()) == 0) {
+                                echo '<tr><td colspan="4">Nincs rögzített bejelentkezési adat.</td></tr>';
+                            } else {
+                                foreach ($project->getLogins() as $login) {
+                                    echo '<tr>';
+                                    echo '<td><a href="' . $login->getUrl() . '" target="_blank" class="text-decoration-none">' . $login->getName() . '</a></td>';
+                                    echo '<td>' . $login->getUsername() . '</td>';
+                                    echo '<td class="passwordTd" data-pw="' . $login->getPassword() . '" style="cursor:pointer;">********</td>';
+                                    echo '<td class="text-end"><div class="action-buttons">';
+                                    echo '<button class="btn btn-sm btn-warning" onclick="modal_open(\'projektek/hozzaferesSzerkeszt\', {id: ' . $login->getId() . '})"><i class="fa fa-pencil"></i></button> ';
+                                    echo '<a href="' . URL . 'admin/process/projects/loginDelete/d/' . $login->getId() . '" onclick="loader_start();" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
+                                    echo '</div></td>';
+                                    echo '</tr>';
+                                }
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <h3 class="h4 mb-3">Dokumentumok</h3>
+                <button class="btn btn-primary" onclick="modal_open('dokumentumok/letrehozas', {p: <?= $project->getId() ?>})">
+                    Új dokumentum
+            </div>
         </div>
     </div>
 </div>

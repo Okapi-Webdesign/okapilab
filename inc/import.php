@@ -33,3 +33,6 @@ require_once ABS_PATH . 'inc/client.php';
 require_once ABS_PATH . 'inc/project.php';
 require_once ABS_PATH . 'inc/projectstatus.php';
 require_once ABS_PATH . 'inc/projectlogin.php';
+require_once ABS_PATH . 'inc/document.php';
+require_once ABS_PATH . 'inc/documenttype.php';
+require_once ABS_PATH . 'inc/documentversion.php';
