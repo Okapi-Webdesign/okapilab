@@ -9,14 +9,16 @@ $client = new Client($data[0]);
 
 <div class="card">
     <div class="card-body">
-        <h2 class="display-4">
+        <h2 class="display-4 mb-2 text-center text-xl-start">
             <?= $client->getName() ?>
         </h2>
-        <p>
-            <span class="me-3"><b>E-mail cím:</b> <a class="text-decoration-none" href="mailto:<?= $client->getEmail() ?>"><?= $client->getEmail() ?></a></span>
-            <span class="me-3"><b>Telefonszám:</b> <a class="text-decoration-none" href="tel:<?= $client->getPhone() ?>"><?= $client->getPhone(true) ?></a></span>
-            <span><b>Kapcsolattartó:</b> <?= $client->getContactName() ?></span>
-        </p>
+        <div class="d-flex justify-content-between align-items-center flex-xl-row flex-column">
+            <span class="text-center text-xl-start">
+                <span class="me-3 d-inline-block"><b>E-mail cím:</b> <a class="text-decoration-none" href="mailto:<?= $client->getEmail() ?>"><?= $client->getEmail() ?></a></span>
+                <span class="me-3 d-inline-block"><b>Telefonszám:</b> <a class="text-decoration-none" href="tel:<?= $client->getPhone() ?>"><?= $client->getPhone(true) ?></a></span>
+                <span class="d-inline-block"><b>Kapcsolattartó:</b> <?= $client->getContactName() ?></span>
+            </span>
+        </div>
         <hr>
         <div class="row">
             <div class="col-12 col-md-3">

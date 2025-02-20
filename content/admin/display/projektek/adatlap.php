@@ -11,7 +11,7 @@ $client = $project->getClient();
 <div class="card">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center flex-xl-row flex-column justify-content-xl-between justify-content-center">
-            <h2 class="display-4">
+            <h2 class="display-4 mb-2 text-center">
                 <i class="fa-brands fa-wordpress me-1 <?= $project->isWordpress() == false ? 'd-none' : '' ?>"></i> <?= $project->getName() ?>
             </h2>
             <div class="text-muted spinner-border float-end d-none" role="status" id="loadingSpinner">
@@ -19,7 +19,7 @@ $client = $project->getClient();
             </div>
         </div>
         <div class="d-flex justify-content-between align-items-center flex-xl-row flex-column">
-            <span class="my-3 my-xl-0 text-center text-xl-start">
+            <span class="mb-3 mb-xl-0 text-center text-xl-start">
                 <span class="me-3 d-inline-block"><b>Ügyfél:</b> <a href="<?= URL ?>admin/ugyfelek/adatlap/d/<?= $project->getClient()->getId() ?>" class="text-decoration-none"><?= $project->getClient()->getName() ?></a></span>
                 <span class="me-3 d-inline-block"><b>Weboldal:</b> <?php
                                                                     $displayUrl = $project->getUrl();
@@ -196,7 +196,7 @@ $client = $project->getClient();
             </li>
         </ul>
         <div class="tab-content" id="pills-tabcontent">
-            <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="pills-login-tab" tabindex="0">
+            <div class="tab-pane show active" id="pills-login" role="tabpanel" aria-labelledby="pills-login-tab" tabindex="0">
                 <h3 class="h4 mb-3">
                     Bejelentkezési adatok
                 </h3>
@@ -242,10 +242,10 @@ $client = $project->getClient();
             </div>
             <div class="tab-pane" id="pills-docs" role="tabpanel" aria-labelledby="pills-docs-tab" tabindex="0">
 
-                <h3 class="h4 mb-3">Dokumentumok</h3>
-                <button class="btn btn-primary" onclick="modal_open('dokumentumok/letrehozas', {p: <?= $project->getId() ?>})">
-                    Új dokumentum
-                </button>
+                <h3 class="h4">Dokumentumok</h3>
+                <?php if ($project->isActive()) { ?><button class="mt-3 btn btn-primary" onclick="modal_open('dokumentumok/letrehozas', {p: <?= $project->getId() ?>})">
+                        Új dokumentum
+                    </button> <?php } ?>
 
                 <div class="mt-2 row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
                     <?php

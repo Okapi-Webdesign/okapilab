@@ -21,7 +21,7 @@ class DocumentVersion
             $stmt->store_result();
             $stmt->bind_result($id, $document_id, $date, $user_id, $changes, $filename, $active);
             if (!$stmt->fetch() || $stmt->num_rows === 0) {
-                throw new Exception('A dokumentum verzió nem található!');
+                throw new Exception('A dokumentumverzió nem található!');
             }
             $stmt->close();
         }
@@ -44,6 +44,11 @@ class DocumentVersion
         }
 
         $this->version = $version;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     public function getVersion(): int
@@ -77,5 +82,20 @@ class DocumentVersion
     public function getUser(): User
     {
         return $this->user;
+    }
+
+    public function isCurrent(): bool
+    {
+        return $this->document->getCurrent()->getId() === $this->id && $this->active;
+    }
+
+    public function getDocument(): Document
+    {
+        return $this->document;
+    }
+
+    public function getSize(): int
+    {
+        return filesize(ABS_PATH . 'storage/' . $this->getDocument()->getProject()->getId() . '/' . $this->filename);
     }
 }

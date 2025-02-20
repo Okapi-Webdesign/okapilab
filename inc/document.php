@@ -65,7 +65,7 @@ class Document
         global $con;
         $id = 0;
 
-        if ($stmt = $con->prepare('SELECT id FROM documents_versions WHERE document_id = ? AND active = 1 ORDER BY upload_date DESC LIMIT 1')) {
+        if ($stmt = $con->prepare('SELECT id FROM documents_versions WHERE document_id = ? ORDER BY upload_date DESC LIMIT 1')) {
             $stmt->bind_param('i', $this->id);
             $stmt->execute();
             $stmt->store_result();
@@ -77,6 +77,26 @@ class Document
         }
 
         return new DocumentVersion($id);
+    }
+
+    public function getVersions(): array
+    {
+        global $con;
+        $versions = [];
+        $id = 0;
+
+        if ($stmt = $con->prepare('SELECT id FROM documents_versions WHERE document_id = ? ORDER BY upload_date DESC')) {
+            $stmt->bind_param('i', $this->id);
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id);
+            while ($stmt->fetch()) {
+                $versions[] = new DocumentVersion($id);
+            }
+            $stmt->close();
+        }
+
+        return $versions;
     }
 
     public function addVersion(array $file, string $changes = null): array
@@ -115,6 +135,17 @@ class Document
         }
 
         if (move_uploaded_file($file['tmp_name'], $target_file)) {
+            if ($stmt = $con->prepare('UPDATE documents_versions SET active = 0 WHERE document_id = ?')) {
+                $stmt->bind_param('i', $this->id);
+                if (!$stmt->execute()) {
+                    return [
+                        'status' => false,
+                        'message' => 'A verzió hozzáadása sikertelen!'
+                    ];
+                }
+                $stmt->close();
+            }
+
             if ($stmt = $con->prepare('INSERT INTO documents_versions (id, document_id, upload_date, upload_user, changes, filename, active) VALUES (NULL, ?, NOW(), ?, ?, ?, 1)')) {
                 $stmt->bind_param('iiss', $this->id, $upload_user, $changes, $filename);
                 if (!$stmt->execute()) {
