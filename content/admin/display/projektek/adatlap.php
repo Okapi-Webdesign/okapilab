@@ -207,7 +207,7 @@ $client = $project->getClient();
                             echo '<td class="passwordTd" data-pw="' . $login->getPassword() . '" style="cursor:pointer;">********</td>';
                             echo '<td class="text-end"><div class="action-buttons">';
                             echo '<button class="btn btn-sm btn-warning" onclick="modal_open(\'projektek/hozzaferesSzerkeszt\', {id: ' . $login->getId() . '})"><i class="fa fa-pencil"></i></button> ';
-                            echo '<button class="btn btn-sm btn-danger" onclick="modal_open(\'projektek/hozzaferesTorol\', {id: ' . $login->getId() . '})"><i class="fa fa-trash"></i></button>';
+                            echo '<a href="' . URL . 'admin/process/projects/loginDelete/d/' . $login->getId() . '" onclick="loader_start();" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
                             echo '</div></td>';
                             echo '</tr>';
                         }
