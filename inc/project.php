@@ -317,4 +317,24 @@ class Project
 
         return null;
     }
+
+    public function getDocuments(): array
+    {
+        global $con;
+        $documents = [];
+        $id = 0;
+
+        if ($stmt = $con->prepare('SELECT `id` FROM `documents` WHERE `project_id` = ?')) {
+            $stmt->bind_param('i', $this->id);
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id);
+            while ($stmt->fetch()) {
+                $documents[] = new Document($id);
+            }
+            $stmt->close();
+        }
+
+        return $documents;
+    }
 }

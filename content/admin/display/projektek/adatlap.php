@@ -186,8 +186,17 @@ $client = $project->getClient();
             </div>
         </div>
         <hr>
-        <div class="row g-3">
-            <div class="col-12 col-md-6">
+
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-login-tab" data-bs-toggle="pill" data-bs-target="#pills-login" type="button" role="tab" aria-controls="pills-login" aria-selected="true">Bejelentkezési adatok</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-docs-tab" data-bs-toggle="pill" data-bs-target="#pills-docs" type="button" role="tab" aria-controls="pills-docs" aria-selected="false">Dokumentumok</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="pills-tabcontent">
+            <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="pills-login-tab" tabindex="0">
                 <h3 class="h4 mb-3">
                     Bejelentkezési adatok
                 </h3>
@@ -231,10 +240,41 @@ $client = $project->getClient();
                     </table>
                 </div>
             </div>
-            <div class="col-12 col-md-6">
+            <div class="tab-pane" id="pills-docs" role="tabpanel" aria-labelledby="pills-docs-tab" tabindex="0">
+
                 <h3 class="h4 mb-3">Dokumentumok</h3>
                 <button class="btn btn-primary" onclick="modal_open('dokumentumok/letrehozas', {p: <?= $project->getId() ?>})">
                     Új dokumentum
+                </button>
+
+                <div class="mt-2 row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                    <?php
+                    $docs = $project->getDocuments();
+
+                    if (count($docs) == 0) {
+                        echo '<div class="col">Nincs rögzített dokumentum.</div>';
+                    } else {
+                        foreach ($docs as $doc) {
+                    ?>
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <a href="<?= URL ?>admin/dokumentumok/adatlap/d/<?= $doc->getId() ?>" class="btn btn-sm btn-primary float-end rounded-pill"><i class="fa fa-eye"></i></a>
+                                        <h5 class="card-title
+                                        "><?= $doc->getType()->getName() ?></h5>
+
+                                        <p class="card-text">
+                                            <b>Dátum:</b> <?= $doc->getCurrent()->getDate() ?> <br>
+                                            <b>Feltöltő:</b> <?= $doc->getCurrent()->getUser()->getFullname() ?>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                    <?php
+                        }
+                    }
+                    ?>
+                </div>
             </div>
         </div>
     </div>
