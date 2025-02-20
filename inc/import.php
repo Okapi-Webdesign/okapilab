@@ -36,3 +36,4 @@ require_once ABS_PATH . 'inc/projectlogin.php';
 require_once ABS_PATH . 'inc/document.php';
 require_once ABS_PATH . 'inc/documenttype.php';
 require_once ABS_PATH . 'inc/documentversion.php';
+require_once ABS_PATH . 'inc/invoice.php';
