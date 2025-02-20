@@ -14,6 +14,7 @@ $pageMeta = [
                         <th>#</th>
                         <th>Név</th>
                         <th>Ügyfél</th>
+                        <th>Weboldal</th>
                         <th>Státusz</th>
                         <th></th>
                     </tr>
@@ -23,11 +24,23 @@ $pageMeta = [
                     $projects = Project::getAll();
 
                     foreach ($projects as $project) {
+                        $displayURL = $project->getURL();
+                        if ($displayURL == NULL) {
+                            $displayURL = 'Nincs megadva';
+                        } else {
+                            $displayURL = str_replace('https://', '', $displayURL);
+                            $displayURL = str_replace('http://', '', $displayURL);
+                            if (substr($displayURL, -1) == '/') {
+                                $displayURL = substr($displayURL, 0, -1);
+                            }
+                        }
                         echo '<tr>';
                         echo '<td>' . $project->getId() . '</td>';
                         echo '<td>' . $project->getName() . '</td>';
                         echo '<td>' . $project->getClient()->getName() . '</td>';
-                        echo '<td>' . $project->getStatus()->print() . '</td>';
+                        if ($project->getUrl() == NULL) echo '<td>' . $displayURL . '</td>';
+                        else echo '<td><a href="' . $project->getUrl() . '" target="_blank">' . $displayURL . '</a></td>';
+                        echo '<td data-sort="' . $project->getStatus()->getId() . '">' . $project->getStatus()->print() . '</td>';
                         echo '<td><a href="projektek/adatlap/d/' . $project->getId() . '" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a></td>';
                     }
                     ?>
@@ -60,8 +73,8 @@ $pageMeta = [
                 {
                     className: 'text-end',
                     orderable: false,
-                    targets: [4]
-                }
+                    targets: [5]
+                },
             ],
             order: [2, 'asc'],
             layout: {

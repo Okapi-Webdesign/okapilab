@@ -41,7 +41,7 @@ $client = $project->getClient();
                 <?php
                 if ($project->getWordpressLogin() !== NULL && $project->isWordpress()) {
                 ?>
-                    <a target="blank" href="<?= URL ?>admin/process/projects/wpAdmin/d/<?= $project->getId() ?>" title="<i class='fa-solid fa-up-right-from-square me-2'></i>Automatikus belépés a WordPress kezelőfelületére" data-bs-html="true" data-bs-toggle="tooltip" class="btn btn-sm btn-primary"><i class="fa fa-wordpress me-2"></i> WordPress panel</a>
+                    <a target="blank" href="<?= URL ?>admin/process/projects/wpAdmin/d/<?= $project->getId() ?>" title="<i class='fa-solid fa-up-right-from-square me-2'></i>Automatikus belépés a WordPress kezelőfelületére" data-bs-html="true" data-bs-toggle="tooltip" class="btn btn-sm btn-primary"><i class="fa fa-wordpress me-2"></i> WordPress admin</a>
                 <?php
                 }
                 if ($project->isActive()) {
@@ -49,6 +49,7 @@ $client = $project->getClient();
                     <button title="Szerkesztés" data-bs-toggle="tooltip" class="btn btn-sm btn-warning" onclick="modal_open('projektek/szerkeszt', {id: <?= $project->getId() ?>})"><i class="fa fa-pencil"></i></button>
                     <button title="Archiválás" data-bs-toggle="tooltip" class="btn btn-sm btn-secondary" onclick="modal_open('projektek/archival', {id: <?= $project->getId() ?>})"><i class="fa fa-archive"></i></button>
                 <?php } else { ?>
+                    <button title="Visszaállítás" data-bs-toggle="tooltip" class="btn btn-sm btn-success" onclick="window.location.href='<?= URL ?>admin/process/projects/restore/d/<?= $project->getId() ?>'"><i class="fa fa-undo"></i></button>
                     <button title="Törlés" data-bs-toggle="tooltip" class="btn btn-sm btn-danger" onclick="modal_open('projektek/torol', {id: <?= $project->getId() ?>})"><i class="fa fa-trash"></i></button>
                 <?php } ?>
             </div>
@@ -80,7 +81,18 @@ $client = $project->getClient();
                     </p>
                 <?php
                 }
+
+                if ($project->isActive()) {
                 ?>
+
+                    <div class="mt-4 text-center">
+                        <?php
+                        if ($project->getStatus()->getId() == ProjectStatus::getMax()->getId()) {
+                            echo '<button onclick="modal_open(\'projektek/archival\', {id: ' . $project->getId() . '})" class="btn btn-secondary"><i class="fa fa-archive me-2"></i>Archiválás</button>';
+                        }
+                        ?>
+                    </div>
+                <?php } ?>
             </div>
             <div class="col-12 col-xl-8">
                 <h3 class="h4">Adatok</h3>
@@ -245,6 +257,10 @@ $client = $project->getClient();
                         Toast.fire({
                             icon: 'success',
                             title: 'Sikeres művelet!'
+                        }).then(() => {
+                            if ($('#statusSelect').val() == '<?= ProjectStatus::getMax()->getId() ?>') {
+                                location.reload();
+                            }
                         });
                     } else {
                         Toast.fire({

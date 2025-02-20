@@ -83,4 +83,20 @@ class ProjectStatus
 
         return $statuses;
     }
+
+    public static function getMax(): ProjectStatus
+    {
+        global $con;
+        $max = 0;
+
+        if ($stmt = $con->prepare('SELECT MAX(`id`) FROM `projects_status` WHERE `active` = 1')) {
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($max);
+            $stmt->fetch();
+            $stmt->close();
+        }
+
+        return new ProjectStatus($max);
+    }
 }

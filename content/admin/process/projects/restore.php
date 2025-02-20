@@ -1,7 +1,7 @@
 <?php
-$id = $_POST['id'];
+$id = $data[0];
 
-if ($stmt = $con->prepare('UPDATE `projects` SET `active` = 0 WHERE `id` = ?')) {
+if ($stmt = $con->prepare('UPDATE `projects` SET `active` = 1 WHERE `id` = ?')) {
     $stmt->bind_param('i', $id);
     if (!$stmt->execute()) {
         alert_redirect('error', URL . 'admin/projektek/adatlap/d/' . $id);
