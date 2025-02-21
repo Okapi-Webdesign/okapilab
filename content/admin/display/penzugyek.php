@@ -3,6 +3,9 @@ $pageMeta = [
     'title' => 'Pénzügyek',
     'packages' => ['datatables', 'select2']
 ];
+
+$invoices = Invoice::getAll();
+$expenses = FinExpense::getAll();
 ?>
 
 <div class="card">
@@ -11,7 +14,17 @@ $pageMeta = [
             <div class="col-12 col-lg-6">
                 <div class="text-bg-primary rounded w-100 p-3">
                     <span class="fs-1 d-block"><?php
-                                                $sum = 'TODO';
+                                                $sum = 0;
+
+                                                foreach (FinIncome::getAll() as $income) {
+                                                    $sum += $income->getAmount();
+                                                }
+
+                                                foreach ($expenses as $expense) {
+                                                    $sum -= $expense->getAmount();
+                                                }
+
+                                                $sum = number_format($sum, 0, 0, ' ');
 
                                                 echo $sum;
                                                 ?> Ft</span>
@@ -21,7 +34,19 @@ $pageMeta = [
             <div class="col-12 col-lg-6">
                 <div class="text-bg-secondary rounded w-100 p-3">
                     <span class="fs-1 d-block"><?php
-                                                $sum = 'TODO';
+                                                $sum = 0;
+                                                $uid = $user->getId();
+
+                                                if ($stmt = $con->prepare('SELECT SUM(amount) FROM fin_payouts WHERE account_id = ? AND YEAR(datetime) = YEAR(NOW())')) {
+                                                    $stmt->bind_param('i', $uid);
+                                                    $stmt->execute();
+                                                    $stmt->store_result();
+                                                    $stmt->bind_result($sum);
+                                                    $stmt->fetch();
+                                                    $stmt->close();
+                                                }
+
+                                                $sum = number_format($sum, 0, 0, ' ');
 
                                                 echo $sum;
                                                 ?> Ft</span>
@@ -58,8 +83,6 @@ $pageMeta = [
                         </thead>
                         <tbody>
                             <?php
-                            $invoices = Invoice::getAll();
-
                             foreach ($invoices as $invoice) {
                                 echo '<tr>';
                                 echo '<td>' . $invoice->getId() . '</td>';
@@ -71,8 +94,44 @@ $pageMeta = [
                                 echo '<td>' . number_format($invoice->getAmount(), 0, 0, ' ') . ' Ft</td>';
                                 echo '<td>' . $invoice->getStatus(2) . '</td>';
                                 echo '<td class="text-end"><div class="action-buttons">';
-                                echo '<button class="btn btn-sm btn-success" onclick="modal_open(\'penzugyek/szamlaBefizetes\', {id:' . $invoice->getId() . '})"><i class="fa fa-money-bill"></i></button>';
+                                if (!$invoice->isPaid()) echo '<button class="btn btn-sm btn-success" onclick="modal_open(\'penzugyek/szamlaBefizetes\', {id:' . $invoice->getId() . '})"><i class="fa fa-money-bill"></i></button>';
                                 echo '<button class="btn btn-sm btn-primary" onclick="modal_open(\'penzugyek/szamlaReszletek\', {id:' . $invoice->getId() . '})"><i class="fa fa-eye"></i></button>';
+                                echo '</div></td>';
+                                echo '</tr>';
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-expenses" role="tabpanel" aria-labelledby="pills-expenses-tab" tabindex="0">
+                <div class="table-responsive">
+                    <table id="expenses_table" class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Indok</th>
+                                <th>Dátum</th>
+                                <th>Összeg</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach ($expenses as $expense) {
+                                if ($expense->getType() == 'payout') {
+                                    $prefix = 'P';
+                                } else {
+                                    $prefix = 'E';
+                                }
+                                echo '<tr>';
+                                echo '<td>' . $prefix . $expense->getId() . '</td>';
+                                echo '<td>' . $expense->getReason() . '</td>';
+                                echo '<td>' . $expense->getDate(true) . '</td>';
+                                echo '<td>' . number_format($expense->getAmount(), 0, 0, ' ') . ' Ft</td>';
+                                echo '<td class="text-end"><div class="action-buttons">';
+                                echo '<a href="' . URL . 'admin/process/finances/expenseDelete/d/' . $expense->getId() . '/' . $expense->getType() . '" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
                                 echo '</div></td>';
                                 echo '</tr>';
                             }
@@ -119,6 +178,47 @@ $pageMeta = [
                         className: 'btn-primary',
                         action: function() {
                             modal_open('penzugyek/szamlaUj');
+                        },
+                        init: function(api, node, config) {
+                            $(node).removeClass('btn-secondary')
+                        },
+                    }]
+                },
+            }
+        });
+
+        $('#expenses_table').DataTable({
+            language: {
+                "sEmptyTable": "Nincs rendelkezésre álló adat",
+                "sInfo": "Megjelenítve: _START_ - _END_ Összesen: _TOTAL_",
+                "sInfoEmpty": "Nincs találat",
+                "sInfoFiltered": "(_MAX_ összes rekord közül szűrve)",
+                "sInfoPostFix": "",
+                "sInfoThousands": " ",
+                "sLengthMenu": "_MENU_ rekord oldalanként",
+                "sLoadingRecords": "Betöltés...",
+                "sProcessing": "Feldolgozás...",
+                "sSearch": "Keresés:",
+                "sZeroRecords": "Nincs a keresésnek megfelelő találat",
+            },
+            columnDefs: [{
+                    orderable: false,
+                    targets: [0, 1]
+                },
+                {
+                    className: 'text-end',
+                    orderable: false,
+                    targets: [4]
+                },
+            ],
+            order: [2, 'desc'],
+            layout: {
+                topStart: {
+                    buttons: [{
+                        text: 'Új kiadás',
+                        className: 'btn-primary',
+                        action: function() {
+                            modal_open('penzugyek/kiadasUj');
                         },
                         init: function(api, node, config) {
                             $(node).removeClass('btn-secondary')

@@ -38,3 +38,5 @@ require_once ABS_PATH . 'inc/documenttype.php';
 require_once ABS_PATH . 'inc/documentversion.php';
 require_once ABS_PATH . 'inc/invoice.php';
 require_once ABS_PATH . 'inc/finincome.php';
+require_once ABS_PATH . 'inc/finexpense.php';
+require_once ABS_PATH . 'inc/finpayout.php';

@@ -51,7 +51,7 @@ if (isset($_POST['p'])) {
             </div>
             <div class="col-12 col-md-6">
                 <label for="create_date" class="form-label">Kiállítás dátuma</label>
-                <input type="date" id="create_date" name="create_date" class="form-control" required max="9999-12-31">
+                <input type="date" id="create_date" name="create_date" class="form-control" required max="<?= date('Y-m-d') ?>">
             </div>
             <div class="col-12 col-md-6">
                 <label for="deadline" class="form-label">Befizetés határideje</label>

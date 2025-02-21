@@ -67,13 +67,19 @@ class Project
         $this->manager = new User($manager_id);
     }
 
-    public static function getAll(): array
+    public static function getAll(bool $archived_too = false): array
     {
         global $con;
         $projects = [];
         $id = 0;
 
-        if ($stmt = $con->prepare('SELECT `id` FROM `projects` WHERE active = 1 ORDER BY `name` ASC')) {
+        if ($archived_too) {
+            $sql = 'SELECT `id` FROM `projects` ORDER BY `name` ASC';
+        } else {
+            $sql = 'SELECT `id` FROM `projects` WHERE active = 1 ORDER BY `name` ASC';
+        }
+
+        if ($stmt = $con->prepare($sql)) {
             $stmt->execute();
             $stmt->store_result();
             $stmt->bind_result($id);
