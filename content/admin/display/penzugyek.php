@@ -66,13 +66,13 @@ $pageMeta = [
                                 echo '<td><span title="' . $invoice->getProject()->getClient()->getName() . '" data-bs-toggle="tooltip">' . $invoice->getProject()->getName() . '</span></td>';
                                 echo '<td>' . $invoice->getInvoiceId() . '</td>';
                                 echo '<td>' . $invoice->getCreateDate(true) . '</td>';
-                                echo '<td>' . $invoice->getDeadline(true) . '</td>';
+                                if (strtotime($invoice->getDeadline()) < time() && $invoice->getStatus() == 0) echo '<td class="text-danger">' . $invoice->getDeadline(true) . '</td>';
+                                else echo '<td>' . $invoice->getDeadline(true) . '</td>';
                                 echo '<td>' . number_format($invoice->getAmount(), 0, 0, ' ') . ' Ft</td>';
                                 echo '<td>' . $invoice->getStatus(2) . '</td>';
                                 echo '<td class="text-end"><div class="action-buttons">';
-                                echo '<button class="btn btn-sm btn-primary" onclick="modal_open(\'penzugyek/szamlaReszletek/' . $invoice->getId() . '\')"><i class="fa fa-eye"></i></button>';
-                                echo '<button class="btn btn-sm btn-warning" onclick="modal_open(\'penzugyek/szamlaSzerkeszt/' . $invoice->getId() . '\')"><i class="fa fa-pencil"></i></button>';
-                                echo '<button class="btn btn-sm btn-danger" onclick="modal_open(\'penzugyek/szamlaTorol/' . $invoice->getId() . '\')"><i class="fa fa-trash"></i></button>';
+                                echo '<button class="btn btn-sm btn-success" onclick="modal_open(\'penzugyek/szamlaBefizetes\', {id:' . $invoice->getId() . '})"><i class="fa fa-money-bill"></i></button>';
+                                echo '<button class="btn btn-sm btn-primary" onclick="modal_open(\'penzugyek/szamlaReszletek\', {id:' . $invoice->getId() . '})"><i class="fa fa-eye"></i></button>';
                                 echo '</div></td>';
                                 echo '</tr>';
                             }

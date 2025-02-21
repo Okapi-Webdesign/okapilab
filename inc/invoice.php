@@ -110,4 +110,71 @@ class Invoice
             }
         }
     }
+
+    public function getPayments(): array
+    {
+        global $con;
+        $payments = [];
+        $id = 0;
+
+        if ($stmt = $con->prepare('SELECT `id` FROM `fin_incomes` WHERE `invoice_id` = ? ORDER BY `datetime` DESC')) {
+            $stmt->bind_param('i', $this->id);
+            $stmt->execute();
+            $stmt->bind_result($id);
+            $stmt->store_result();
+            while ($stmt->fetch()) {
+                $payments[] = new FinIncome($id);
+            }
+            $stmt->close();
+        }
+        return $payments;
+    }
+
+    public function isPaid(): bool
+    {
+        global $con;
+        $amount = 0;
+
+        if ($stmt = $con->prepare('SELECT SUM(`amount`) FROM `fin_incomes` WHERE `invoice_id` = ?')) {
+            $stmt->bind_param('i', $this->id);
+            $stmt->execute();
+            $stmt->bind_result($amount);
+            $stmt->fetch();
+            $stmt->close();
+        }
+
+        return $amount >= $this->amount;
+    }
+
+    public function getRemaining(): int
+    {
+        global $con;
+        $amount = 0;
+
+        if ($stmt = $con->prepare('SELECT SUM(`amount`) FROM `fin_incomes` WHERE `invoice_id` = ?')) {
+            $stmt->bind_param('i', $this->id);
+            $stmt->execute();
+            $stmt->bind_result($amount);
+            $stmt->fetch();
+            $stmt->close();
+        }
+
+        return $this->amount - $amount;
+    }
+
+    public function getPaymentsSum(): int
+    {
+        global $con;
+        $amount = 0;
+
+        if ($stmt = $con->prepare('SELECT SUM(`amount`) FROM `fin_incomes` WHERE `invoice_id` = ?')) {
+            $stmt->bind_param('i', $this->id);
+            $stmt->execute();
+            $stmt->bind_result($amount);
+            $stmt->fetch();
+            $stmt->close();
+        }
+
+        return $amount;
+    }
 }
