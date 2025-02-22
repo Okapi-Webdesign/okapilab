@@ -219,6 +219,19 @@ class TrelloTable
         }
     }
 
+    public function getListByName(string $name): array
+    {
+        if (empty($this->lists)) {
+            $this->lists = $this->getLists();
+        }
+
+        foreach ($this->lists as $list) {
+            if ($list['name'] == $name) {
+                return $list;
+            }
+        }
+    }
+
     public function getProject(string $labelId): Project|false
     {
         global $con;
@@ -252,5 +265,43 @@ class TrelloTable
         }
 
         return '';
+    }
+
+    public function createCard(Project $project, string $name, string $desc, string $pos, string $due, string $listId, bool $addMe = true): bool
+    {
+        global $user;
+
+        $url = "https://api.trello.com/1/cards";
+        $data = array(
+            'name' => $name,
+            'desc' => $desc,
+            'pos' => $pos,
+            'due' => $due,
+            'idList' => $listId,
+            'key' => $this->apiKey,
+            'token' => $this->token,
+            'idLabels' => $project->getTrelloId(),
+        );
+
+        if ($addMe) {
+            $data['idMembers'] = $user->getTrelloId();
+        }
+
+        // POST adatok összeállítása
+        $options = [
+            'http' => [
+                'method'  => 'POST',
+                'header'  => 'Content-type: application/x-www-form-urlencoded',
+                'content' => http_build_query($data),
+            ],
+        ];
+
+        // Stream context létrehozása
+        $context  = stream_context_create($options);
+
+        // POST kérés elküldése
+        $response = file_get_contents($url, false, $context);
+
+        return $response !== false;
     }
 }

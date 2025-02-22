@@ -4,7 +4,7 @@ $pageMeta = ['title' => 'Trello táblakezelés'];
 $trello = new TrelloTable();
 ?>
 
-<a target="blank" href="<?= $trello->getBoardData()['url'] ?>">
+<a target="_blank" href="<?= $trello->getBoardData()['url'] ?>">
     <button class="btn btn-primary">
         <i class="fa-solid fa-up-right-from-square me-2"></i> Trello tábla megnyitása
     </button>
@@ -60,7 +60,7 @@ $trello = new TrelloTable();
 
                         $projectNames = [];
                         foreach ($projects as $project) {
-                            $projectNames[] = '<a href="' . URL . 'admin/projektek/adatlap/d/' . $project->getId() . '">' . $project->getName() . '</a>';
+                            $projectNames[] = $project->getName();
                         }
 
                         echo '<tr style="cursor:pointer;" onclick="window.open(\'https://trello.com/c/' . $card['shortLink'] . '\', \'_blank\')">';
@@ -77,83 +77,47 @@ $trello = new TrelloTable();
         </div>
 
         <hr>
-        <h3 class="h4 mb-3">Beállítások</h3>
-        <div class="form-group">
-            <label for="account_trello" class="form-label">Trello-felhasználó</label>
-            <select name="account_trello" id="account_trello" class="form-select">
-                <option value="" disabled selected>Válasszon...</option>
-                <?php foreach ($trello->getMembers() as $member) : ?>
-                    <option <?= $user->getTrelloId() == $member['id'] ? 'selected' : '' ?> value="<?= $member['id'] ?>"><?= $member['fullName'] ?> (<?= $member['username'] ?>)</option>
-                <?php endforeach; ?>
-            </select>
-        </div>
+        <h3 class="h4 mb-3">Projektek</h3>
 
-        <div class="mt-3">
-            <span class="mb-2 d-block">Projektek</span>
-            <div class="table-responsive">
-                <table class="table table-hover table-striped">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Projekt</th>
-                            <th>Címke</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $projects = Project::getAll();
-                        $labels = $trello->getLabels();
-                        // azon listaelemek törlése, amelyeknek neve üres
-                        $labels = array_filter($labels, function ($label) {
-                            return !empty($label['name']);
-                        });
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Projekt</th>
+                        <th>Címke</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $projects = Project::getAll();
+                    $labels = $trello->getLabels();
+                    // azon listaelemek törlése, amelyeknek neve üres
+                    $labels = array_filter($labels, function ($label) {
+                        return !empty($label['name']);
+                    });
 
-                        foreach ($projects as $project) {
-                            echo '<tr>';
-                            echo '<td>' . $project->getName() . '</td>';
-                            echo '<td>';
-                            echo '<select class="form-select project_trello" data-project-id="' . $project->getId() . '">';
-                            echo '<option value="" selected>Válasszon...</option>';
-                            foreach ($labels as $label) {
-                                echo '<option ' . ($project->getTrelloId() == $label['id'] ? 'selected' : '') . ' value="' . $label['id'] . '">' . $label['name'] . '</option>';
-                            }
-                            echo '</select>';
-                            echo '</td>';
-                            echo '</tr>';
+                    foreach ($projects as $project) {
+                        echo '<tr>';
+                        echo '<td>' . $project->getName() . '</td>';
+                        echo '<td>';
+                        echo '<select class="form-select project_trello" data-project-id="' . $project->getId() . '">';
+                        echo '<option value="" selected>Válasszon...</option>';
+                        foreach ($labels as $label) {
+                            echo '<option ' . ($project->getTrelloId() == $label['id'] ? 'selected' : '') . ' value="' . $label['id'] . '">' . $label['name'] . '</option>';
                         }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
+                        echo '</select>';
+                        echo '</td>';
+                        echo '</tr>';
+                    }
+                    ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
 <script>
     $('document').ready(function() {
-        $('#account_trello').change(function() {
-            $.ajax({
-                url: '<?= URL ?>assets/ajax/admin/trello/changeMember.php',
-                type: 'POST',
-                data: {
-                    trello_id: $(this).val()
-                },
-                success: function(response) {
-                    if (response == 'success') {
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Sikeres művelet!'
-                        });
-                        location.reload();
-                    } else {
-                        Toast.fire({
-                            icon: 'error',
-                            title: 'Hiba történt!',
-                            html: response
-                        });
-                    }
-                }
-            });
-        });
 
         $('.project_trello').change(function() {
             $.ajax({
