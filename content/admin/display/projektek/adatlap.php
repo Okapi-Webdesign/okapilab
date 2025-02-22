@@ -188,15 +188,24 @@ $client = $project->getClient();
         <hr>
 
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <?php
+            if ($project->getTrelloId() !== false) {
+            ?>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-trello-tab" data-bs-toggle="pill" data-bs-target="#pills-trello" type="button" role="tab" aria-controls="pills-trello" aria-selected="false">Feladatok</button>
+                </li>
+            <?php
+            }
+            ?>
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="pills-login-tab" data-bs-toggle="pill" data-bs-target="#pills-login" type="button" role="tab" aria-controls="pills-login" aria-selected="true">Bejelentkezési adatok</button>
+                <button class="nav-link <?= $project->getTrelloId() === false ? 'active' : '' ?>" id="pills-login-tab" data-bs-toggle="pill" data-bs-target="#pills-login" type="button" role="tab" aria-controls="pills-login" aria-selected="true">Bejelentkezési adatok</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="pills-docs-tab" data-bs-toggle="pill" data-bs-target="#pills-docs" type="button" role="tab" aria-controls="pills-docs" aria-selected="false">Dokumentumok</button>
             </li>
         </ul>
-        <div class="tab-content" id="pills-tabcontent">
-            <div class="tab-pane show active" id="pills-login" role="tabpanel" aria-labelledby="pills-login-tab" tabindex="0">
+        <div class="tab-content px-1" id="pills-tabcontent">
+            <div class="tab-pane <?= $project->getTrelloId() === false ? 'active show' : '' ?>" id="pills-login" role="tabpanel" aria-labelledby="pills-login-tab" tabindex="0">
                 <h3 class="h4 mb-3">
                     Bejelentkezési adatok
                 </h3>
@@ -241,9 +250,8 @@ $client = $project->getClient();
                 </div>
             </div>
             <div class="tab-pane" id="pills-docs" role="tabpanel" aria-labelledby="pills-docs-tab" tabindex="0">
-
                 <h3 class="h4">Dokumentumok</h3>
-                <?php if ($project->isActive()) { ?><button class="mt-3 btn btn-primary" onclick="modal_open('dokumentumok/letrehozas', {p: <?= $project->getId() ?>})">
+                <?php if ($project->isActive()) { ?><button class="mt-2 btn btn-primary" onclick="modal_open('dokumentumok/letrehozas', {p: <?= $project->getId() ?>})">
                         Új dokumentum
                     </button> <?php } ?>
 
@@ -274,6 +282,12 @@ $client = $project->getClient();
                         }
                     }
                     ?>
+                </div>
+            </div>
+            <div class="tab-pane <?= $project->getTrelloId() !== false ? 'active show' : '' ?>" id="pills-trello" role="tabpanel" aria-labelledby="pills-trello-tab" tabindex="0">
+                <div class="d-flex align-items-center">
+                    <strong role="status">Betöltés...</strong>
+                    <div class="spinner-border ms-auto" aria-hidden="true"></div>
                 </div>
             </div>
         </div>
@@ -414,6 +428,17 @@ $client = $project->getClient();
                 $(this).text('********');
             } else {
                 $(this).text(pw);
+            }
+        });
+
+        $.ajax({
+            url: '<?= URL ?>assets/ajax/admin/projects/getTrello.php',
+            type: 'POST',
+            data: {
+                project: '<?= $project->getId() ?>'
+            },
+            success: function(response) {
+                $('#pills-trello').html(response);
             }
         });
     });

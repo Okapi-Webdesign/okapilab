@@ -18,7 +18,6 @@ $pageMeta = [
                         <th>Cégjegyzékszám <i class="text-muted ms-1 fa-solid fa-circle-question" data-bs-toggle="tooltip" title="Cégjegyzékszám, nyilvántartási szám vagy személyiigazolvány-szám"></i></th>
                         <th>E-mail cím</th>
                         <th>Telefonszám</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,7 +25,7 @@ $pageMeta = [
                     $clients = Client::getAll();
 
                     foreach ($clients as $client) {
-                        echo '<tr>';
+                        echo '<tr data-id="' . $client->getId() . '" class="cursor-pointer">';
                         echo '<td>' . $client->getId() . '</td>';
                         $class = $client->isActive() ? 'text-primary' : 'text-secondary';
                         if ($client->getType() == 1) echo '<td><span title="Magánszemély" data-bs-toggle="tooltip" class="' . $class . ' fw-bold">M</span></td>';
@@ -35,7 +34,6 @@ $pageMeta = [
                         echo '<td>' . $client->getRegistrationNumber() . '</td>';
                         echo '<td><a href="mailto:' . $client->getEmail() . '">' . $client->getEmail() . '</a></td>';
                         echo '<td><a href="tel:' . $client->getPhone() . '">' . $client->getPhone(true) . '</a></td>';
-                        echo '<td><a href="' . URL . 'admin/ugyfelek/adatlap/d/' . $client->getId() . '" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a></td>';
                         echo '</tr>';
                     }
                     ?>
@@ -63,7 +61,7 @@ $pageMeta = [
             },
             columnDefs: [{
                     orderable: false,
-                    targets: [0, 3, 4, 5, 6]
+                    targets: [0, 3, 4, 5]
                 },
                 {
                     width: '200px',
@@ -72,10 +70,6 @@ $pageMeta = [
                 {
                     className: 'text-center',
                     targets: [1]
-                },
-                {
-                    className: 'text-end',
-                    targets: [6]
                 }
             ],
             order: [2, 'asc'],
@@ -93,6 +87,12 @@ $pageMeta = [
                     }, ]
                 },
             }
+        });
+
+        $('#table').on('click', 'tr', function() {
+            var id = $(this).data('id');
+            loader_start();
+            window.location.href = '<?= URL ?>admin/ugyfelek/adatlap/d/' + id;
         });
     });
 </script>

@@ -77,7 +77,7 @@ if (!isset($pageMeta['packages']) || $pageMeta['packages'] == null || !is_array(
             addMenuItem('Projektek', 'projektek', 'fa fa-project-diagram');
             addMenuItem('Dokumentumok', 'dokumentumok', 'fa fa-file-alt');
             addMenuItem('Pénzügyek', 'penzugyek', 'fa fa-money-bill-wave');
-            addMenuItem('Feladatok', 'feladatok', 'fa fa-tasks');
+            addMenuItem('Trello', 'trello', 'fa-brands fa-trello');
             addMenuItem('Beállítások', 'beallitasok', 'fa fa-cogs');
             ?>
         </ul>

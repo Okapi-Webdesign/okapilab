@@ -19,8 +19,9 @@ if (!file_exists($dir)) {
     mkdir($dir);
 }
 
+
 if (!file_put_contents($filename, $image_data)) {
-    alert_redirect('error', URL . 'admin/projektek/adatlap/d/' . $project->getId());
+    alert_redirect('error', URL . 'admin/projektek/adatlap/d/' . $project->getId(), 'Hiba történt a kép feltöltése közben!');
 }
 
 $project->updateImageUrl('storage/' . $project->getId() . '/screenshot.jpeg');

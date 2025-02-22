@@ -40,3 +40,4 @@ require_once ABS_PATH . 'inc/invoice.php';
 require_once ABS_PATH . 'inc/finincome.php';
 require_once ABS_PATH . 'inc/finexpense.php';
 require_once ABS_PATH . 'inc/finpayout.php';
+require_once ABS_PATH . 'inc/trello.php';

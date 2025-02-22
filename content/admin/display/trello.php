@@ -1,0 +1,183 @@
+<?php
+$pageMeta = ['title' => 'Trello táblakezelés'];
+
+$trello = new TrelloTable();
+?>
+
+<a target="blank" href="<?= $trello->getBoardData()['url'] ?>">
+    <button class="btn btn-primary">
+        <i class="fa-solid fa-up-right-from-square me-2"></i> Trello tábla megnyitása
+    </button>
+</a>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <h3 class="h4 mb-3">Következő feladatok</h3>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Feladat</th>
+                        <th>Projekt</th>
+                        <th>Határidő</th>
+                        <th>Státusz</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $cards = $trello->getUserCards($user->getTrelloId(), 5, 'Teendő');
+                    foreach ($cards as $card) {
+                        $status = $trello->getList($card['idList'])['name'];
+                        switch ($status) {
+                            case 'Később':
+                                $statusBadge = '<span class="badge text-bg-secondary"><i class="fa fa-clock me-2"></i>Később</span>';
+                                break;
+                            case 'Teendő':
+                                $statusBadge = '<span class="badge text-bg-warning"><i class="fa fa-exclamation-triangle me-2"></i>Teendő</span>';
+                                break;
+                            case 'Folyamatban':
+                                $statusBadge = '<span class="badge text-bg-info"><i class="fa fa-spinner me-2"></i>Folyamatban</span>';
+                                break;
+                            case 'Kész':
+                                $statusBadge = '<span class="badge text-bg-success"><i class="fa fa-check me-2"></i>Kész</span>';
+                                break;
+                            case 'Visszajelzés / Felülvizsgálat':
+                                $statusBadge = '<span class="badge text-bg-primary"><i class="fa fa-eye me-2"></i>Visszajelzés / Felülvizsgálat</span>';
+                                break;
+                            default:
+                                $statusBadge = '<span class="badge text-bg-secondary">' . $status . '</span>';
+                                break;
+                        }
+
+                        $projects = [];
+
+                        foreach ($card['labels'] as $label) {
+                            if ($trello->getProject($label['id'])) {
+                                $projects[] = $trello->getProject($label['id']);
+                            }
+                        }
+
+                        $projectNames = [];
+                        foreach ($projects as $project) {
+                            $projectNames[] = '<a href="' . URL . 'admin/projektek/adatlap/d/' . $project->getId() . '">' . $project->getName() . '</a>';
+                        }
+
+                        echo '<tr style="cursor:pointer;" onclick="window.open(\'https://trello.com/c/' . $card['shortLink'] . '\', \'_blank\')">';
+                        echo '<td>' . $card['idShort'] . '</td>';
+                        echo '<td>' . $card['name'] . '</td>';
+                        echo '<td>' . implode(', ', $projectNames) . '</td>';
+                        echo '<td>' . (!empty($card['due']) ? date('Y. m. d. H:i', strtotime($card['due'])) : '') . '</td>';
+                        echo '<td>' . $statusBadge . '</td>';
+                        echo '</tr>';
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+
+        <hr>
+        <h3 class="h4 mb-3">Beállítások</h3>
+        <div class="form-group">
+            <label for="account_trello" class="form-label">Trello-felhasználó</label>
+            <select name="account_trello" id="account_trello" class="form-select">
+                <option value="" disabled selected>Válasszon...</option>
+                <?php foreach ($trello->getMembers() as $member) : ?>
+                    <option <?= $user->getTrelloId() == $member['id'] ? 'selected' : '' ?> value="<?= $member['id'] ?>"><?= $member['fullName'] ?> (<?= $member['username'] ?>)</option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <div class="mt-3">
+            <span class="mb-2 d-block">Projektek</span>
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Projekt</th>
+                            <th>Címke</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $projects = Project::getAll();
+                        $labels = $trello->getLabels();
+                        // azon listaelemek törlése, amelyeknek neve üres
+                        $labels = array_filter($labels, function ($label) {
+                            return !empty($label['name']);
+                        });
+
+                        foreach ($projects as $project) {
+                            echo '<tr>';
+                            echo '<td>' . $project->getName() . '</td>';
+                            echo '<td>';
+                            echo '<select class="form-select project_trello" data-project-id="' . $project->getId() . '">';
+                            echo '<option value="" selected>Válasszon...</option>';
+                            foreach ($labels as $label) {
+                                echo '<option ' . ($project->getTrelloId() == $label['id'] ? 'selected' : '') . ' value="' . $label['id'] . '">' . $label['name'] . '</option>';
+                            }
+                            echo '</select>';
+                            echo '</td>';
+                            echo '</tr>';
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('document').ready(function() {
+        $('#account_trello').change(function() {
+            $.ajax({
+                url: '<?= URL ?>assets/ajax/admin/trello/changeMember.php',
+                type: 'POST',
+                data: {
+                    trello_id: $(this).val()
+                },
+                success: function(response) {
+                    if (response == 'success') {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Sikeres művelet!'
+                        });
+                        location.reload();
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Hiba történt!',
+                            html: response
+                        });
+                    }
+                }
+            });
+        });
+
+        $('.project_trello').change(function() {
+            $.ajax({
+                url: '<?= URL ?>assets/ajax/admin/trello/changeProject.php',
+                type: 'POST',
+                data: {
+                    trello_id: $(this).val(),
+                    project_id: $(this).data('project-id')
+                },
+                success: function(response) {
+                    if (response == 'success') {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Sikeres művelet!'
+                        });
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Hiba történt!',
+                            html: response
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>

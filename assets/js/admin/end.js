@@ -10,3 +10,21 @@
 $('.sidebarToggler').click(function () {
     $('#sidebar').toggleClass('sidebar-open');
 });
+
+$('a').click(function () {
+    if ($(this).attr('href') === '#') {
+        return;
+    }
+
+    if ($(this).attr('target') === '_blank') {
+        return;
+    }
+
+    if ($(this).attr('href').includes('javascript')) {
+        return;
+    }
+
+    setTimeout(() => {
+        loader_start();
+    }, 100);
+});

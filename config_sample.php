@@ -28,6 +28,13 @@ define("URL", "http://local.bozai.eu/");
 // A webapp neve
 define("APP_NAME", "OkapiLab");
 
+// Trello API kulcs
+define("TRELLO_APIKEY", "");
+// Trello API token
+define("TRELLO_TOKEN", "");
+// Trello tábla ID
+define("TRELLO_BOARD", "");
+
 // Fejlesztési üzemmód
 define("DEV_MODE", false);
 // E-mailek küldése

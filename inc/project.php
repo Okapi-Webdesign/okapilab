@@ -343,4 +343,26 @@ class Project
 
         return $documents;
     }
+
+    public function getTrelloId()
+    {
+        global $con;
+        $trello_id = null;
+
+        if ($stmt = $con->prepare('SELECT `trello_id` FROM `trello_projects` WHERE `project_id` = ?')) {
+            $stmt->bind_param('i', $this->id);
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($trello_id);
+            if ($stmt->fetch()) {
+                return $trello_id;
+            }
+            if ($stmt->num_rows > 1) {
+                return false;
+            }
+            $stmt->close();
+        }
+
+        return false;
+    }
 }

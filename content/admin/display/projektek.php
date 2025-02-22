@@ -8,7 +8,7 @@ $pageMeta = [
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
-            <table id="table" class="table table-hover table-striped">
+            <table id="table" class="projectTable table table-hover table-striped">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -16,12 +16,12 @@ $pageMeta = [
                         <th>Ügyfél</th>
                         <th>Weboldal</th>
                         <th>Státusz</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     $projects = Project::getAll();
+                    $trello = new TrelloTable();
 
                     foreach ($projects as $project) {
                         $displayURL = $project->getURL();
@@ -34,14 +34,40 @@ $pageMeta = [
                                 $displayURL = substr($displayURL, 0, -1);
                             }
                         }
-                        echo '<tr>';
+                        echo '<tr data-id="' . $project->getId() . '">';
                         echo '<td>' . $project->getId() . '</td>';
-                        echo '<td>' . $project->getName() . '</td>';
+                        echo '<td>' . $project->getName();
+                        if ($project->getTrelloId() != false) {
+                            $card = $trello->getProjectCards($project, 1, ['Folyamatban', 'Teendő'], true);
+                            if (!empty($card)) {
+                                $card = $card[0];
+                                $arrow = '<i class="fa fa-chevron-right text-primary me-2"></i>';
+                                $border = 'primary';
+                                if ($trello->getList($card['idList'])['name'] == 'Folyamatban') {
+                                    $arrow = '<i class="fa fa-chevron-right text-warning me-2"></i>';
+                                    $border = 'warning';
+                                }
+                                if ($card['due'] != NULL) {
+                                    $due = strtotime($card['due']);
+                                    if ($due < time()) {
+                                        $arrow = '<i class="fa fa-angles-right text-danger me-2"></i>';
+                                        $border = 'danger';
+                                    }
+                                }
+                                echo '<br>';
+                                echo '<div data-card-id="' . $card['id'] . '" class="shadow-sm mt-1 projectTaskLabel bg-white border border-' . $border . ' rounded p-2 d-flex align-items-center gap-2"><span>' . $arrow . '</span><div class="lh-1">' . $card['name'];
+                                if ($card['due'] != NULL) {
+                                    echo '<br><small class="text-muted">' . date('Y. m. d', strtotime($card['due'])) . '</small>';
+                                }
+                                echo '</div></div>';
+                            }
+                        }
+                        echo '</td>';
                         echo '<td>' . $project->getClient()->getName() . '</td>';
                         if ($project->getUrl() == NULL) echo '<td>' . $displayURL . '</td>';
                         else echo '<td><a href="' . $project->getUrl() . '" target="_blank">' . $displayURL . '</a></td>';
                         echo '<td data-sort="' . $project->getStatus()->getId() . '">' . $project->getStatus()->print() . '</td>';
-                        echo '<td><a href="projektek/adatlap/d/' . $project->getId() . '" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a></td>';
+                        echo '</tr>';
                     }
                     ?>
                 </tbody>
@@ -67,15 +93,9 @@ $pageMeta = [
                 "sZeroRecords": "Nincs a keresésnek megfelelő találat",
             },
             columnDefs: [{
-                    orderable: false,
-                    targets: [0]
-                },
-                {
-                    className: 'text-end',
-                    orderable: false,
-                    targets: [5]
-                },
-            ],
+                orderable: false,
+                targets: [0]
+            }, ],
             order: [2, 'asc'],
             layout: {
                 topStart: {
@@ -102,6 +122,20 @@ $pageMeta = [
                     ]
                 },
             }
+        });
+
+        $('.projectTable tbody tr td').click(function() {
+            loader_start();
+            var id = $(this).closest('tr').data('id');
+            window.location.href = '<?= URL ?>admin/projektek/adatlap/d/' + id
+        }).children().click(function(e) {
+            if ($(this).hasClass('projectTaskLabel')) {
+                e.stopPropagation();
+                var id = $(this).data('card-id');
+                window.open('https://trello.com/c/' + id, '_blank');
+            }
+
+            return false;
         });
     });
 </script>

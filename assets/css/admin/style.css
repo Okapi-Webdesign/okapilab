@@ -12068,10 +12068,14 @@ main {
   min-height: 100vh;
 }
 
-.table tr,
-.table th,
-.table td {
+.table:not(.projectTable) tr,
+.table:not(.projectTable) th,
+.table:not(.projectTable) td {
   vertical-align: middle;
+}
+
+.projectTable tr {
+  cursor: pointer;
 }
 
 .action-buttons {
@@ -12154,4 +12158,15 @@ span.req {
   87.5% {
     box-shadow: 0em -2.6em 0em 0em rgba(255, 255, 255, 0.2), 1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2), 2.5em 0em 0 0em rgba(255, 255, 255, 0.2), 1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2), 0em 2.5em 0 0em rgba(255, 255, 255, 0.2), -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.5), -2.6em 0em 0 0em rgba(255, 255, 255, 0.7), -1.8em -1.8em 0 0em #ffffff;
   }
+}
+
+.projectTaskLabel, .projectTaskCard {
+  cursor: pointer;
+}
+.projectTaskLabel:hover, .projectTaskCard:hover {
+  background-color: #f2f2f2 !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }/*# sourceMappingURL=style.css.map */

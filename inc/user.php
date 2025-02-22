@@ -131,4 +131,20 @@ class User
         }
         return $users;
     }
+
+    function getTrelloId(): string
+    {
+        global $con;
+        $trello_id = null;
+        if ($stmt = $con->prepare('SELECT `trello_id` FROM `trello_accounts` WHERE `account_id` = ?')) {
+            $stmt->bind_param('i', $this->id);
+            if (!$stmt->execute()) return false;
+            $stmt->store_result();
+            $stmt->bind_result($trello_id);
+            if (!$stmt->fetch()) return false;
+            if ($stmt->num_rows == 0) return false;
+            $stmt->close();
+        }
+        return $trello_id;
+    }
 }
