@@ -16,7 +16,7 @@ $('a').click(function () {
         return;
     }
 
-    if ($(this).attr('target') === '_blank') {
+    if ($(this).attr('target') === '_blank' || $(this).attr('target') === 'blank') {
         return;
     }
 

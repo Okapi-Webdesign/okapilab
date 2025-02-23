@@ -57,6 +57,14 @@ require_once '../../../../inc/import.php';
                     ?>
                 </select>
             </div>
+            <div class="col-12">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="email_send" name="email_send" checked value="1">
+                    <label class="form-check-label" for="email_send">
+                        E-mail kiküldése az ügyfélnek
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal-footer">

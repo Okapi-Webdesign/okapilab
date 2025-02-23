@@ -43,7 +43,7 @@ if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE (email = ? or
                 $stmt2->close();
             }
 
-            redirect(URL . 'admin/iranyitopult');
+            redirect(URL . 'admin/projektek');
         } else {
             $error = 'Hibás felhasználónév vagy jelszó! (2)';
         }

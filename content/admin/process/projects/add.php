@@ -33,5 +33,16 @@ if (!file_exists($dir)) {
     mkdir($dir);
 }
 
+// Email kiküldése
+if (isset($_POST['email_send']) && $_POST['email_send'] == 1) {
+    $client = new Client($client);
+    if (!mail_send_template($client->getEmail(), 'project_created', [
+        'name' => $client->getName(),
+        'project' => $name
+    ])) {
+        alert_redirect('warning', URL . 'admin/projektek', 'Hiba történt az e-mail kiküldése közben!');
+    }
+}
+
 // Átiránytás
 alert_redirect('success', URL . 'admin/projektek/adatlap/d/' . $pid);

@@ -81,7 +81,8 @@ if (!mail_send_template(
     [
         'name' => $contact_lastname . ' ' . $contact_firstname,
         'email' => $email,
-        'password' => $password
+        'password' => $password,
+        'url' => URL
     ]
 )) {
     alert_redirect('warning', URL . 'admin/ugyfelek', 'Az üdvözlő e-mail küldése sikertelen!');

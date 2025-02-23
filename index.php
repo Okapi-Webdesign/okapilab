@@ -6,7 +6,7 @@ require_once 'inc/import.php';
 // Alkalmazás verziója
 define('APP_VERSION', '1.0.1');
 
-$default_url = "iranyitopult";
+$default_url = "projektek";
 
 // Az URL-ből olvassuk ki az "url" GET paramétert
 $url = isset($_GET['url']) ? explode("/d/", $_GET['url'], 2)[0] : "";
