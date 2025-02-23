@@ -74,14 +74,15 @@ $project = new Project($_POST['project']);
                             $memberNames = [];
                             foreach ($members as $member) {
                                 $member = $trello->getMember($member);
-                                if ($member['id'] != $user->getTrelloId()) $memberNames[] = $member['fullName'];
-                                else $memberNames[] = 'Én';
+                                if ($member['id'] != $user->getTrelloId()) {
+                                    $_user = $trello->getUserById($member['id']);
+                                    $memberNames[] = '<img src="' . $_user->getProfilePicture() . '" height="16" width="16" class="rounded-circle mb-1"> ' . $_user->getFullname();
+                                } else $memberNames[] = '<img src="' . $user->getProfilePicture() . '" height="16" width="16" class="rounded-circle mb-1"> Én';
                             }
                             ?>
 
                             <?php if (!empty($memberNames)) { ?><p class="mb-3 text-muted">
-                                    <i class="fa fa-user-circle me-1"></i>
-                                    <?= implode(', ', $memberNames) ?>
+                                    <?= implode('<br>', $memberNames) ?>
                                 </p>
                             <?php } ?>
 

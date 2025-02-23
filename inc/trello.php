@@ -90,6 +90,20 @@ class TrelloTable
         return $data;
     }
 
+    public function getUserById(string $uid)
+    {
+        global $con;
+        $accountId = 0;
+        if ($stmt = $con->prepare("SELECT `account_id` FROM trello_accounts WHERE trello_id = ?")) {
+            $stmt->bind_param("s", $uid);
+            $stmt->execute();
+            $stmt->bind_result($accountId);
+            $stmt->fetch();
+            $stmt->close();
+            return new User($accountId);
+        }
+    }
+
     public function getUserCards(string $uid, int $limit = 10, null|string $list = null): array
     {
         $url = "https://api.trello.com/1/boards/{$this->boardId}/cards";

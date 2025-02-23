@@ -10,6 +10,12 @@ class User
     {
         global $con;
         $email = $role = $link = 0;
+
+        if ($id == 0) {
+            $this->id = 0;
+            return;
+        }
+
         if ($stmt = $con->prepare('SELECT `email`, `role`, `client_id` FROM `accounts` WHERE `id` = ?')) {
             $stmt->bind_param('i', $id);
             if (!$stmt->execute()) return false;
@@ -87,7 +93,7 @@ class User
     {
         global $con;
         $last_login = null;
-        if ($stmt = $con->prepare('SELECT `lastlogin` FROM `accounts` WHERE `id` = ?')) {
+        if ($stmt = $con->prepare('SELECT `lastlogin_date` FROM `accounts` WHERE `id` = ?')) {
             $stmt->bind_param('i', $this->id);
             if (!$stmt->execute()) return false;
             $stmt->store_result();

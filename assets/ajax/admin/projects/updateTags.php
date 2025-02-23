@@ -11,8 +11,8 @@ if ($tags == null) {
 }
 
 foreach ($tags as $key => $tag) {
-    if ($stmt = $con->prepare('SELECT `name` FROM `projects_tags` WHERE `id` = ?')) {
-        $stmt->bind_param('i', $tag);
+    if ($stmt = $con->prepare('SELECT `name` FROM `projects_tags` WHERE `id` = ? OR name = ?')) {
+        $stmt->bind_param('is', $tag, $tag);
         $stmt->execute();
         $stmt->store_result();
         $stmt->bind_result($name);
