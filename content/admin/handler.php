@@ -12,12 +12,12 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === 'admin' && isset($
 }
 
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === 'admin' && $url == 'belepes') {
-    redirect(URL . 'admin/iranyitopult');
+    redirect(URL . 'admin/projektek');
 }
 
 // URL beállítása
 if (empty($url)) {
-    redirect(URL . 'admin/iranyitopult');
+    redirect(URL . 'admin/projektek');
 }
 
 if (!file_exists(ABS_PATH . 'content/admin/display/' . $url . '.php') && !file_exists(ABS_PATH . 'content/admin/' . $url . '.php') && $url != '404' && strpos($url, 'belepes/') === false && $url != 'belepes' && strpos($url, 'assets/') === false) {
