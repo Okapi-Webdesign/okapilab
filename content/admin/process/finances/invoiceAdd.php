@@ -32,4 +32,16 @@ if ($stmt = $con->prepare('INSERT INTO `invoices`(`id`, `invoice_id`, `project_i
     $stmt->close();
 }
 
+if (!isset($_POST['email_send']) && $_POST['email_send'] == 1) {
+    if (!mail_send_template($project->getClient()->getEmail(), 'invoice_created', [
+        'name' => $project->getClient()->getContactName(),
+        'invoice_number' => $invoice_id,
+        'date' => $create_date,
+        'amount' => number_format($amount, 0, 0, ' '),
+        'url' => URL . 'storage/' . $project->getId() . '/invoices/' . $filename
+    ])) {
+        alert_redirect('warning', URL . 'admin/penzugyek');
+    }
+}
+
 alert_redirect('success', URL . 'admin/penzugyek');
