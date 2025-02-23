@@ -165,7 +165,8 @@ class Document
 
         return [
             'status' => true,
-            'message' => ''
+            'message' => '',
+            'url' => URL . 'storage/' . $this->getProject()->getId() . '/' . $filename
         ];
     }
 }
