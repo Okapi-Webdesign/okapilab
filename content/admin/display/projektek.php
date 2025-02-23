@@ -41,16 +41,16 @@ $pageMeta = [
                             $card = $trello->getProjectCards($project, 1, ['Folyamatban', 'Teendő'], true);
                             if (!empty($card)) {
                                 $card = $card[0];
-                                $arrow = '<i class="fa fa-chevron-right text-primary me-2"></i>';
+                                $arrow = '<i class="fa fa-chevron-right text-primary mx-2"></i>';
                                 $border = 'primary';
                                 if ($trello->getList($card['idList'])['name'] == 'Folyamatban') {
-                                    $arrow = '<i class="fa fa-chevron-right text-warning me-2"></i>';
+                                    $arrow = '<i class="fa fa-chevron-right text-warning mx-2"></i>';
                                     $border = 'warning';
                                 }
                                 if ($card['due'] != NULL) {
                                     $due = strtotime($card['due']);
                                     if ($due < time()) {
-                                        $arrow = '<i class="fa fa-angles-right text-danger me-2"></i>';
+                                        $arrow = '<i class="fa fa-angles-right text-danger mx-2"></i>';
                                         $border = 'danger';
                                     }
                                 }
