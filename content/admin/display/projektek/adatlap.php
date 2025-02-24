@@ -39,7 +39,7 @@ $client = $project->getClient();
             </span>
             <div class="action-buttons">
                 <?php
-                if ($project->getWordpressLogin() !== NULL && $project->isWordpress()) {
+                if ($project->getWordpressLogin() !== NULL && $project->isWordpress() && $project->getUrl() != NULL) {
                 ?>
                     <a target="blank" href="<?= URL ?>admin/process/projects/wpAdmin/d/<?= $project->getId() ?>" title="<i class='fa-solid fa-up-right-from-square me-2'></i>Automatikus belépés a WordPress kezelőfelületére" data-bs-html="true" data-bs-toggle="tooltip" class="btn btn-sm btn-primary"><i class="fa fa-wordpress me-2"></i> WordPress admin</a>
                 <?php
