@@ -113,7 +113,7 @@ class User
 
     function loggedin(): bool
     {
-        return $this->role > 0 && isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === 'admin';
+        return $this->role > 0 && isset($_SESSION['loggedin']);
     }
 
     function getClient(): Client|null

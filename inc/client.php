@@ -181,4 +181,22 @@ class Client
         }
         return $projects;
     }
+
+    public function getActiveProjects(): array
+    {
+        global $con;
+        $id = 0;
+        $projects = [];
+        if ($stmt = $con->prepare('SELECT `id` FROM `projects` WHERE `client_id` = ? AND `active` = 1 ORDER BY name ASC')) {
+            $stmt->bind_param('i', $this->id);
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id);
+            while ($stmt->fetch()) {
+                $projects[] = new Project($id);
+            }
+            $stmt->close();
+        }
+        return $projects;
+    }
 }

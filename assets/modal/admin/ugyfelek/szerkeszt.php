@@ -76,7 +76,7 @@ $client_is_organization = $c->getType() == 2;
             ?>
             <div class="col-12 col-md-6">
                 <label for="email" class="form-label">E-mail cím</label>
-                <input type="email" class="form-control" id="email" name="email" value="<?= $c->getEmail() ?>" required>
+                <input type="email" class="form-control" id="email" value="<?= $c->getEmail() ?>" disabled>
             </div>
             <div class="col-12 col-md-6">
                 <label for="phone" class="form-label">Telefonszám</label>

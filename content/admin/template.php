@@ -151,7 +151,7 @@ if (!isset($pageMeta['packages']) || $pageMeta['packages'] == null || !is_array(
         </p>
 
         <?php
-        if ((isset($pageMeta['role']) && !$user->role($pageMeta['role'])) || !$user->loggedin()) {
+        if ((isset($pageMeta['role']) && !$user->role($pageMeta['role'])) || !$user->role(2) || !$user->loggedin()) {
             echo '<div class="alert alert-danger">Nincs jogosultsága megtekinteni ezt az oldalt!</div>';
             return;
         }
@@ -166,7 +166,7 @@ if (!isset($pageMeta['packages']) || $pageMeta['packages'] == null || !is_array(
         <?php
         }
 
-        html_load($url, $data);
+        html_load('admin', $url, $data);
         ?>
     </div>
 

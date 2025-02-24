@@ -43,11 +43,11 @@ function redirect($target)
 // --- 2. Fájlkezelés --- //
 
 // 2.1. HTML betöltése
-function html_load($section, $data = null)
+function html_load($type, $section, $data = null)
 {
     global $con, $user, $settings;
-    if (file_exists(ABS_PATH . 'content/admin/display/' . $section . '.php')) {
-        require_once ABS_PATH . 'content/admin/display/' . $section . '.php';
+    if (file_exists(ABS_PATH . 'content/' . $type . '/display/' . $section . '.php')) {
+        require_once ABS_PATH . 'content/' . $type . '/display/' . $section . '.php';
     } else {
         echo 'A fájl nem található!';
     }

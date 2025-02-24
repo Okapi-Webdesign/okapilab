@@ -12,9 +12,13 @@ if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
     $password = $_POST['password'];
 }
 
+setcookie('email', '', time() - 3600, '/');
+setcookie('password', '', time() - 3600, '/');
+setcookie('platform', '', time() - 3600, '/');
+
 // Adatok lekérdezése
-if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE (email = ? or email = ?) and role = 1 LIMIT 1')) {
-    $stmt->bind_param('ss', $email, $email);
+if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE email = ? and role = 1 LIMIT 1')) {
+    $stmt->bind_param('s', $email);
     $stmt->execute();
     $stmt->store_result();
 
@@ -27,6 +31,14 @@ if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE (email = ? or
             $_SESSION['loggedin'] = 'client';
             $_SESSION['name'] = $email;
             $_SESSION['id'] = $id;
+            $_SESSION['project'] = NULL;
+
+            $u = new User($id);
+            $c = $u->getClient();
+
+            if (count($c->getActiveProjects()) == 1) {
+                $_SESSION['project'] = $c->getActiveProjects()[0]->getId();
+            }
 
             if (isset($_POST['rememberMe'])) {
                 setcookie('email', $email, time() + 60 * 60 * 24 * 30, '/');
@@ -34,13 +46,13 @@ if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE (email = ? or
                 setcookie('platform', 'client', time() + 60 * 60 * 24 * 30, '/');
             }
 
-            if ($stmt2 = $con->prepare('UPDATE accounts SET lastlogin = NOW() WHERE id = ?')) {
+            if ($stmt2 = $con->prepare('UPDATE accounts SET lastlogin_date = NOW() WHERE id = ?')) {
                 $stmt2->bind_param('i', $id);
                 $stmt2->execute();
                 $stmt2->close();
             }
 
-            redirect(URL . 'ugyfelfaliujsag');
+            redirect(URL . 'ugyfel/projektem');
         } else {
             $error = 'Hibás felhasználónév vagy jelszó! (2)';
         }
@@ -51,8 +63,5 @@ if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE (email = ? or
     $stmt->close();
 }
 
-setcookie('email', '', time() - 3600, '/');
-setcookie('password', '', time() - 3600, '/');
-setcookie('platform', '', time() - 3600, '/');
-
-redirect(URL . 'ugyfel/belepes');
+redirect(URL . 'ugyfel/belepes?err=' . $error);
+exit;

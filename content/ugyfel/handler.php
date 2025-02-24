@@ -13,22 +13,22 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === 'client') {
 }
 
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === 'client' && $url == 'belepes') {
-    redirect(URL . 'ugyfel/iranyitopult');
+    redirect(URL . 'ugyfel/projektem');
 }
 
 // URL beállítása
 if (empty($url)) {
-    redirect(URL . 'ugyfel/iranyitopult');
+    redirect(URL . 'ugyfel/projektem');
 }
 
-if (!file_exists(ABS_PATH . 'content/ugyfel/display/' . $url . '.php') && !file_exists(ABS_PATH . 'content/admin/' . $url . '.php') && $url != '404' && strpos($url, 'belepes/') === false && $url != 'belepes' && strpos($url, 'assets/') === false) {
+if (!file_exists(ABS_PATH . 'content/ugyfel/display/' . $url . '.php') && !file_exists(ABS_PATH . 'content/ugyfel/' . $url . '.php') && $url != '404' && strpos($url, 'belepes/') === false && $url != 'belepes' && strpos($url, 'assets/') === false) {
     $url = '404';
 }
 
 // Keressük meg a fájlt
 if (strpos($url, 'belepes/') === false && $url != 'belepes') {
     if (strpos($url, 'process/') !== false && file_exists(ABS_PATH . 'content/ugyfel/process/' . str_replace('process/', '', $url) . '.php')) {
-        require_once ABS_PATH . 'content/ugyfel' . $url . '.php';
+        require_once ABS_PATH . 'content/ugyfel/' . $url . '.php';
     } elseif (file_exists(ABS_PATH . 'content/ugyfel/display/' . $url . '.php')) {
         require_once ABS_PATH . 'content/ugyfel/template.php';
     } else {

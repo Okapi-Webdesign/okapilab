@@ -1,0 +1,4 @@
+<?php
+$pageMeta = [
+    'title' => 'Projektem',
+];

@@ -24,7 +24,7 @@ if (isset($_COOKIE['email']) && isset($_COOKIE['password']) && $_COOKIE['platfor
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 
-<body class="d-flex align-items-center justify-content-center bg-light">
+<body class="d-flex align-items-center justify-content-center bg-light vh-100">
     <?php
     if (isset($_GET['err'])) {
     ?>
@@ -34,7 +34,7 @@ if (isset($_COOKIE['email']) && isset($_COOKIE['password']) && $_COOKIE['platfor
     <?php } ?>
     <div class="card shadow-sm p-4">
         <div class="text-center mb-3">
-            <img src="<?= URL ?>assets/img/logo.png" alt="EduLink logó" class="mb-4" style="max-width: 100px;">
+            <img src="<?= URL ?>assets/img/logo.png" alt="OkapiLab logó" class="mb-4" style="max-width: 100px;">
             <h1 class="h4 mb-0">Jelentkezz be</h1>
             <p class="text-muted">a további információk eléréséhez!</p>
         </div>
@@ -56,7 +56,7 @@ if (isset($_COOKIE['email']) && isset($_COOKIE['password']) && $_COOKIE['platfor
             </div>
             <button type="submit" class="btn btn-primary btn-block">Bejelentkezés</button>
         </form>
-        <p class="mt-3 mb-0 text-muted text-center"><span>&copy;</span> EduLink 2024-<?= date('Y') ?></p>
+        <p class="mt-3 mb-0 text-muted text-center"><span>&copy;</span> OkapiLab 2024-<?= date('Y') ?></p>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
