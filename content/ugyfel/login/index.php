@@ -52,7 +52,6 @@ if (isset($_COOKIE['email']) && isset($_COOKIE['password']) && $_COOKIE['platfor
                     <input type="checkbox" class="form-check-input" id="rememberMe">
                     <label class="form-check-label" for="rememberMe">Emlékezz rám</label>
                 </div>
-                <a href="<?= URL ?>ugyfel/belepes/forgot-password" class="btn btn-link">Elfelejtett jelszó?</a>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Bejelentkezés</button>
         </form>
