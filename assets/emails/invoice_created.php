@@ -19,6 +19,6 @@ $email = [
 
 <p>Amennyiben kérdésed van, keress minket bizalommal az <a href="mailto:info@okapiweb.hu" style="color: #FF9E00; text-decoration: none;">info@okapiweb.hu</a> e-mail címen.</p>
 
-<p><strong>Köszönjük, hogy az Okapi Webdesignt használod!</strong></p>
+<p><strong>Köszönjük, hogy az Okapi Webdesignt választottad!</strong></p>
 '
 ];

@@ -9,7 +9,6 @@ $email = [
 
 <p>A projekt megvalósításához szükséges adatokat és alapanyagokat kérjük, küldd el az <a href="mailto:info@okapiweb.hu" style="color: #FF9E00; text-decoration: none;">info@okapiweb.hu</a> e-mail címre.</p>
 
-<p><strong>Köszönjük az együttműködésed!</strong></p>
+<p><strong>Köszönjük az együttműködésedet!</strong></p>
 '
 ];
-?>

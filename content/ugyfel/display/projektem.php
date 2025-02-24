@@ -11,7 +11,7 @@ if ($project->getClient()->getId() != $user->getClient()->getId()) {
 
 <div class="card">
     <div class="card-body">
-        <div id="projectHeader" class="d-flex justify-content-md-between justify-content-start flex-column flex-md-row align-items-center pb-2 mb-2 border-bottom">
+        <div id="projectHeader" class="d-flex justify-content-md-between justify-content-start flex-column flex-md-row align-items-center pb-2 border-bottom border-dark">
             <h2 class="display-4">
                 <?= $project->getName() ?>
             </h2>
@@ -38,7 +38,7 @@ if ($project->getClient()->getId() != $user->getClient()->getId()) {
             </div>
         </div>
 
-        <div class="row g-3">
+        <div class="row g-3 mt-2">
             <div class="col-12 col-md-4">
                 <img src="<?php
                             if ($project->getImageUri() === NULL) {
@@ -65,6 +65,10 @@ if ($project->getClient()->getId() != $user->getClient()->getId()) {
                             echo '<a href="' . $displayUrl . '" target="_blank" class="text-decoration-none">' . $displayUrl . '</a>';
                         } else {
                             echo 'Nincs megadva.';
+                        }
+
+                        if ($project->isWordpress()) {
+                            echo '<br><i class="fa-brands fa-wordpress me-1"></i> WordPress';
                         }
                         ?>
                     </div>
@@ -93,39 +97,37 @@ if ($project->getClient()->getId() != $user->getClient()->getId()) {
                     </div>
                 </div>
 
-                <h3 class="h4 mt-3">Dokumentumok</h3>
-                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
-                    <?php
-                    $docs = $project->getDocuments();
-                    if ($docs == NULL || count($docs) == 0) {
-                        echo '<div class="col">Nincs dokumentum feltöltve.</div>';
-                    } else {
-                        foreach ($docs as $doc) {
-                            $current = $doc->getCurrent();
-                            $file = $current->getFilename();
+                <h3 class="h4 mt-3 pt-3 border-top">Bejelentkezési adatok</h3>
+                <p class="text-muted">
+                    A jelszó felfedéséhez kattints a mezőre!
+                </p>
 
-                    ?>
-                            <div class="col">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title"><?= $doc->getType()->getName() ?></h5>
-
-                                        <p class="card-text">
-                                            <b>Feltöltés dátuma:</b> <?= $current->getDate(true) ?> <br>
-                                            <b>Állapot:</b> <?= $current->isActive() ? '<span class="badge bg-success">Aktuális</span>' : '<span class="badge bg-secondary">Elavult</span>' ?> <br>
-                                            <b>Méret:</b> <?= round(filesize(ABS_PATH . 'storage/' . $project->getId() . '/' . $file) / 1024) ?> KB
-                                        </p>
-
-                                        <a href="<?= URL ?>ugyfel/process/project/download/<?= $current->getId() ?>" class="btn btn-primary">
-                                            <i class="fa fa-download me-2"></i> Letöltés
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                    <?php
-                        }
-                    }
-                    ?>
+                <button class="btn btn-primary mb-3" onclick="modal_open('projekt/hozzaferesHozzaad')"><i class="fa fa-plus me-2"></i> Új adat</button>
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th style="width:33%;">Platform</th>
+                                <th style="width:33%;">Felhasználónév</th>
+                                <th style="width:33%;">Jelszó</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if (count($project->getLogins()) == 0) {
+                                echo '<tr><td colspan="4">Nincs rögzített bejelentkezési adat.</td></tr>';
+                            } else {
+                                foreach ($project->getLogins() as $login) {
+                                    echo '<tr>';
+                                    echo '<td><a href="' . $login->getUrl() . '" target="_blank" class="text-decoration-none">' . $login->getName() . '</a></td>';
+                                    echo '<td>' . $login->getUsername() . '</td>';
+                                    echo '<td class="passwordTd" data-pw="' . $login->getPassword() . '" style="cursor:pointer;">********</td>';
+                                    echo '</tr>';
+                                }
+                            }
+                            ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -136,6 +138,15 @@ if ($project->getClient()->getId() != $user->getClient()->getId()) {
     $('document').ready(function() {
         $('.webOpener').click(function() {
             window.open('<?= $project->getUrl() ?>', '_blank');
+        });
+
+        $('.passwordTd').click(function() {
+            pw = $(this).data('pw');
+            if ($(this).text() == pw) {
+                $(this).text('********');
+            } else {
+                $(this).text(pw);
+            }
         });
     });
 </script>
