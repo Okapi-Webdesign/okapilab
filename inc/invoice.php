@@ -87,7 +87,7 @@ class Invoice
         else if ($formatted == 1) {
             switch ($this->status) {
                 case 0:
-                    return 'Kiállítva';
+                    return 'Fizetésre vár';
                     break;
                 case 1:
                     return 'Befizetve';
@@ -99,7 +99,7 @@ class Invoice
         } else {
             switch ($this->status) {
                 case 0:
-                    return '<span class="badge text-bg-warning">Kiállítva</span>';
+                    return '<span class="badge text-bg-warning">Fizetésre vár</span>';
                     break;
                 case 1:
                     return '<span class="badge text-bg-success">Befizetve</span>';
@@ -174,6 +174,8 @@ class Invoice
             $stmt->fetch();
             $stmt->close();
         }
+
+        if ($amount == NULL) return 0;
 
         return $amount;
     }

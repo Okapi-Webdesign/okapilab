@@ -330,7 +330,7 @@ class Project
         $documents = [];
         $id = 0;
 
-        if ($stmt = $con->prepare('SELECT `id` FROM `documents` WHERE `project_id` = ?')) {
+        if ($stmt = $con->prepare('SELECT `id` FROM `documents` WHERE `project_id` = ? ORDER BY `id` DESC')) {
             $stmt->bind_param('i', $this->id);
             $stmt->execute();
             $stmt->store_result();
@@ -364,5 +364,25 @@ class Project
         }
 
         return false;
+    }
+
+    public function getInvoices(): array
+    {
+        global $con;
+        $invoices = [];
+        $id = 0;
+
+        if ($stmt = $con->prepare('SELECT `id` FROM `invoices` WHERE `project_id` = ? ORDER BY `id` DESC')) {
+            $stmt->bind_param('i', $this->id);
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id);
+            while ($stmt->fetch()) {
+                $invoices[] = new Invoice($id);
+            }
+            $stmt->close();
+        }
+
+        return $invoices;
     }
 }
