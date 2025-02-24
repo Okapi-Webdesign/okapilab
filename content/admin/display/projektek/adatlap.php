@@ -30,7 +30,7 @@ $client = $project->getClient();
                                                                         if (substr($displayUrl, -1) == '/') {
                                                                             $displayUrl = substr($displayUrl, 0, -1);
                                                                         }
-                                                                        echo '<a href="' . $displayUrl . '" target="_blank" class="text-decoration-none">' . $displayUrl . '</a>';
+                                                                        echo '<a href="' . $project->getUrl() . '" target="_blank" class="text-decoration-none">' . $displayUrl . '</a>';
                                                                     } else {
                                                                         echo 'Nincs megadva.';
                                                                     }
