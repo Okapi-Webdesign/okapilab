@@ -12,7 +12,7 @@ $expenses = FinExpense::getAll();
     <div class="card-body">
         <div class="row g-3">
             <div class="col-12 col-lg-6">
-                <div class="text-bg-primary rounded w-100 p-3">
+                <div class="text-bg-primary rounded w-100 p-3 bg-gradient">
                     <span class="fs-1 d-block"><?php
                                                 $sum = 0;
 
