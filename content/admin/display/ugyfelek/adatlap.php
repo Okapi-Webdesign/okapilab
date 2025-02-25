@@ -20,7 +20,7 @@ $client = new Client($data[0]);
             </span>
         </div>
         <hr>
-        <div class="row">
+        <div class="row g-3">
             <div class="col-12 col-md-3">
                 <h3 class="h6">Projekt(ek)</h3>
                 <?php
