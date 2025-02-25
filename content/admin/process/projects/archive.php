@@ -10,7 +10,7 @@ if ($stmt = $con->prepare('UPDATE `projects` SET `active` = 0 WHERE `id` = ?')) 
     $stmt->close();
 }
 
-if ($project->getStatus(1) == 'Befejezett') {
+if ($project->getStatus()->getId() == ProjectStatus::getMax()->getId()) {
     $wdate = date('Y-m-d', strtotime('+6 months'));
     if ($stmt = $con->prepare('UPDATE `projects` SET `warranty` = ? WHERE `id` = ?')) {
         $stmt->bind_param('si', $wdate, $id);
