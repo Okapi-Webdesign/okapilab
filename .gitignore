@@ -2,3 +2,4 @@ config.php
 assets/nevnap.json
 storage/*
 assets/img/profile/*
+.vscode
