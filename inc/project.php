@@ -385,4 +385,14 @@ class Project
 
         return $invoices;
     }
+
+    public function getWpConnection()
+    {
+        $c = new WordPressConnection($this);
+        if ($c->initialized()) {
+            return $c;
+        } else {
+            return false;
+        }
+    }
 }
