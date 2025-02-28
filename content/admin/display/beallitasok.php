@@ -13,7 +13,7 @@ $pageMeta = [
                     <?php
                     $labels = $con->query("SELECT * FROM `projects_tags` ORDER BY `name` ASC");
                     foreach ($labels as $row) {
-                        echo "<a href='" . URL . "admin/process/settings/delete/d/" . $row['id'] . "' class='list-group-item list-group-item-action d-flex justify-content-between align-items-center deleteButton'>" . $row['name'] . " <i class='fa fa-trash deleteIcon'></i></a>";
+                        echo "<a href='" . URL . "admin/process/settings/deleteTag/d/" . $row['id'] . "' class='list-group-item list-group-item-action d-flex justify-content-between align-items-center deleteButton'>" . $row['name'] . " <i class='fa fa-trash deleteIcon'></i></a>";
                     }
                     ?>
                 </ul>
@@ -67,6 +67,11 @@ $pageMeta = [
                     </table>
                 </div>
             </div>
+        </div>
+
+        <div class="mt-3">
+            <h3 class="h4">Műveletek</h3>
+            <a href="<?= URL ?>admin/process/settings/gitpull" class="btn btn-danger">Frissítés</a>
         </div>
     </div>
 </div>

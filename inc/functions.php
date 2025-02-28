@@ -360,3 +360,15 @@ function isLightColor(string $color)
     $brightness = (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
     return $brightness > 155;
 }
+
+// 6.8. Verzió lekérése
+// Verzió lekérése
+function get_appver()
+{
+    $commitHash = exec('git log --pretty="%h" -n1 HEAD');
+
+    $commitDate = new \DateTime(trim(exec('git log -n1 --pretty=%ci HEAD')));
+    $commitDate->setTimezone(new \DateTimeZone('Europe/Budapest'));
+
+    return sprintf('v%s dev-%s (%s)', APP_VERSION, $commitHash, $commitDate->format('Y-m-d H:i:s'));
+}
