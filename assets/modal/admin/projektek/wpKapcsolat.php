@@ -11,7 +11,7 @@ $project = new Project($_POST['id']);
     </h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Bezárás"></button>
 </div>
-<form action="<?= URL ?>admin/process/projects/wpConnection" method="post" class="needs-validation" novalidate>
+<form action="<?= URL ?>admin/process/projects/wp/connect" method="post" class="needs-validation" novalidate>
     <div class="modal-body">
         <div class="row g-3">
             <div class="col-12 col-md-6">

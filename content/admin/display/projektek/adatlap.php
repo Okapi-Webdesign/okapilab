@@ -43,6 +43,10 @@ $client = $project->getClient();
                 ?>
                     <button title="WordPress kapcsolat létrehozása" data-bs-toggle="tooltip" class="btn btn-sm btn-success" onclick="modal_open('projektek/wpKapcsolat', {id: <?= $project->getId() ?>})"><i class="fa fa-link"></i></button>
                 <?php
+                } elseif ($project->isWordpress() && $project->getWpConnection()) {
+                ?>
+                    <a href="<?= URL ?>admin/projektek/wordpress/d/<?= $project->getId() ?>" title="WordPress kezelő" data-bs-toggle="tooltip" class="btn btn-sm btn-primary"><i class="fa-brands fa-wordpress me-2"></i> WordPress</a>
+                <?php
                 }
                 if ($project->isActive()) {
                 ?>
@@ -115,7 +119,7 @@ $client = $project->getClient();
                         <?php
                         if ($project->getWordpressLogin() !== NULL && $project->isWordpress() && $project->getUrl() != NULL) {
                         ?>
-                            <a target="blank" href="<?= URL ?>admin/process/projects/wpAdmin/d/<?= $project->getId() ?>" title="<i class='fa-solid fa-up-right-from-square me-2'></i>Automatikus belépés a WordPress kezelőfelületére" data-bs-html="true" data-bs-toggle="tooltip" class="text-decoration-none"><i class="fa fa-wordpress me-1"></i> WordPress admin</a>
+                            <a target="blank" href="<?= URL ?>admin/process/projects/wp/admin/d/<?= $project->getId() ?>" title="<i class='fa-solid fa-up-right-from-square me-2'></i>Automatikus belépés a WordPress kezelőfelületére" data-bs-html="true" data-bs-toggle="tooltip" class="text-decoration-none"><i class="fa fa-wordpress me-1"></i> WordPress admin</a>
                         <?php } ?>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">

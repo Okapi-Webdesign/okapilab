@@ -34,9 +34,19 @@ $pageMeta = [
                                 $displayURL = substr($displayURL, 0, -1);
                             }
                         }
+
+                        $wpicon = '';
+                        if ($project->isWordpress()) {
+                            if ($project->getWpConnection() && $project->getWpConnection()->testconnection()) {
+                                $wpicon = '<i title="WordPress adatkapcsolat aktív" data-bs-toggle="tooltip" class="fa fa-wordpress text-success me-1"></i> ';
+                            } else {
+                                $wpicon = '<i title="WordPress adatkapcsolat inaktív" data-bs-toggle="tooltip" class="fa fa-wordpress text-danger me-1"></i> ';
+                            }
+                        }
+
                         echo '<tr data-id="' . $project->getId() . '">';
                         echo '<td>' . $project->getId() . '</td>';
-                        echo '<td>' . $project->getName();
+                        echo '<td data-sort="' . $project->getName() . '">' . $wpicon . $project->getName();
                         if ($project->getTrelloId() != false) {
                             $card = $trello->getProjectCards($project, 1, ['Folyamatban', 'Teendő'], true);
                             if (!empty($card)) {
@@ -96,7 +106,7 @@ $pageMeta = [
                 orderable: false,
                 targets: [0]
             }, ],
-            order: [2, 'asc'],
+            order: [1, 'asc'],
             layout: {
                 topStart: {
                     buttons: [{

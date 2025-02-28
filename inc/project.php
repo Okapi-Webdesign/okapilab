@@ -248,12 +248,13 @@ class Project
         return date('Y. m. d.', strtotime($this->deadline));
     }
 
-    public function getWarranty(): string|null
+    public function getWarranty(bool $formatted = true): string|null
     {
         if ($this->warranty == NULL) {
             return null;
         }
-        return date('Y. m. d.', strtotime($this->warranty));
+        if ($formatted) return date('Y. m. d.', strtotime($this->warranty));
+        return $this->warranty;
     }
 
     public function addLogin(string $name, string $url, string $username, string $password, bool $private): bool

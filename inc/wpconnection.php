@@ -16,8 +16,6 @@ class WordPressConnection
             $this->project = $project;
         }
 
-        $wp_url = $this->project->getUrl();
-
         $id = $local_hash = $wp_hash = 0;
         $project_id = $this->project->getId();
         if ($stmt = $con->prepare('SELECT `id`, `local_hash`, `wp_hash` FROM `wordpress_connections` WHERE `project_id` = ?')) {
@@ -25,6 +23,7 @@ class WordPressConnection
             $stmt->execute();
             $stmt->store_result();
             $stmt->bind_result($id, $local_hash, $wp_hash);
+            $stmt->fetch();
             if ($stmt->num_rows > 0) {
                 $this->id = $id;
                 $this->wp_hash = $wp_hash;
@@ -54,17 +53,12 @@ class WordPressConnection
         return $this->project;
     }
 
-    public function connect(string $wp_hash): bool
+    public function rest_request($url)
     {
-        global $con;
-        $local_hash = bin2hex(random_bytes(16));
-        $url = $this->project->getUrl();
-
-        // Kérés küldése a WP felé
-        $json_url = "$url/wp-json/okapilab/v1/connect";
+        $json_url = $this->project->getUrl() . 'wp-json/okapilab/v1/' . $url;
         $postdata = [
-            'wp_hash' => $wp_hash,
-            'okapi_hash' => $local_hash
+            'wp_hash' => $this->wp_hash,
+            'okapi_hash' => $this->local_hash
         ];
 
         $options = [
@@ -78,6 +72,34 @@ class WordPressConnection
         $context = stream_context_create($options);
         $response = file_get_contents($json_url, false, $context);
         $response = json_decode($response);
+
+        return $response;
+    }
+
+    public function connect(string $wp_hash): bool
+    {
+        global $con;
+        $local_hash = bin2hex(random_bytes(16));
+
+        $this->wp_hash = $wp_hash;
+        $this->local_hash = $local_hash;
+
+        $pid = $this->project->getId();
+        $id = 0;
+        if ($stmt = $con->prepare('SELECT `id` FROM `wordpress_connections` WHERE `wp_hash` = ? AND `local_hash` = ? AND `project_id` != ?')) {
+            $stmt->bind_param('ssi', $wp_hash, $local_hash, $pid);
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id);
+            $stmt->fetch();
+            if ($stmt->num_rows > 0) {
+                $stmt->close();
+                return false;
+            }
+            $stmt->close();
+        }
+
+        $response = $this->rest_request('connect');
 
         if ($response === NULL) {
             return false;
@@ -93,5 +115,86 @@ class WordPressConnection
         }
 
         return true;
+    }
+
+    public function disconnect(): bool
+    {
+        global $con;
+        if (!$this->initialized()) {
+            return false;
+        }
+
+        $response = $this->rest_request('disconnect');
+
+        $stmt = $con->prepare('DELETE FROM `wordpress_connections` WHERE `id` = ?');
+        $stmt->bind_param('i', $this->id);
+        $stmt->execute();
+        $stmt->close();
+        return true;
+    }
+
+    public function testconnection(): bool
+    {
+        if (!$this->initialized()) {
+            return false;
+        }
+
+        $response = $this->rest_request('testconnection');
+
+        if ($response === NULL) {
+            return false;
+        }
+
+        return $response == "success";
+    }
+
+    public function isMaintenanceMode(): bool
+    {
+        if (!$this->initialized()) {
+            return false;
+        }
+
+        $response = $this->rest_request('checkmaintenance');
+
+        if ($response === NULL) {
+            return false;
+        }
+
+        return $response == "1";
+    }
+
+    public function toggleMaintenance(): bool
+    {
+        if (!$this->initialized()) {
+            return false;
+        }
+
+        $response = $this->rest_request('togglemaintenance');
+
+        if ($response === NULL) {
+            return false;
+        }
+
+        return $response == "success";
+    }
+
+    public static function getProjectByHash(string $wp_hash, string $connect_hash): Project
+    {
+        global $con;
+        $project = false;
+        $id = 0;
+        if ($stmt = $con->prepare('SELECT `project_id` FROM `wordpress_connections` WHERE `wp_hash` = ? AND `local_hash` = ?')) {
+            $stmt->bind_param('ss', $wp_hash, $connect_hash);
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id);
+            $stmt->fetch();
+            if ($stmt->num_rows > 0) {
+                $project = new Project($id);
+            }
+            $stmt->close();
+        }
+
+        return $project;
     }
 }
