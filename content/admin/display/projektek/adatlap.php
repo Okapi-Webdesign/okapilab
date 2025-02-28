@@ -115,12 +115,6 @@ $client = $project->getClient();
                         <?php } else {
                             echo 'Nincs megadva.';
                         } ?>
-
-                        <?php
-                        if ($project->getWordpressLogin() !== NULL && $project->isWordpress() && $project->getUrl() != NULL) {
-                        ?>
-                            <a target="blank" href="<?= URL ?>admin/process/projects/wp/admin/d/<?= $project->getId() ?>" title="<i class='fa-solid fa-up-right-from-square me-2'></i>Automatikus belépés a WordPress kezelőfelületére" data-bs-html="true" data-bs-toggle="tooltip" class="text-decoration-none"><i class="fa fa-wordpress me-1"></i> WordPress admin</a>
-                        <?php } ?>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
                         <b>Státusz</b> <br>

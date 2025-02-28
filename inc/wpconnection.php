@@ -178,6 +178,17 @@ class WordPressConnection
         return $response == "success";
     }
 
+    public function getLoginLink()
+    {
+        if (!$this->initialized()) {
+            return '';
+        }
+
+        $response = $this->rest_request('login');
+
+        return $response->login_url;
+    }
+
     public static function getProjectByHash(string $wp_hash, string $connect_hash): Project
     {
         global $con;

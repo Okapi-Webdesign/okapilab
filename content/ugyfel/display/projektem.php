@@ -17,9 +17,9 @@ if ($project->getClient()->getId() != $user->getClient()->getId()) {
             </h2>
             <div class="action-buttons">
                 <?php
-                if ($project->isWordpress() && $project->getWordpressLogin() != NULL && $project->getUrl() != NULL) {
+                if ($project->isWordpress() && $project->getUrl() != NULL) {
                 ?>
-                    <a data-bs-toggle="tooltip" title="WordPress adminisztrációs felület megnyitása (új oldalon)" href="<?= URL ?>ugyfel/process/project/wpLogin" class="btn btn-primary" target="_blank">
+                    <a data-bs-toggle="tooltip" title="WordPress adminisztrációs felület megnyitása (új oldalon)" href="<?= URL ?>ugyfel/process/project/wp/login" class="btn btn-primary" target="_blank">
                         <i class="fa fa-brands fa-wordpress me-2"></i> WP Admin
                     </a>
 

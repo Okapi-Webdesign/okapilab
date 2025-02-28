@@ -21,7 +21,7 @@ class Project
     {
         global $con;
         $this->id = $id;
-        $name = $url = $comment = $warranty = $image_uri = $create_date = $client_id = $status = $tags = $services = $manager_id = $is_wordpress = $is_active = $deadline = null;
+        $name = $url = $comment = $warranty = $image_uri = $create_date = $client_id = $status = $tags = $services = $manager_id = $is_wordpress = $is_active = $deadline = '';
 
         if ($stmt = $con->prepare('SELECT `id`, `client_id`, `name`, `url`, `status`, `tags`, `deadline`, `services`, `manager_id`, `comment`, `warranty`, `is_wordpress`, `active`, `image_uri`, `create_date` FROM `projects` WHERE `id` = ?')) {
             $stmt->bind_param('i', $id);
@@ -46,8 +46,6 @@ class Project
 
         if ($client_id) {
             $this->client = new Client($client_id);
-        } else {
-            $this->client = null;
         }
 
         $this->status = new ProjectStatus($status);
@@ -303,26 +301,6 @@ class Project
         }
 
         return $logins;
-    }
-
-    public function getWordpressLogin(): ProjectLogin|null
-    {
-        global $con, $user;
-        $id = 0;
-        $uid = $user->getId();
-
-        if ($stmt = $con->prepare('SELECT `id` FROM `projects_logins` WHERE `project_id` = ? AND `name` = "WordPress" AND (`private` = 0 OR `author` = ?)')) {
-            $stmt->bind_param('ii', $this->id, $uid);
-            $stmt->execute();
-            $stmt->store_result();
-            $stmt->bind_result($id);
-            if ($stmt->fetch()) {
-                return new ProjectLogin($id);
-            }
-            $stmt->close();
-        }
-
-        return null;
     }
 
     public function getDocuments(): array

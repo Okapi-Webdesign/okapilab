@@ -35,6 +35,11 @@ $wp = new WordPressConnection($project);
                     Vissza a projekthez
                 </a>
 
+                <a target="_blank" href="<?= URL ?>admin/process/projects/wp/login/d/<?= $project->getId() ?>" class="btn btn-primary btn-sm">
+                    <i class="fa-brands fa-wordpress me-1"></i>
+                    Kezelőfelület megnyitása
+                </a>
+
                 <button class="btn btn-danger btn-sm" onclick="modal_open('projektek/wpKapcsolatBontas', {id: <?= $project->getId() ?>})">
                     <i class="fa fa-unlink me-1"></i>
                     Kapcsolat bontása
