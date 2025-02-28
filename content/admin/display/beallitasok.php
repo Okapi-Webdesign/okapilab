@@ -71,7 +71,7 @@ $pageMeta = [
 
         <div class="mt-3">
             <h3 class="h4">Műveletek</h3>
-            <a href="<?= URL ?>admin/process/settings/gitpull" class="btn btn-danger">Frissítés</a>
+            <a href="<?= URL ?>admin/process/settings/gitpull" class="btn btn-primary">Frissítés</a>
         </div>
     </div>
 </div>
