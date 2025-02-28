@@ -18,7 +18,7 @@ foreach ($tags as $key => $tag) {
         $stmt->bind_result($name);
         if ($stmt->num_rows == 0) {
             unset($tags[$key]);
-            $new_tags[] = $tag;
+            $new_tags[] = $name;
             continue;
         }
         $stmt->fetch();
