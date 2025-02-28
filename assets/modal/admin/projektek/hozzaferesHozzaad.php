@@ -17,11 +17,11 @@ $project = new Project($_POST['id']);
         <div class="row g-3">
             <div class="col-12 col-md-6">
                 <label for="name" class="form-label">Megnevezés</label>
-                <input type="text" id="name" name="name" class="form-control" required <?= isset($_POST['wp']) ? 'value="WordPress"' : '' ?>>
+                <input type="text" id="name" name="name" class="form-control" required>
             </div>
             <div class="col-12 col-md-6">
                 <label for="url" class="form-label">Belépési URL</label>
-                <input type="url" id="url" name="url" class="form-control" required <?= isset($_POST['wp']) && $project->getUrl() !== NULL ? 'value="' . $project->getUrl() . 'wp-admin"' : '' ?>>
+                <input type="url" id="url" name="url" class="form-control" required>
             </div>
             <div class="col-12 col-md-6">
                 <label for="username" class="form-label">Felhasználónév</label>

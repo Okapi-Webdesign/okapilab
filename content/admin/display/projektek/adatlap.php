@@ -235,10 +235,6 @@ $client = $project->getClient();
                         </thead>
                         <tbody>
                             <?php
-                            if ($project->isWordpress() && $project->getWordpressLogin() === NULL) {
-                                echo '<tr><td colspan="4"><a href="#" onclick="modal_open(\'projektek/hozzaferesHozzaad\', {id: ' . $project->getId() . ', wp: 1})">WordPress belépési adat hozzáadása</a></td></tr>';
-                            }
-
                             if (count($project->getLogins()) == 0) {
                                 echo '<tr><td colspan="4">Nincs rögzített bejelentkezési adat.</td></tr>';
                             } else {
