@@ -31,18 +31,15 @@ $wp = new WordPressConnection($project);
 
             <div class="action-buttons">
                 <a href="<?= URL ?>admin/projektek/adatlap/d/<?= $project->getId() ?>" class="d-inline-block d-md-none btn btn-secondary btn-sm">
-                    <i class="fa fa-arrow-left me-1"></i>
-                    Vissza a projekthez
+                    <i class="fa fa-arrow-left"></i>
                 </a>
 
-                <a target="_blank" href="<?= URL ?>admin/process/projects/wp/login/d/<?= $project->getId() ?>" class="btn btn-primary btn-sm">
-                    <i class="fa-brands fa-wordpress me-1"></i>
-                    Kezelőfelület megnyitása
+                <a title="WordPress admin felület megnyitása" data-bs-toggle="tooltip" target="_blank" href="<?= URL ?>admin/process/projects/wp/login/d/<?= $project->getId() ?>" class="btn btn-primary btn-sm">
+                    <i class="fa-brands fa-wordpress me-1"></i> Bejelentkezés
                 </a>
 
-                <button class="btn btn-danger btn-sm" onclick="modal_open('projektek/wpKapcsolatBontas', {id: <?= $project->getId() ?>})">
-                    <i class="fa fa-unlink me-1"></i>
-                    Kapcsolat bontása
+                <button title="Kapcsolat bontása" data-bs-toggle="tooltip" class="btn btn-danger btn-sm" onclick="modal_open('projektek/wpKapcsolatBontas', {id: <?= $project->getId() ?>})">
+                    <i class="fa fa-unlink"></i>
                 </button>
             </div>
         </div>
