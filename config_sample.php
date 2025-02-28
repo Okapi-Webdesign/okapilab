@@ -39,6 +39,8 @@ define("TRELLO_BOARD", "");
 define("DEV_MODE", false);
 // E-mailek küldése
 define("ENABLE_EMAILS", true);
+// Tesztkörnyezet
+define("TEST_ENV", false);
 
 // A webapp adminisztrátorának e-mail címe
 define("ADMIN_EMAIL", "bozaiakos@bozaiakos.hu");

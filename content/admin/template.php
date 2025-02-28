@@ -62,6 +62,7 @@ if (!isset($pageMeta['packages']) || $pageMeta['packages'] == null || !is_array(
         <a href="<?= URL ?>admin" class="align-items-center me-md-auto text-white text-decoration-none d-md-flex d-none">
             <img src="<?= URL ?>assets/img/logo.png" alt="Logo" width="32" class="me-3">
             <span class="fs-4"><?= APP_NAME ?></span>
+            <?= TEST_ENV ? '<span class="badge text-bg-warning ms-2 mt-1">Teszt</span>' : '' ?>
         </a>
         <div class="d-flex align-items-center me-md-auto text-white text-decoration-none d-md-none">
             <button class="sidebarToggler">
