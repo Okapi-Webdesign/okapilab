@@ -27,8 +27,8 @@ foreach ($tags as $key => $tag) {
 }
 
 foreach ($new_tags as $tag) {
-    if ($stmt = $con->prepare('INSERT INTO `projects_tags` (`id`, `name`) VALUES (?, ?)')) {
-        $stmt->bind_param('is', $tag, $tag);
+    if ($stmt = $con->prepare('INSERT INTO `projects_tags` (`id`, `name`) VALUES (null, ?)')) {
+        $stmt->bind_param('s', $tag);
         $stmt->execute();
         $tag_id = $stmt->insert_id;
         $tags[] = $tag_id;
