@@ -12,13 +12,14 @@ if ($tags == null) {
 
 foreach ($tags as $key => $tag) {
     if ($stmt = $con->prepare('SELECT `name` FROM `projects_tags` WHERE `id` = ? OR name = ?')) {
-        $stmt->bind_param('is', $tag, $tag);
+        $tagint = intval($tag);
+        $stmt->bind_param('is', $tagint, $tag);
         $stmt->execute();
         $stmt->store_result();
         $stmt->bind_result($name);
         if ($stmt->num_rows == 0) {
             unset($tags[$key]);
-            $new_tags[] = $name;
+            $new_tags[] = $tag;
             continue;
         }
         $stmt->fetch();

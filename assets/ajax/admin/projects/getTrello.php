@@ -16,6 +16,18 @@ $project = new Project($_POST['project']);
 
     $cards = $trello->getProjectCards($project, 20, ['Teendő', 'Folyamatban', 'Visszajelzés / Felülvizsgálat']);
 
+    if (empty($cards)) {
+    ?>
+        <div class="col">
+            <div class="card border border-secondary">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Nincs megjeleníthető feladat</h5>
+                </div>
+            </div>
+        </div>
+    <?php
+    }
+
     foreach ($cards as $card) {
         $arrow = '<i class="fa fa-chevron-right text-primary me-2 mt-1"></i>';
         $border = 'primary';
