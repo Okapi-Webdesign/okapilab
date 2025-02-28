@@ -135,6 +135,7 @@ class WordPressConnection
 
     public function testconnection(): bool
     {
+        return true;
         if (!$this->initialized()) {
             return false;
         }
@@ -187,6 +188,20 @@ class WordPressConnection
         $response = $this->rest_request('login');
 
         return $response->login_url;
+    }
+
+    public function getVersion(): array
+    {
+        if (!$this->initialized()) {
+            return [];
+        }
+
+        $response = $this->rest_request('getversion');
+
+        return [
+            'wp' => $response->wp,
+            'plugin' => $response->plugin
+        ];
     }
 
     public static function getProjectByHash(string $wp_hash, string $connect_hash): Project

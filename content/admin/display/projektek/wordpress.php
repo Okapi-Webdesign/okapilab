@@ -67,6 +67,11 @@ $wp = new WordPressConnection($project);
                             </div>
                             <div class="card-body">
                                 <b>Kapcsolat állapota:</b> <?= $wp->testconnection() ? '<span class="badge bg-success">Kapcsolódva</span>' : '<span class="badge bg-danger">Nincs kapcsolat</span>' ?><br>
+                                <?php if ($wp->testconnection()) {
+                                ?>
+                                    <b>WordPress verzió:</b> <?= $wp->getVersion()['wp'] ?><br>
+                                    <b>Plugin verzió:</b> <?= $wp->getVersion()['plugin'] ?><br>
+                                <?php } ?>
                             </div>
                         </div>
 
