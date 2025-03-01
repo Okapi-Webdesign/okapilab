@@ -68,10 +68,7 @@ $wp = new WordPressConnection($project);
                                 ?>
                                     <b>WordPress verzió:</b> <?php
                                                                 // legfrissebb wp verzió lekérése a wordpress.org-ról
-                                                                $url = 'https://api.wordpress.org/core/version-check/1.7/';
-                                                                $body = file_get_contents($url);
-                                                                $data = json_decode($body);
-                                                                if ($data->offers[0]->version == $wp->getVersion()['wp']) {
+                                                                if (WordPressConnection::getLatestWpVersion() == $wp->getVersion()['wp']) {
                                                                     echo '<span class="badge bg-success">' . $wp->getVersion()['wp'] . '</span>';
                                                                 } else {
                                                                     echo '<span class="badge bg-warning">' . $wp->getVersion()['wp'] . '</span>';

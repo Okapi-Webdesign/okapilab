@@ -203,6 +203,13 @@ class WordPressConnection
         ];
     }
 
+    public function isUpToDate()
+    {
+        if ($this->getVersion()['wp'] === WordPressConnection::getLatestWpVersion()) {
+            return true;
+        }
+    }
+
     public static function getProjectByHash(string $wp_hash, string $connect_hash): Project
     {
         global $con;
@@ -228,5 +235,24 @@ class WordPressConnection
         $response = file_get_contents('https://api.wordpress.org/core/version-check/1.7/');
         $response = json_decode($response);
         return $response->offers[0]->version;
+    }
+
+    public static function getConnectedSites(): array
+    {
+        global $con;
+        $sites = [];
+        $id = 0;
+
+        if ($stmt = $con->prepare('SELECT `projects`.`id` FROM `wordpress_connections` INNER JOIN `projects` ON `projects`.`id` = `wordpress_connections`.`project_id` ORDER BY `projects`.`name`')) {
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id);
+            while ($stmt->fetch()) {
+                $sites[] = new Project($id);
+            }
+            $stmt->close();
+        }
+
+        return $sites;
     }
 }

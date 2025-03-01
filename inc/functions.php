@@ -273,9 +273,11 @@ function alert_redirect($type, $target, $message = null, $title = null, $popup =
 // 5.1. Menü elem hozzáadása
 function addMenuItem($name, $url, $icon)
 {
-    global $user;
-    if (isset($_GET['url'])) $active = strpos($_GET['url'], $url) !== false;
-    else $active = false;
+    global $user, $activeMenuItem;
+    if ($activeMenuItem == NULL && isset($_GET['url'])) {
+        $active = strpos($_GET['url'], $url) !== false;
+        $activeMenuItem = $active ? $url : NULL;
+    } else $active = false;
     if ($url == 'iranyitopult' && !isset($_GET['url'])) $active = true;
     $activeClass = $active ? 'active' : 'text-white';
     echo '<li class="nav-item">
@@ -336,6 +338,10 @@ function getSetting(string $key)
         $stmt->fetch();
         $stmt->close();
     }
+
+    if ($value == "") {
+        return "-";
+    }
     return $value;
 }
 
@@ -346,7 +352,21 @@ function updateSetting(string $key, string $value)
     if ($stmt = $con->prepare('UPDATE `settings` SET `value` = ? WHERE `name` = ?')) {
         $stmt->bind_param('ss', $value, $key);
         $stmt->execute();
+        $rows = $stmt->affected_rows;
         $stmt->close();
+    }
+
+    if ($rows > 0) {
+        return true;
+    } else {
+        if ($stmt = $con->prepare('INSERT INTO `settings` (`name`, `value`) VALUES (?, ?)')) {
+            $stmt->bind_param('ss', $key, $value);
+            $stmt->execute();
+            $stmt->close();
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 

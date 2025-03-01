@@ -73,10 +73,12 @@ if (!isset($pageMeta['packages']) || $pageMeta['packages'] == null || !is_array(
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
             <?php
+            $activeMenuItem = NULL;
             addMenuItem('Projektek', 'projektek', 'fa fa-project-diagram');
             addMenuItem('Ügyfelek', 'ugyfelek', 'fa fa-users');
             addMenuItem('Dokumentumok', 'dokumentumok', 'fa fa-file-alt');
             addMenuItem('Pénzügyek', 'penzugyek', 'fa fa-money-bill-wave');
+            addMenuItem('WordPress', 'wordpress', 'fa-brands fa-wordpress');
             addMenuItem('Trello', 'trello', 'fa-brands fa-trello');
             addMenuItem('Beállítások', 'beallitasok', 'fa fa-cogs');
             ?>
