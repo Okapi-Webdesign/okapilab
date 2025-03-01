@@ -72,7 +72,6 @@ class WordPressConnection
         $context = stream_context_create($options);
         $response = file_get_contents($json_url, false, $context);
         $response = json_decode($response);
-
         return $response;
     }
 
@@ -222,5 +221,12 @@ class WordPressConnection
         }
 
         return $project;
+    }
+
+    public static function getLatestWpVersion(): string
+    {
+        $response = file_get_contents('https://api.wordpress.org/core/version-check/1.7/');
+        $response = json_decode($response);
+        return $response->offers[0]->version;
     }
 }

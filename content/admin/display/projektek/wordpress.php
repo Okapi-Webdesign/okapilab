@@ -57,7 +57,7 @@ $wp = new WordPressConnection($project);
 
             <div class="col-12 col-xl-8">
                 <div class="row row-cols-1 row-cols-lg-2 g-3">
-                    <div class="col-12">
+                    <div class="col">
                         <div class="card mb-3">
                             <div class="card-header">
                                 <h5 class="card-title">Adatkapcsolat</h5>
@@ -66,7 +66,17 @@ $wp = new WordPressConnection($project);
                                 <b>Kapcsolat állapota:</b> <?= $wp->testconnection() ? '<span class="badge bg-success">Kapcsolódva</span>' : '<span class="badge bg-danger">Nincs kapcsolat</span>' ?><br>
                                 <?php if ($wp->testconnection()) {
                                 ?>
-                                    <b>WordPress verzió:</b> <?= $wp->getVersion()['wp'] ?><br>
+                                    <b>WordPress verzió:</b> <?php
+                                                                // legfrissebb wp verzió lekérése a wordpress.org-ról
+                                                                $url = 'https://api.wordpress.org/core/version-check/1.7/';
+                                                                $body = file_get_contents($url);
+                                                                $data = json_decode($body);
+                                                                if ($data->offers[0]->version == $wp->getVersion()['wp']) {
+                                                                    echo '<span class="badge bg-success">' . $wp->getVersion()['wp'] . '</span>';
+                                                                } else {
+                                                                    echo '<span class="badge bg-warning">' . $wp->getVersion()['wp'] . '</span>';
+                                                                }
+                                                                ?><br>
                                     <b>Plugin verzió:</b> <?= $wp->getVersion()['plugin'] ?><br>
                                 <?php } ?>
                             </div>
