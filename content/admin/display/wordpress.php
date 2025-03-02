@@ -63,6 +63,34 @@ $pageMeta = [
                         </ul>
                     </div>
                 </div>
+
+                <div class="card shadow-none border mb-3">
+                    <div class="card-body">
+                        <h3 class="h4">Elementor verzió</h3>
+                        <p>
+                            <b>Legfrissebb Elementor verzió:</b>
+                            <?= WordPressConnection::getLatestPluginVersion('elementor')->version; ?>
+                        </p>
+
+                        <ul class="list-group">
+                            <?php
+                            foreach (WordPressConnection::getConnectedSites() as $site) {
+                                $wp = new WordPressConnection($site);
+                            ?>
+                                <a href="<?= URL ?>admin/projektek/wordpress/d/<?= $site->getId() ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <?= $site->getName() ?>
+                                    <span class="wpELPluginVersion" data-project="<?= $site->getId() ?>">
+                                        <div class="spinner-border spinner-border-sm" role="status">
+                                            <span class="visually-hidden">Betöltés...</span>
+                                        </div>
+                                    </span>
+                                </a>
+                            <?php
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </dic>
     </div>
@@ -96,6 +124,23 @@ $pageMeta = [
                 },
                 success: function(data) {
                     $('.wpOLPluginVersion[data-project="' + project + '"]').html(data);
+                }
+            });
+        });
+
+        $('.wpELPluginVersion').each(function() {
+            var project = $(this).data('project');
+            $.ajax({
+                url: '<?= URL ?>assets/ajax/admin/wp/getPluginVersion',
+                method: 'POST',
+                data: {
+                    project: project,
+                    formatted: true,
+                    latest: '<?= WordPressConnection::getLatestPluginVersion('elementor')->version ?>',
+                    slug: 'elementor'
+                },
+                success: function(data) {
+                    $('.wpELPluginVersion[data-project="' + project + '"]').html(data);
                 }
             });
         });

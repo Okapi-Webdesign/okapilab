@@ -53,13 +53,17 @@ class WordPressConnection
         return $this->project;
     }
 
-    public function rest_request($url)
+    public function rest_request($url, ?array $data = null)
     {
         $json_url = $this->project->getUrl() . 'wp-json/okapilab/v1/' . $url;
         $postdata = [
             'wp_hash' => $this->wp_hash,
             'okapi_hash' => $this->local_hash
         ];
+
+        if ($data !== NULL) {
+            $postdata = array_merge($postdata, $data);
+        }
 
         $options = [
             'http' => [
@@ -68,6 +72,8 @@ class WordPressConnection
                 'content' => json_encode($postdata)
             ]
         ];
+
+        //exit(var_dump($json_url, $postdata));
 
         $context = stream_context_create($options);
         $response = file_get_contents($json_url, false, $context);
@@ -210,6 +216,17 @@ class WordPressConnection
         }
     }
 
+    public function getPluginVersion(string $slug): string|null
+    {
+        if (!$this->initialized()) {
+            return '';
+        }
+
+        $response = $this->rest_request('getpluginversion', ['slug' => $slug]);
+
+        return $response->version;
+    }
+
     public static function getProjectByHash(string $wp_hash, string $connect_hash): Project
     {
         global $con;
@@ -235,6 +252,13 @@ class WordPressConnection
         $response = file_get_contents('https://api.wordpress.org/core/version-check/1.7/');
         $response = json_decode($response);
         return $response->offers[0]->version;
+    }
+
+    public static function getLatestPluginVersion(string $slug): stdClass
+    {
+        $response = file_get_contents('https://api.wordpress.org/plugins/info/1.0/' . $slug . '.json');
+        $response = json_decode($response);
+        return $response;
     }
 
     public static function getConnectedSites(): array
