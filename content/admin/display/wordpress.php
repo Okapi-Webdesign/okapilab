@@ -92,6 +92,16 @@ $pageMeta = [
                     </div>
                 </div>
             </div>
+            <div class="col-12 col-md-6 col-xl-8">
+                <div class="card shadow-none border mb-3">
+                    <div class="card-body">
+                        <h3 class="h4">Letöltés</h3>
+                        <p class="mb-0">
+                            A legfrissebb OkapiLab-WP plugin <a href="<?= URL ?>assets/okapi-wp_latest.zip">ide kattintva letölthető.</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </dic>
     </div>
 </div>
