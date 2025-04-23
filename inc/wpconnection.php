@@ -73,7 +73,7 @@ class WordPressConnection
             ]
         ];
 
-        //exit(var_dump($json_url, $postdata));
+        //var_dump($json_url, $postdata);
 
         $context = stream_context_create($options);
         $response = file_get_contents($json_url, false, $context);
@@ -225,6 +225,17 @@ class WordPressConnection
         $response = $this->rest_request('getpluginversion', ['slug' => $slug]);
 
         return $response->version;
+    }
+
+    public function getPluginUpdates()
+    {
+        if (!$this->initialized()) {
+            return '';
+        }
+
+        $response = $this->rest_request('plugin-updates');
+
+        return $response;
     }
 
     public static function getProjectByHash(string $wp_hash, string $connect_hash): Project

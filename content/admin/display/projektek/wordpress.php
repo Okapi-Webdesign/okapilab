@@ -56,42 +56,84 @@ $wp = new WordPressConnection($project);
             </div>
 
             <div class="col-12 col-xl-8">
-                <div class="row row-cols-1 row-cols-lg-2 g-3">
-                    <div class="col">
-                        <div class="card mb-3">
-                            <div class="card-header">
-                                <h5 class="card-title">Adatkapcsolat</h5>
-                            </div>
-                            <div class="card-body">
-                                <b>Kapcsolat állapota:</b> <?= $wp->testconnection() ? '<span class="badge bg-success">Kapcsolódva</span>' : '<span class="badge bg-danger">Nincs kapcsolat</span>' ?><br>
-                                <?php if ($wp->testconnection()) {
-                                ?>
-                                    <b>WordPress verzió:</b> <?php
-                                                                // legfrissebb wp verzió lekérése a wordpress.org-ról
-                                                                if (WordPressConnection::getLatestWpVersion() == $wp->getVersion()['wp']) {
-                                                                    echo '<span class="badge bg-success">' . $wp->getVersion()['wp'] . '</span>';
-                                                                } else {
-                                                                    echo '<span class="badge bg-warning">' . $wp->getVersion()['wp'] . '</span>';
-                                                                }
-                                                                ?><br>
-                                    <b>Plugin verzió:</b> <?= $wp->getVersion()['plugin'] ?><br>
-                                <?php } ?>
-                            </div>
-                        </div>
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="card-title">Adatkapcsolat</h5>
+                    </div>
+                    <div class="card-body">
+                        <b>Kapcsolat állapota:</b> <?= $wp->testconnection() ? '<span class="badge bg-success">Kapcsolódva</span>' : '<span class="badge bg-danger">Nincs kapcsolat</span>' ?><br>
+                        <?php if ($wp->testconnection()) {
+                        ?>
+                            <b>WordPress verzió:</b> <?php
+                                                        // legfrissebb wp verzió lekérése a wordpress.org-ról
+                                                        if (WordPressConnection::getLatestWpVersion() == $wp->getVersion()['wp']) {
+                                                            echo '<span class="badge bg-success">' . $wp->getVersion()['wp'] . '</span>';
+                                                        } else {
+                                                            echo '<span class="badge bg-warning">' . $wp->getVersion()['wp'] . '</span>';
+                                                        }
+                                                        ?><br>
+                            <b>Plugin verzió:</b> <?= $wp->getVersion()['plugin'] ?><br>
+                        <?php } ?>
+                    </div>
+                </div>
 
-                        <div class="card mb-3">
-                            <div class="card-header">
-                                <h5 class="card-title">Karbantartási üzemmód</h5>
-                            </div>
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="card-title">Karbantartási üzemmód</h5>
+                    </div>
 
-                            <div class="card-body">
-                                <b>Karbantartási üzemmód:</b> <?= $wp->isMaintenanceMode() ? '<span class="badge text-bg-warning">Bekapcsolva</span>' : '<span class="badge bg-secondary">Kikapcsolva</span>' ?><br>
+                    <div class="card-body">
+                        <b>Karbantartási üzemmód:</b> <?= $wp->isMaintenanceMode() ? '<span class="badge text-bg-warning">Bekapcsolva</span>' : '<span class="badge bg-secondary">Kikapcsolva</span>' ?><br>
 
-                                <button class="btn btn-<?= $wp->isMaintenanceMode() ? 'secondary' : 'warning' ?> btn-sm mt-3" onclick="modal_open('projektek/wpKarbantartas', {id: <?= $project->getId() ?>})">
-                                    <i class="fa fa-wrench me-1"></i>
-                                    <?= $wp->isMaintenanceMode() ? 'Karbantartás kikapcsolása' : 'Karbantartás bekapcsolása' ?>
-                                </button>
-                            </div>
+                        <button class="btn btn-<?= $wp->isMaintenanceMode() ? 'secondary' : 'warning' ?> btn-sm mt-3" onclick="modal_open('projektek/wpKarbantartas', {id: <?= $project->getId() ?>})">
+                            <i class="fa fa-wrench me-1"></i>
+                            <?= $wp->isMaintenanceMode() ? 'Karbantartás kikapcsolása' : 'Karbantartás bekapcsolása' ?>
+                        </button>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="card-title">Frissítések</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Plugin</th>
+                                        <th>Jelenlegi</th>
+                                        <th>Legfrissebb</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $plugins = $wp->getPluginUpdates();
+                                    if (count($plugins) == 0) {
+                                    ?>
+                                        <tr>
+                                            <td colspan="4" class="text-center">Nincs elérhető frissítés</td>
+                                        </tr>
+                                        <?php
+                                    } else {
+                                        foreach ($plugins as $plugin) {
+                                        ?>
+                                            <tr>
+                                                <td><?= $plugin->name ?></td>
+                                                <td><?= $plugin->current_version ?></td>
+                                                <td><?= $plugin->new_version ?></td>
+                                                <td>
+                                                    <a href="<?= URL ?>admin/process/projects/wp/update/<?= $project->getId() ?>/<?= $plugin->slug ?>" class="btn btn-primary btn-sm float-end">
+                                                        <i class="fa fa-download"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                    <?php
+                                        }
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
