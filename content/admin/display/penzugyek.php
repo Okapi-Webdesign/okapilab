@@ -73,7 +73,7 @@ $expenses = FinExpense::getAll();
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Projekt</th>
+                                <th>Tárgy</th>
                                 <th>Sorszám</th>
                                 <th>Kiállítás dátuma</th>
                                 <th>Befizetés határideje</th>

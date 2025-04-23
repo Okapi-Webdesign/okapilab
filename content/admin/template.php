@@ -80,6 +80,7 @@ if (!isset($pageMeta['packages']) || $pageMeta['packages'] == null || !is_array(
             addMenuItem('Pénzügyek', 'penzugyek', 'fa fa-money-bill-wave');
             addMenuItem('WordPress', 'wordpress', 'fa-brands fa-wordpress');
             addMenuItem('Trello', 'trello', 'fa-brands fa-trello');
+            addMenuItem('Webhoszting', 'webhoszting', 'fa-solid fa-plug');
             addMenuItem('Beállítások', 'beallitasok', 'fa fa-cogs');
             ?>
         </ul>

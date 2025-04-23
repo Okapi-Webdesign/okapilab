@@ -103,7 +103,6 @@ $wp = new WordPressConnection($project);
                                         <th>Plugin</th>
                                         <th>Jelenlegi</th>
                                         <th>Legfrissebb</th>
-                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -122,11 +121,6 @@ $wp = new WordPressConnection($project);
                                                 <td><?= $plugin->name ?></td>
                                                 <td><?= $plugin->current_version ?></td>
                                                 <td><?= $plugin->new_version ?></td>
-                                                <td>
-                                                    <a href="<?= URL ?>admin/process/projects/wp/update/<?= $project->getId() ?>/<?= $plugin->slug ?>" class="btn btn-primary btn-sm float-end">
-                                                        <i class="fa fa-download"></i>
-                                                    </a>
-                                                </td>
                                             </tr>
                                     <?php
                                         }
