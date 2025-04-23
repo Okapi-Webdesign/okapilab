@@ -86,7 +86,7 @@ $pageMeta = [
                                     echo '<td>.' . $domain->getTld() . '</td>';
                                     echo '<td>' . $domain->getPrice(true) . ' / év</td>';
                                     echo '<td class="text-end action-buttons">';
-                                    echo '<button type="button" class="btn btn-sm btn-warning" onclick="modal_open(\'webhoszting/domainedit\', {id: ' . $domain->getId() . '})"><i class="fa fa-pencil"></i></button>';
+                                    echo '<button type="button" class="btn btn-sm btn-warning" onclick="modal_open(\'webhoszting/domainszerkesztes\', {id: ' . $domain->getId() . '})"><i class="fa fa-pencil"></i></button>';
                                     echo '<button type="button" class="btn btn-sm btn-danger" onclick="modal_open(\'webhoszting/domaintorles\', {id: ' . $domain->getId() . '})"><i class="fa fa-trash"></i></button>';
                                     echo '</td>';
                                     echo '</tr>';
@@ -96,6 +96,9 @@ $pageMeta = [
                         </tbody>
                     </table>
                 </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-subscriptions" role="tabpanel" aria-labelledby="pills-subscriptions-tab" tabindex="0">
             </div>
         </div>
     </div>
