@@ -44,3 +44,5 @@ require_once ABS_PATH . 'inc/trello.php';
 require_once ABS_PATH . 'inc/wpconnection.php';
 require_once ABS_PATH . 'inc/whplan.php';
 require_once ABS_PATH . 'inc/whdomainplan.php';
+require_once ABS_PATH . 'inc/whsubscription.php';
+require_once ABS_PATH . 'inc/whdomain.php';

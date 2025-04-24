@@ -86,7 +86,16 @@ $expenses = FinExpense::getAll();
                             foreach ($invoices as $invoice) {
                                 echo '<tr>';
                                 echo '<td>' . $invoice->getId() . '</td>';
-                                echo '<td><span title="' . $invoice->getProject()->getClient()->getName() . '" data-bs-toggle="tooltip">' . $invoice->getProject()->getName() . '</span></td>';
+                                if ($invoice->getType() == 'domain') {
+                                    $subject = $invoice->getSubject()->getDomain() . ' domain';
+                                } else if ($invoice->getType() == 'project') {
+                                    $subject = $invoice->getSubject()->getName();
+                                } else if ($invoice->getType() == 'subscription') {
+                                    $subject = $invoice->getSubject()->getPlan()->getName();
+                                } else {
+                                    $subject = 'N/A';
+                                }
+                                echo '<td><span title="' . $invoice->getSubject()->getClient()->getName() . '" data-bs-toggle="tooltip">' . $subject . '</span></td>';
                                 echo '<td>' . $invoice->getInvoiceId() . '</td>';
                                 echo '<td>' . $invoice->getCreateDate(true) . '</td>';
                                 if (strtotime($invoice->getDeadline()) < time() && $invoice->getStatus() == 0) echo '<td class="text-danger">' . $invoice->getDeadline(true) . '</td>';

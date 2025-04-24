@@ -38,7 +38,7 @@ class WHDomainPlan
         return $this->tld;
     }
 
-    public function getPrice(bool $formatted): int|string
+    public function getPrice(bool $formatted = false): int|string
     {
         if ($formatted) {
             return number_format($this->yearly_price, 0, '.', ' ') . ' Ft';
@@ -63,5 +63,25 @@ class WHDomainPlan
             throw new Exception("Database error: " . $con->error);
         }
         return $plans;
+    }
+
+    public static function getByTld(string $tld): ?WHDomainPlan
+    {
+        global $con;
+        $id = 0;
+        if ($stmt = $con->prepare("SELECT `id` FROM `wh_domainprices` WHERE `tld` = ?")) {
+            $stmt->bind_param("s", $tld);
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id);
+            if ($stmt->num_rows == 0) {
+                return null;
+            }
+            $stmt->fetch();
+            $stmt->close();
+        } else {
+            throw new Exception("Database error: " . $con->error);
+        }
+        return new WHDomainPlan($id);
     }
 }

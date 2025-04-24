@@ -3,7 +3,9 @@ class Invoice
 {
     private int $id;
     private string $invoice_id;
-    private Project $project;
+    private Project|null $project;
+    private WHSubscription|null $subscription;
+    private WHDomain|null $domain;
     private string $create_date;
     private string $deadline;
     private int $amount;
@@ -13,18 +15,32 @@ class Invoice
     {
         global $con;
         $this->id = $id;
-        $invoice_id = $project_id = $create_date = $deadline = $amount = $status = 0;
+        $invoice_id = $project_id = $create_date = $deadline = $amount = $status = $wh_id = $domain_id = 0;
 
-        if ($stmt = $con->prepare('SELECT `id`, `invoice_id`, `project_id`, `create_date`, `deadline`, `amount`, `status` FROM `invoices` WHERE `id` = ?')) {
+        if ($stmt = $con->prepare('SELECT `id`, `invoice_id`, `project_id`, `wh_id`, `domain_id`, `create_date`, `deadline`, `amount`, `status` FROM `invoices` WHERE `id` = ?')) {
             $stmt->bind_param('i', $id);
             $stmt->execute();
-            $stmt->bind_result($id, $invoice_id, $project_id, $create_date, $deadline, $amount, $status);
+            $stmt->bind_result($id, $invoice_id, $project_id, $wh_id, $domain_id, $create_date, $deadline, $amount, $status);
             $stmt->fetch();
             $stmt->close();
         }
 
         $this->invoice_id = $invoice_id;
-        $this->project = new Project($project_id);
+        if ($project_id != 0) {
+            $this->project = new Project($project_id);
+        } else {
+            $this->project = null;
+        }
+        if ($wh_id != 0) {
+            $this->subscription = new WHSubscription($wh_id);
+        } else {
+            $this->subscription = null;
+        }
+        if ($domain_id != 0) {
+            $this->domain = new WHDomain($domain_id);
+        } else {
+            $this->domain = null;
+        }
         $this->create_date = $create_date;
         $this->deadline = $deadline;
         $this->amount = $amount;
@@ -49,6 +65,14 @@ class Invoice
         return $invoices;
     }
 
+    public function getType(): string
+    {
+        if ($this->project != null) return 'project';
+        else if ($this->domain != null) return 'domain';
+        else if ($this->subscription != null) return 'subscription';
+        else return 'unknown';
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -59,9 +83,12 @@ class Invoice
         return $this->invoice_id;
     }
 
-    public function getProject(): Project
+    public function getSubject(): Project|WHDomain|WHSubscription|null
     {
-        return $this->project;
+        if ($this->project != null) return $this->project;
+        else if ($this->domain != null) return $this->domain;
+        else if ($this->subscription != null) return $this->subscription;
+        else return null;
     }
 
     public function getCreateDate(bool $formatted = false): string
@@ -109,6 +136,8 @@ class Invoice
                     break;
             }
         }
+
+        return 0;
     }
 
     public function getPayments(): array

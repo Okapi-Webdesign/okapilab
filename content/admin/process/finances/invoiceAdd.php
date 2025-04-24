@@ -7,7 +7,7 @@ $deadline = $_POST['deadline'];
 $file = $_FILES['file'];
 $pid = $project->getId();
 
-$dir = ABS_PATH . 'storage/' . $project->getId() . '/invoices/';
+$dir = ABS_PATH . 'storage/' . $client->getId() . '/invoices/';
 if (!file_exists($dir)) {
     mkdir($dir, 0777, true);
 }
@@ -38,7 +38,7 @@ if (!isset($_POST['email_send']) && $_POST['email_send'] == 1) {
         'invoice_number' => $invoice_id,
         'date' => $create_date,
         'amount' => number_format($amount, 0, 0, ' '),
-        'url' => URL . 'storage/' . $project->getId() . '/invoices/' . $filename
+        'url' => URL . 'storage/' . $client->getId() . '/invoices/' . $filename
     ])) {
         alert_redirect('warning', URL . 'admin/penzugyek');
     }
