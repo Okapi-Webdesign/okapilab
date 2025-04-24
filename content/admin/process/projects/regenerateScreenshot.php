@@ -4,6 +4,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== 'admin') {
 }
 
 $project = new Project($data[0]);
+$client = $project->getClient();
 
 $dir = ABS_PATH . 'storage/' . $client->getId() . '/';
 $filename = $dir . $project->getId() . '_screenshot.jpeg';

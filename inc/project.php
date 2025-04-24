@@ -374,4 +374,24 @@ class Project
             return false;
         }
     }
+
+    public function getWebhosting(): WHSubscription|null
+    {
+        global $con;
+        $wh = 0;
+        if ($stmt = $con->prepare('SELECT `webhosting` FROM `projects` WHERE `id` = ?')) {
+            $stmt->bind_param('i', $this->id);
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($wh);
+            if ($stmt->fetch()) {
+                if ($wh == null) {
+                    return null;
+                }
+                return new WHSubscription($wh);
+            }
+            $stmt->close();
+        }
+        return null;
+    }
 }

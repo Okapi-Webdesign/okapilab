@@ -34,7 +34,7 @@ $project = new Project($_POST['id']);
                     <option value="0" <?= !$project->isWordpress() ? 'selected' : '' ?>>Nem</option>
                 </select>
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-4">
                 <label for="manager" class="form-label">Projektvezető</label>
                 <select id="manager" name="manager" class="form-select" required>
                     <option value="">Válassz...</option>
@@ -45,9 +45,35 @@ $project = new Project($_POST['id']);
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-4">
                 <label for="deadline" class="form-label">Határidő</label>
                 <input type="date" id="deadline" name="deadline" class="form-control" value="<?= $project->getDeadline() ?>" max="9999-12-31">
+            </div>
+            <div class="col-12 col-md-4">
+                <label for="webhosting" class="form-label">Webhosting</label>
+                <select id="webhosting" name="webhosting" class="form-select">
+                    <option value="">Válassz...</option>
+                    <?php
+                    $cid = $project->getClient()->getId();
+                    if ($stmt = $con->prepare('SELECT id FROM wh_subscriptions WHERE client = ? AND `status` = 1 ORDER BY price ASC')) {
+                        $stmt->bind_param('i', $cid);
+                        $stmt->execute();
+                        $stmt->store_result();
+                        if ($stmt->num_rows > 0) {
+                            $stmt->bind_result($id);
+                            if ($project->getWebhosting() == null) $curWH = null;
+                            else $curWH = $project->getWebhosting()->getId();
+                            while ($stmt->fetch()) {
+                                $wh = new WHSubscription($id);
+                                echo '<option value="' . $wh->getId() . '" ' . ($curWH == $wh->getId() ? 'selected' : '') . '>#' . $wh->getId() . ' ' . $wh->getPlan()->getName() . '</option>';
+                            }
+                        } else {
+                            echo '<option value="">Nincs elérhető webhosting</option>';
+                        }
+                        $stmt->close();
+                    }
+                    ?>
+                </select>
             </div>
         </div>
     </div>

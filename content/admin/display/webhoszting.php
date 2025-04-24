@@ -84,7 +84,7 @@ $pageMeta = [
                                 } else {
                                     echo '<button type="button" class="btn btn-sm btn-primary" onclick="modal_open(\'webhoszting/domainszamla\', {id: ' . $domain->getId() . '})"><i class="fa fa-money"></i></button>';
                                 }
-                                echo '<button type="button" class="btn btn-sm btn-danger" onclick="modal_open(\'webhoszting/domainregdelete\', {id: ' . $domain->getId() . '})"><i class="fa fa-trash"></i></button>';
+                                echo '<button type="button" class="btn btn-sm btn-danger" onclick="modal_open(\'webhoszting/domainregtorles\', {id: ' . $domain->getId() . '})"><i class="fa fa-trash"></i></button>';
                                 echo '</td>';
                                 echo '</tr>';
                             }

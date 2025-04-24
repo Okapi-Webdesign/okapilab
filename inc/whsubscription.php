@@ -107,4 +107,25 @@ class WHSubscription
         $expiryDate = strtotime($this->last_renewal . ' + ' . $p);
         return $expiryDate;
     }
+
+    public function getProjects(): array
+    {
+        global $con;
+        $projects = [];
+        $id = 0;
+        if ($stmt = $con->prepare('SELECT id FROM projects WHERE webhosting = ?')) {
+            $stmt->bind_param('i', $this->id);
+            $stmt->execute();
+            $stmt->bind_result($id);
+            $stmt->store_result();
+            while ($stmt->fetch()) {
+                $projects[] = new Project($id);
+            }
+            $stmt->close();
+        } else {
+            throw new Exception('Database error: ' . mysqli_error($con));
+        }
+
+        return $projects;
+    }
 }
