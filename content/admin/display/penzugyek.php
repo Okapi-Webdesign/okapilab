@@ -95,7 +95,8 @@ $expenses = FinExpense::getAll();
                                 } else {
                                     $subject = 'N/A';
                                 }
-                                echo '<td><span title="' . $invoice->getSubject()->getClient()->getName() . '" data-bs-toggle="tooltip">' . $subject . '</span></td>';
+                                if ($subject != 'N/A') echo '<td><span title="' . $invoice->getSubject()->getClient()->getName() . '" data-bs-toggle="tooltip">' . $subject . '</span></td>';
+                                else echo '<td>' . $subject . '</td>';
                                 echo '<td>' . $invoice->getInvoiceId() . '</td>';
                                 echo '<td>' . $invoice->getCreateDate(true) . '</td>';
                                 if (strtotime($invoice->getDeadline()) < time() && $invoice->getStatus() == 0) echo '<td class="text-danger">' . $invoice->getDeadline(true) . '</td>';
