@@ -40,8 +40,8 @@ if (isset($_COOKIE['email']) && isset($_COOKIE['password']) && $_COOKIE['platfor
         </div>
         <form class="needs-validation" novalidate action="<?= URL ?>ugyfel/belepes/auth" method="post">
             <div class="form-group">
-                <label for="email">Felhasználónév</label>
-                <input type="text" class="form-control" id="email" placeholder="Add meg a felhasználóneved" required name="email">
+                <label for="email">E-mail</label>
+                <input type="text" class="form-control" id="email" placeholder="Add meg az e-mail címed" required name="email">
             </div>
             <div class="form-group">
                 <label for="password">Jelszó</label>

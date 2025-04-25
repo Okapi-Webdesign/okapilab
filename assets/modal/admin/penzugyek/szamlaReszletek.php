@@ -1,4 +1,7 @@
 <?php
+
+use Avifinfo\Prop;
+
 define('FILE_IMPORT', true);
 require_once '../../../../inc/import.php';
 
@@ -28,10 +31,20 @@ $invoice = new Invoice($_POST['id']);
             </span>
         </div>
         <div class="col-12 col-md-6">
-            <b>Projekt:</b>
+            <b>Tárgy:</b>
             <span class="d-block mb-3">
-                <?php echo $invoice->getProject()->getName(); ?> <br>
-                <b>Ügyfél:</b> <?php echo $invoice->getProject()->getClient()->getName(); ?>
+                <?php
+                if ($invoice->getSubject() instanceof WHSubscription) {
+                    echo 'Tárhelyszámla - ' . $invoice->getSubject()->getPlan()->getName();
+                } elseif ($invoice->getSubject() instanceof WHDomain) {
+                    echo 'Domain számla - ' . $invoice->getSubject()->getDomain();
+                } elseif ($invoice->getSubject() instanceof Project) {
+                    echo 'Projekt számla - ' . $invoice->getSubject()->getName();
+                } else {
+                    echo 'Ismeretlen';
+                }
+                ?> <br>
+                <span class="text-muted"><?php echo $invoice->getSubject()->getClient()->getName(); ?></span>
             </span>
 
             <label for="status" class="fw-bold">Státusz:</label>

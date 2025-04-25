@@ -7,7 +7,7 @@ $deadline = $_POST['deadline'];
 $file = $_FILES['file'];
 $pid = $project->getId();
 
-$dir = ABS_PATH . 'storage/' . $client->getId() . '/invoices/';
+$dir = ABS_PATH . 'storage/' . $project->getClient()->getId() . '/invoices/';
 if (!file_exists($dir)) {
     mkdir($dir, 0777, true);
 }
