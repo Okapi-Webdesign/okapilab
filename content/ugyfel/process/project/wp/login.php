@@ -1,5 +1,5 @@
 <?php
-$p = new Project($data[0]);
+$p = new Project($_SESSION['project']);
 
 $wp = new WordPressConnection($p);
 

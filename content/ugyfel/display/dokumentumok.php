@@ -13,7 +13,7 @@ $documents = $project->getDocuments();
         <?php
         if (count($documents) == 0) {
         ?>
-            <div class="alert alert-info mb-0">Nincsenek dokumentumok a projektedhez.</div>
+            <div class="alert alert-info">Nincsenek dokumentumok a projektedhez.</div>
         <?php
         }
         ?>

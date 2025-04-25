@@ -6,6 +6,22 @@ $pageMeta = [
 
 $project = new Project($_SESSION['project']);
 $invoices = $project->getInvoices();
+$cid = $project->getClient()->getId();
+
+if ($stmt = $con->prepare('SELECT invoices.id FROM (invoices LEFT JOIN wh_subscriptions subs ON wh_id = subs.id) LEFT JOIN wh_domains dom ON dom.id = domain_id WHERE subs.client = ? OR dom.client = ?')) {
+    $stmt->bind_param('ii', $cid, $cid);
+    $stmt->execute();
+    $stmt->store_result();
+    $stmt->bind_result($id);
+    while ($stmt->fetch()) {
+        $invoice = new Invoice($id);
+        if ($invoice->getStatus() == 2) {
+            continue;
+        }
+        $invoices[] = $invoice;
+    }
+    $stmt->close();
+}
 
 $sum = 0;
 $sumPaid = 0;
@@ -47,7 +63,7 @@ foreach ($invoices as $invoice) {
                     foreach ($invoices as $invoice) {
                     ?>
                         <tr>
-                            <td><a href="<?= URL ?>storage/<?= $_SESSION['project'] ?>/invoices/<?= $invoice->getInvoiceId() ?>.pdf" target="_blank" class="text-decoration-none"><i class="fa fa-file-pdf me-2"></i> <?= $invoice->getInvoiceId() ?></a></td>
+                            <td><a href="<?= URL ?>storage/<?= $cid ?>/invoices/<?= $invoice->getInvoiceId() ?>.pdf" target="_blank" class="text-decoration-none"><i class="fa fa-file-pdf me-2"></i> <?= $invoice->getInvoiceId() ?></a></td>
                             <td><?= $invoice->getCreateDate(true) ?></td>
                             <td><?= $invoice->getDeadline(true) ?></td>
                             <td><?= number_format($invoice->getAmount(), 0, ',', ' ') ?> Ft</td>

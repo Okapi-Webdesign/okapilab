@@ -11,7 +11,7 @@ if ($project->getClient()->getId() != $user->getClient()->getId()) {
 
 <div class="card p-2">
     <div class="card-body">
-        <div id="projectHeader" class="d-flex justify-content-md-between justify-content-start flex-column flex-md-row align-items-center pb-2 border-bottom border-dark">
+        <div id="projectHeader" class="d-flex justify-content-md-between justify-content-start flex-column flex-md-row align-items-center">
             <h2 class="display-4">
                 <?= $project->getName() ?>
             </h2>
@@ -37,7 +37,7 @@ if ($project->getClient()->getId() != $user->getClient()->getId()) {
                 ?>
             </div>
         </div>
-
+        <hr>
         <div class="row g-3 mt-2">
             <div class="col-12 col-md-4">
                 <img src="<?php
