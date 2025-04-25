@@ -105,7 +105,7 @@ $expenses = FinExpense::getAll();
                                 echo '<td>' . $invoice->getStatus(2) . '</td>';
                                 echo '<td class="text-end"><div class="action-buttons">';
                                 if (!$invoice->isPaid() && $invoice->getStatus(0) != 2) echo '<button class="btn btn-sm btn-success" onclick="modal_open(\'penzugyek/szamlaBefizetes\', {id:' . $invoice->getId() . '})"><i class="fa fa-money-bill"></i></button>';
-                                echo '<button class="btn btn-sm btn-primary" onclick="modal_open(\'penzugyek/szamlaReszletek\', {id:' . $invoice->getId() . '})"><i class="fa fa-eye"></i></button>';
+                                if ($subject != 'N/A') echo '<button class="btn btn-sm btn-primary" onclick="modal_open(\'penzugyek/szamlaReszletek\', {id:' . $invoice->getId() . '})"><i class="fa fa-eye"></i></button>';
                                 echo '</div></td>';
                                 echo '</tr>';
                             }
