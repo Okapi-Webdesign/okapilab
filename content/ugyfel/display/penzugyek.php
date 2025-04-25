@@ -37,6 +37,13 @@ foreach ($invoices as $invoice) {
 
 <div class="card p-2">
     <div class="card-body">
+        <?php
+        if ($sum - $sumPaid > 0) {
+            echo '<div class="alert alert-danger mb-3" role="alert">
+            <strong>Figyelem!</strong> Jelenleg ' . number_format($sum - $sumPaid, 0, ',', ' ') . ' Ft ki nem egyenlített tartozásod van a projektedhez. Kérjük, mihamarabb fizesd be a fennálló tartozást, hogy elkerüld a szolgáltatásaid felfüggesztését!
+            </div>';
+        }
+        ?>
         <div class="d-flex justify-content-center align-items-center h-100 gap-md-5 gap-1 flex-column flex-md-row mb-3">
             <span><b>Összeg:</b> <?= number_format($sum, 0, ',', ' ') ?> Ft</span>
             <span><b>Befizetve:</b> <?= number_format($sumPaid, 0, ',', ' ') ?> Ft</span>

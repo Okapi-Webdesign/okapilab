@@ -56,6 +56,27 @@ class WHDomain
         return $domains;
     }
 
+    public static function getAllByClient(int $clientId): array
+    {
+        global $con;
+        $domains = [];
+        $id = 0;
+        if ($stmt = $con->prepare('SELECT `id` FROM `wh_domains` WHERE `client` = ?')) {
+            $stmt->bind_param('i', $clientId);
+            $stmt->execute();
+            $stmt->bind_result($id);
+            $stmt->store_result();
+            while ($stmt->fetch()) {
+                $domains[] = new WHDomain($id);
+            }
+            $stmt->close();
+        } else {
+            throw new Exception('Database error: ' . mysqli_error($con));
+        }
+
+        return $domains;
+    }
+
     public function getId(): int
     {
         return $this->id;

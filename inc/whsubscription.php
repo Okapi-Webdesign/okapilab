@@ -61,6 +61,27 @@ class WHSubscription
         return $subscriptions;
     }
 
+    public static function getAllByClient(int $clientId): array
+    {
+        global $con;
+        $subscriptions = [];
+        $id = 0;
+        if ($stmt = $con->prepare('SELECT `id` FROM `wh_subscriptions` WHERE `client` = ?')) {
+            $stmt->bind_param('i', $clientId);
+            $stmt->execute();
+            $stmt->bind_result($id);
+            $stmt->store_result();
+            while ($stmt->fetch()) {
+                $subscriptions[] = new WHSubscription($id);
+            }
+            $stmt->close();
+        } else {
+            throw new Exception('Database error: ' . mysqli_error($con));
+        }
+
+        return $subscriptions;
+    }
+
     public function getId(): int
     {
         return $this->id;

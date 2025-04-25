@@ -84,6 +84,9 @@ if ($_SESSION['project'] == null && $url != 'profil/projektvalaszto' && strpos($
                     <li class="nav-item">
                         <a class="nav-link <?= strpos($_GET['url'], 'penzugyek') == true ? 'active' : '' ?>" href="<?= URL ?>ugyfel/penzugyek">Pénzügyek</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= strpos($_GET['url'], 'szolgaltatasok') == true ? 'active' : '' ?>" href="<?= URL ?>ugyfel/szolgaltatasok">Szolgáltatásaim</a>
+                    </li>
                 </ul>
                 <div class="float-end dropdown">
                     <a class="dropdown-toggle text-dark text-decoration-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">

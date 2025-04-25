@@ -10,7 +10,7 @@ $subscription = new WHSubscription($data[0]);
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center flex-xl-row flex-column justify-content-xl-between justify-content-center">
             <h2 class="display-4 mb-2 text-center">
-                #<?= $subscription->getId() ?> <?= $subscription->getPlan()->getName() ?> tárhely
+                #<?= $subscription->getId() ?> <?= $subscription->getPlan()->getName() ?> csomag
             </h2>
             <div class="text-muted spinner-border float-end d-none" role="status" id="loadingSpinner">
                 <span class="visually-hidden">Betöltés...</span>
