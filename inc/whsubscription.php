@@ -26,6 +26,9 @@ class WHSubscription
                 $this->plan = new WHPlan($plan);
                 $this->billing_period = $billing_period;
                 $this->price = $price;
+                if ($price == null) {
+                    $this->price = $this->billing_period == 'monthly' ? $this->plan->getMonthlyPrice() : $this->plan->getYearlyPrice();
+                }
                 $this->create_date = $create_date;
                 $this->last_renewal = $last_renewal;
                 $this->status = $status;
@@ -78,9 +81,24 @@ class WHSubscription
         return $this->billing_period;
     }
 
-    public function getPrice(): int|null
+    public function getPrice(bool $formatted = false): int|string
     {
+        if ($formatted) {
+            return number_format($this->price, 0, '.', ' ') . ' Ft';
+        }
         return $this->price;
+    }
+
+    public function hasCustomPrice(): bool
+    {
+        $billing_period = $this->billing_period;
+        $standard_price = $billing_period == 'monthly' ? $this->plan->getMonthlyPrice() : $this->plan->getYearlyPrice();
+        $price = $this->price;
+        if ($price == $standard_price) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public function getCreateDate(): string

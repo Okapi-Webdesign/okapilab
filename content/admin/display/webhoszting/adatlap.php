@@ -75,9 +75,16 @@ $subscription = new WHSubscription($data[0]);
                     <div class="col">
                         <b>Tárhelycsomag</b> <br>
                         <span>
-                            <?= $subscription->getPlan()->getName() ?> csomag <br>
-                            <span class="text-muted"><?= $subscription->getPlan()->getSize(true) ?>
-                                <br> <?= $subscription->getBillingPeriod() == 'monthly' ? $subscription->getPlan()->getMonthlyPrice(true) . ' / hó' : $subscription->getPlan()->getYearlyPrice(true) . ' / hó' ?></span>
+                            <span class="text-primary cursor-pointer" onclick="modal_open('webhoszting/tarhelyszerkesztes', {id: <?= $subscription->getId() ?>})"><?= $subscription->getPlan()->getName() ?> csomag</span> <br>
+                            <span class="text-muted">
+                                <?= $subscription->getPlan()->getSize(true) ?>
+                            </span> <br>
+                            <span class="text-muted <?= $subscription->hasCustomPrice() ? 'text-decoration-line-through' : '' ?>">
+                                <?= $subscription->getBillingPeriod() == 'monthly' ? $subscription->getPlan()->getMonthlyPrice(true) . ' / hó' : $subscription->getPlan()->getYearlyPrice(true) . ' / év' ?>
+                            </span> <?php
+                                    if ($subscription->hasCustomPrice()) {
+                                        echo '<br><span class="text-danger fw-bold">Egyedi ár: ' . $subscription->getPrice(true) . '</span>';
+                                    } ?>
                         </span>
                         </span>
                     </div>
