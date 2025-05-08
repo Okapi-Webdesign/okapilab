@@ -5,6 +5,9 @@ $wordpress = $_POST['wordpress'];
 $manager = $_POST['manager'];
 $deadline = empty($_POST['deadline']) ? null : $_POST['deadline'];
 $wh = $_POST['webhosting'];
+if (empty($wh)) {
+    $wh = null;
+}
 
 // Projekt adatainak frissítése az adatbázisban
 if ($stmt = $con->prepare('UPDATE `projects` SET `url` = ?, `is_wordpress` = ?, `manager_id` = ?, `deadline` = ?, `webhosting` = ? WHERE `id` = ?')) {
