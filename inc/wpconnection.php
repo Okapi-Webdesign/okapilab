@@ -55,7 +55,12 @@ class WordPressConnection
 
     public function rest_request($url, ?array $data = null)
     {
-        $json_url = $this->project->getUrl() . 'wp-json/okapilab/v1/' . $url;
+        $projectURL = $this->project->getUrl();
+        // ha a projectURL nem /-re végződik, akkor hozzáadunk egyet
+        if (substr($projectURL, -1) !== '/') {
+            $projectURL .= '/';
+        }
+        $json_url = $projectURL . 'wp-json/okapilab/v1/' . $url;
         $postdata = [
             'wp_hash' => $this->wp_hash,
             'okapi_hash' => $this->local_hash
