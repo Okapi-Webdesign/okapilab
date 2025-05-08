@@ -112,7 +112,6 @@ class WordPressConnection
         $response = $this->rest_request('connect');
 
         if ($response === NULL) {
-            exit('Szerver nem elérhető!');
             return false;
         }
 
