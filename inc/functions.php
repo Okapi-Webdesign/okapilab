@@ -105,7 +105,7 @@ function mail_send(string $to, string $subject, string $body)
 
         $mail->isHTML(true);
         $mail->addAddress("$to");
-        if (ADMIN_EMAIL != false && DEV_MODE == true) $mail->addBCC(ADMIN_EMAIL);
+        if (!empty(ADMIN_EMAIL)) $mail->addBCC(ADMIN_EMAIL);
         $header = ""; //file_get_contents(ABS_PATH . "/assets/emails/header.html");
         $footer = file_get_contents(ABS_PATH . "/assets/emails/footer.html");
         $body = $header . $body . $footer;
