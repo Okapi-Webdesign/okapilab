@@ -82,15 +82,26 @@ $pageMeta = [
             layout: {
                 topStart: {
                     buttons: [{
-                        text: 'Létrehozás',
-                        action: function() {
-                            modal_open('dokumentumok/letrehozas');
+                            text: 'Létrehozás',
+                            action: function() {
+                                modal_open('dokumentumok/letrehozas');
+                            },
+                            className: 'btn-primary',
+                            init: function(api, node, config) {
+                                $(node).removeClass('btn-secondary')
+                            },
                         },
-                        className: 'btn-primary',
-                        init: function(api, node, config) {
-                            $(node).removeClass('btn-secondary')
-                        },
-                    }, ]
+                        {
+                            text: 'Generálás',
+                            className: 'btn-secondary',
+                            action: function() {
+                                window.location.href = '<?= URL ?>admin/dokumentumok/generalas';
+                            },
+                            init: function(api, node, config) {
+                                $(node).removeClass('btn-primary')
+                            },
+                        }
+                    ]
                 },
             }
         });
