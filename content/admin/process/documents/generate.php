@@ -5,21 +5,10 @@ ob_end_clean();
 
 class Pdf extends \setasign\Fpdi\Tfpdf\Fpdi
 {
-    /**
-     * "Remembers" the template id of the imported page
-     */
-    protected $tplId;
-
-    /**
-     * Draw an imported PDF logo on every page
-     */
     function Template(string $source, int $page = 1)
     {
-        if ($this->tplId === null) {
-            $this->setSourceFile(ABS_PATH . 'assets/documents/' . $source . '.pdf');
-            $this->tplId = $this->importPage($page);
-        }
-        $this->useTemplate($this->tplId, 0, 0, 210, 297);
+        $this->setSourceFile(ABS_PATH . 'assets/documents/' . $source . '.pdf');;
+        $this->useTemplate($this->importPage($page), 0, 0, 210, 297);
     }
 }
 
@@ -41,4 +30,48 @@ if (!in_array($type, $types)) {
 
 require ABS_PATH . 'content/admin/process/documents/generate/' . $type . '.php';
 
-$pdf->Output('I', 'dokumentum.pdf');
+/*$pdf->Output('I', 'document.pdf');
+exit();*/
+
+$tempDir = ABS_PATH . 'storage/temp';
+if (!is_dir($tempDir)) {
+    mkdir($tempDir, 0777, true);
+}
+
+$type = $_POST['documentType'] == 'munkalap' ? 'Munkalap' : 'Szerződés';
+$fileName = $type . '.pdf';
+
+$project_id = $project->getId();
+
+$pdf->Output('F', $tempDir . '/' . $fileName);
+$type = DocumentType::getByName($type);
+$type = $type->getId();
+if ($stmt = $con->prepare('INSERT INTO `documents`(`id`, `project_id`, `type`) VALUES (NULL, ?, ?)')) {
+    $stmt->bind_param('ii', $project_id, $type);
+    if (!$stmt->execute()) {
+        alert_redirect('error', URL . 'admin/dokumentumok', 'A dokumentum létrehozása sikertelen!');
+    }
+    $id = $stmt->insert_id;
+    $stmt->close();
+}
+
+$document = new Document($id);
+
+$output = $document->addGeneratedVersion($tempDir . '/' . $fileName);
+if (!$output['status']) {
+    alert_redirect('error', URL . 'admin/dokumentumok', $output['message']);
+}
+
+unlink($tempDir . '/' . $fileName);
+if (isset($_POST['email_send']) && $_POST['email_send']) {
+    if (!mail_send_template($project->getClient()->getEmail(), 'document_created', [
+        'name' => $project->getClient()->getName(),
+        'type' => $document->getType()->getName(),
+        'author' => $user->getFullname(),
+        'url' => $output['url']
+    ])) {
+        alert_redirect('warning', URL . 'admin/dokumentumok');
+    }
+}
+
+alert_redirect('success', URL . 'admin/dokumentumok/adatlap/d/' . $document->getId());

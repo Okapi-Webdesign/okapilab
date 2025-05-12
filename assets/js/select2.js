@@ -2,12 +2,14 @@ $('document').ready(function () {
     $('.select2').not('.modal .select2').select2({
         theme: 'bootstrap-5',
         width: '100%',
+        placeholder: 'Válassz egy lehetőséget!',
     });
 
     $('.select2-tags').not('.modal .select2-tags').select2({
         theme: 'bootstrap-5',
         width: '100%',
         tags: true,
+        placeholder: 'Válassz vagy add meg!',
 
     });
 

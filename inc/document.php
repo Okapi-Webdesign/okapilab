@@ -99,7 +99,7 @@ class Document
         return $versions;
     }
 
-    public function addVersion(array $file, string $changes = null): array
+    public function addVersion(array $file, ?string $changes = null): array
     {
         global $con, $user;
         $upload_user = $user->getId();
@@ -111,6 +111,11 @@ class Document
 
         $filename = basename($file['name']);
         $filename = pathinfo($filename, PATHINFO_FILENAME);
+        $filename = str_replace(
+            ['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű', 'Á', 'É', 'Í', 'Ó', 'Ö', 'Ő', 'Ú', 'Ü', 'Ű'],
+            ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u', 'A', 'E', 'I', 'O', 'O', 'O', 'U', 'U', 'U'],
+            $filename
+        );
         $filename = preg_replace('/[^a-zA-Z0-9]/', '_', $filename);
         $filename = $filename . '_' . time();
         $filename = $filename . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
@@ -148,6 +153,74 @@ class Document
 
             if ($stmt = $con->prepare('INSERT INTO documents_versions (id, document_id, upload_date, upload_user, changes, filename, active) VALUES (NULL, ?, NOW(), ?, ?, ?, 1)')) {
                 $stmt->bind_param('iiss', $this->id, $upload_user, $changes, $filename);
+                if (!$stmt->execute()) {
+                    return [
+                        'status' => false,
+                        'message' => 'A verzió hozzáadása sikertelen!'
+                    ];
+                }
+                $stmt->close();
+            }
+        } else {
+            return [
+                'status' => false,
+                'message' => 'A fájl feltöltése sikertelen!'
+            ];
+        }
+
+        return [
+            'status' => true,
+            'message' => '',
+            'url' => URL . 'storage/' . $this->getProject()->getId() . '/' . $filename
+        ];
+    }
+
+    public function addGeneratedVersion(string $filepath): array
+    {
+        global $con, $user;
+        $upload_user = $user->getId();
+
+        $target_dir = ABS_PATH . 'storage/' . $this->getProject()->getId() . '/';
+        if (!file_exists($target_dir)) {
+            mkdir($target_dir, 0777, true);
+        }
+
+        $filename = basename($filepath);
+        $filename = pathinfo($filename, PATHINFO_FILENAME);
+        $filename = str_replace(
+            ['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű', 'Á', 'É', 'Í', 'Ó', 'Ö', 'Ő', 'Ú', 'Ü', 'Ű'],
+            ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u', 'A', 'E', 'I', 'O', 'O', 'O', 'U', 'U', 'U'],
+            $filename
+        );
+        $filename = preg_replace('/[^a-zA-Z0-9]/', '_', $filename);
+        $filename = $filename . '_' . time();
+        $filename = $filename . '.' . pathinfo($filepath, PATHINFO_EXTENSION);
+
+        $target_file = $target_dir . $filename;
+
+        // kiterjesztés ellenőrzése (pdf vagy docx)
+        $file_type = strtolower(pathinfo($filepath, PATHINFO_EXTENSION));
+        if ($file_type !== 'pdf' && $file_type !== 'docx') {
+            return [
+                'status' => false,
+                'message' => 'A fájl kiterjesztése nem megfelelő!'
+            ];
+        }
+
+        if (rename($filepath, $target_file)) {
+            if ($stmt = $con->prepare('UPDATE documents_versions SET active = 0 WHERE document_id = ?')) {
+                $stmt->bind_param('i', $this->id);
+                if (!$stmt->execute()) {
+                    return [
+                        'status' => false,
+                        'message' => 'A verzió hozzáadása sikertelen!'
+                    ];
+                }
+                $stmt->close();
+            }
+
+            if ($stmt = $con->prepare('INSERT INTO documents_versions (id, document_id, upload_date, upload_user, changes, filename, active) VALUES (NULL, ?, NOW(), ?, NULL, ?, 1)')) {
+                $stmt->bind_param('iis', $this->id, $upload_user, $filename);
                 if (!$stmt->execute()) {
                     return [
                         'status' => false,

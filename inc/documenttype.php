@@ -43,6 +43,23 @@ class DocumentType
         return $types;
     }
 
+    public static function getByName(string $name): ?DocumentType
+    {
+        global $con;
+        $id = 0;
+
+        if ($stmt = $con->prepare('SELECT id FROM documents_types WHERE name = ?')) {
+            $stmt->bind_param('s', $name);
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($id);
+            $stmt->fetch();
+            $stmt->close();
+        }
+
+        return $id ? new DocumentType($id) : null;
+    }
+
     public function getId(): int
     {
         return $this->id;

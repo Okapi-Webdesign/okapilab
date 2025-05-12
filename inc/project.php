@@ -394,4 +394,19 @@ class Project
         }
         return null;
     }
+
+    public function getDomain(): string|null
+    {
+        $url = $this->getUrl();
+        if ($url == null) {
+            return null;
+        }
+
+        $url = parse_url($url);
+        if (isset($url['host'])) {
+            return $url['host'];
+        } else {
+            return null;
+        }
+    }
 }
