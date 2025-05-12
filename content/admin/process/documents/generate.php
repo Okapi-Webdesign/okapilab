@@ -30,15 +30,24 @@ if (!in_array($type, $types)) {
 
 require ABS_PATH . 'content/admin/process/documents/generate/' . $type . '.php';
 
-$pdf->Output('I', 'document.pdf');
-exit();
+/*$pdf->Output('I', 'document.pdf');
+exit();*/
 
 $tempDir = ABS_PATH . 'storage/temp';
 if (!is_dir($tempDir)) {
     mkdir($tempDir, 0777, true);
 }
 
-$type = $_POST['documentType'] == 'munkalap' ? 'Munkalap' : 'Szerződés';
+switch ($type) {
+    case 'munkalap':
+        $type = 'Munkalap';
+        break;
+    case 'teljesitesi':
+        $type = 'Teljesítési igazolás';
+        break;
+    default:
+        $type = 'Szerződés';
+}
 $fileName = $type . '.pdf';
 
 $project_id = $project->getId();
