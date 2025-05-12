@@ -212,6 +212,6 @@ if ($whois === false) {
         </div>
 <?php
     } else {
-        echo "<h3 class='text-success mb-3'><i class='fa fa-check-circle me-2'></i>$nevelo <strong>" . htmlspecialchars($maindomain) . "</strong> domain szabad!</h3>";
+        echo "<h3 class='text-success mb-0'><i class='fa fa-check-circle me-2'></i>$nevelo <strong>" . htmlspecialchars($maindomain) . "</strong> domain szabad!</h3>";
     }
 }
