@@ -89,7 +89,7 @@ $pageMeta = [
             }
         });
 
-        $('#table').on('click', 'tr', function() {
+        $('#table tbody').on('click', 'tr', function() {
             var id = $(this).data('id');
             loader_start();
             window.location.href = '<?= URL ?>admin/ugyfelek/adatlap/d/' + id;
