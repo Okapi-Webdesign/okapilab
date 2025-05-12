@@ -140,16 +140,16 @@ if ($whois === false) {
 } else {
     $registered = isRegistered($whois, $tld);
 
-    $nevelo = 'A';
-    $msh = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y'];
-    if (!in_array(substr($domain, 0, 1), $msh)) {
-        $nevelo = 'Az';
-    }
-
     $maindomain = $domain;
     if (strpos($domain, '.') !== false) {
         $parts = explode('.', $domain);
         $maindomain = implode('.', array_slice($parts, -2));
+    }
+
+    $nevelo = 'A';
+    $msh = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y'];
+    if (!in_array(substr($maindomain, 0, 1), $msh)) {
+        $nevelo = 'Az';
     }
 
     if ($registered) {
