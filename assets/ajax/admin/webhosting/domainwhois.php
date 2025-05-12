@@ -153,7 +153,7 @@ if ($whois === false) {
     }
 
     if ($registered) {
-        echo "<h3 class='text-danger mb-3'><i class='fa fa-times-circle me-2'></i>$nevelo <strong>" . htmlspecialchars($maindomain) . "</strong> domain foglalt!</h3>";
+        echo "<h3 class='text-danger mb-3'><i class='fa fa-times-circle me-2'></i>$nevelo <a target='_blank' href='https://" . htmlspecialchars($maindomain) . "'><strong>" . htmlspecialchars($maindomain) . "</strong></a> domain foglalt!</h3>";
 
         // Névszerverek
         $nsRecords = getNameServers($domain);
