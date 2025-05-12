@@ -15,6 +15,7 @@ $pageMeta = [
                     <option value="munkalap">Munkalap</option>
                     <option value="szerzodes_k">Megbízási szerződés honlapkészítésre</option>
                     <option value="szerzodes_ku">Megbízási szerződés honlapkészítésre és -üzemeltetésre</option>
+                    <option value="teljesitesi">Teljesítési igazolás</option>
                 </select>
             </div>
             <hr>

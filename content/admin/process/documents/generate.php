@@ -23,15 +23,15 @@ $pdf->SetDisplayMode('fullpage', 'single');
 
 $project = new Project($_POST['project']);
 $type = $_POST['documentType'];
-$types = ['munkalap', 'szerzodes_k', 'szerzodes_ku'];
+$types = ['munkalap', 'szerzodes_k', 'szerzodes_ku', 'teljesitesi'];
 if (!in_array($type, $types)) {
     die('Invalid document type');
 }
 
 require ABS_PATH . 'content/admin/process/documents/generate/' . $type . '.php';
 
-/*$pdf->Output('I', 'document.pdf');
-exit();*/
+$pdf->Output('I', 'document.pdf');
+exit();
 
 $tempDir = ABS_PATH . 'storage/temp';
 if (!is_dir($tempDir)) {
@@ -65,7 +65,7 @@ if (!$output['status']) {
 unlink($tempDir . '/' . $fileName);
 if (isset($_POST['email_send']) && $_POST['email_send']) {
     if (!mail_send_template($project->getClient()->getEmail(), 'document_created', [
-        'name' => $project->getClient()->getName(),
+        'name' => $project->getClient()->getContactName(),
         'type' => $document->getType()->getName(),
         'author' => $user->getFullname(),
         'url' => $output['url']
