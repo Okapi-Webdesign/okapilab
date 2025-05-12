@@ -81,6 +81,7 @@ if (!isset($pageMeta['packages']) || $pageMeta['packages'] == null || !is_array(
             addMenuItem('WordPress', 'wordpress', 'fa-brands fa-wordpress');
             addMenuItem('Trello', 'trello', 'fa-brands fa-trello');
             addMenuItem('Webhoszting', 'webhoszting', 'fa-solid fa-plug');
+            addMenuItem('Domain ellenőrzés', 'domainwhois', 'fa-solid fa-globe');
             addMenuItem('Beállítások', 'beallitasok', 'fa fa-cogs');
             ?>
         </ul>
