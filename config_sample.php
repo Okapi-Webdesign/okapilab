@@ -35,6 +35,9 @@ define("TRELLO_TOKEN", "");
 // Trello tábla ID
 define("TRELLO_BOARD", "");
 
+// DomainWHOIS API kulcs
+define("DOMAINWHOIS_API_KEY", "");
+
 // Fejlesztési üzemmód
 define("DEV_MODE", false);
 // E-mailek küldése

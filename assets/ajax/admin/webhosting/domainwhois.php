@@ -15,7 +15,7 @@ if (!preg_match('/^[a-z0-9][a-z0-9\-\.]{1,61}[a-z0-9]\.[a-z]{2,}$/', $domain)) {
 
 function whoisQuery($domain)
 {
-    $apiKey = 'at_hvmU9m6qWJiikgVNhQlcku9Pke9c0'; // Cseréld ki a saját API kulcsodra
+    $apiKey = DOMAINWHOIS_API_KEY; // Cseréld ki a saját API kulcsodra
     $url = 'https://www.whoisxmlapi.com/whoisserver/WhoisService?' . http_build_query([
         'apiKey' => $apiKey,
         'domainName' => $domain,
