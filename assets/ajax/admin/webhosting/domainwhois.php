@@ -13,118 +13,26 @@ if (!preg_match('/^[a-z0-9][a-z0-9\-\.]{1,61}[a-z0-9]\.[a-z]{2,}$/', $domain)) {
     exit;
 }
 
-$whoisServers = [
-    'hu'    => 'whois.nic.hu',
-    'com'   => 'whois.verisign-grs.com',
-    'net'   => 'whois.verisign-grs.com',
-    'org'   => 'whois.pir.org',
-    'info'  => 'whois.afilias.net',
-    'biz'   => 'whois.neulevel.biz',
-    'eu'    => 'whois.eu',
-    'co.uk' => 'whois.nic.uk',
-    'uk'    => 'whois.nic.uk',
-    'de'    => 'whois.denic.de',
-    'fr'    => 'whois.nic.fr',
-    'it'    => 'whois.nic.it',
-    'nl'    => 'whois.domain-registry.nl',
-    'cz'    => 'whois.nic.cz',
-    'pl'    => 'whois.dns.pl',
-    'se'    => 'whois.iis.se',
-    'ch'    => 'whois.nic.ch',
-    'at'    => 'whois.nic.at',
-    'be'    => 'whois.dns.be',
-    'ca'    => 'whois.cira.ca',
-    'au'    => 'whois.auda.org.au',
-    'us'    => 'whois.nic.us',
-    'xyz'   => 'whois.nic.xyz',
-    'io'    => 'whois.nic.io',
-    'app'   => 'whois.nic.google',
-    'dev'   => 'whois.nic.google',
-    'me'    => 'whois.nic.me',
-    'tv'    => 'tvwhois.verisign-grs.com',
-];
-
-$toplist = [
-    'hu',
-    'com',
-    'eu',
-    'org',
-    'info',
-    'net'
-];
-
-function getTld($domain)
-{
-    $parts = explode('.', $domain);
-    return strtolower(end($parts));
-}
-
 function whoisQuery($domain)
 {
-    global $whoisServers;
+    $apiKey = 'at_hvmU9m6qWJiikgVNhQlcku9Pke9c0'; // Cseréld ki a saját API kulcsodra
+    $url = 'https://www.whoisxmlapi.com/whoisserver/WhoisService?' . http_build_query([
+        'apiKey' => $apiKey,
+        'domainName' => $domain,
+        'outputFormat' => 'JSON'
+    ]);
 
-    $tld = getTld($domain);
-    $server = $whoisServers[$tld] ?? null;
-
-    if (!$server) {
+    $response = file_get_contents($url);
+    if ($response === false) {
         return false;
     }
 
-    $fp = fsockopen($server, 43, $errno, $errstr, 10);
-    if (!$fp) {
-        return false;
-    }
-
-    fwrite($fp, $domain . "\r\n");
-    $response = '';
-    while (!feof($fp)) {
-        $response .= fgets($fp, 128);
-    }
-    fclose($fp);
-    return $response;
+    return json_decode($response, true);
 }
 
-function isRegistered($whoisData, $tld)
+function isRegistered($whoisData)
 {
-    // Egyszerűbb logika, TLD-nként más lehet a "not found" üzenet
-    $notFoundPatterns = [
-        'hu'    => 'No match',
-        'com'   => 'No match for',
-        'net'   => 'No match for',
-        'org'   => 'NOT FOUND',
-        'info'  => 'NOT FOUND',
-        'biz'   => 'Not found',
-        'eu'    => 'Status: AVAILABLE',
-        'co.uk' => 'No match for',
-        'uk'    => 'No match for',
-        'de'    => 'Status: free',
-        'fr'    => 'No entries found',
-        'it'    => 'Status: AVAILABLE',
-        'nl'    => 'is free',
-        'cz'    => 'no entries found',
-        'pl'    => 'No information available',
-        'se'    => 'not found',
-        'ch'    => 'We do not have an entry',
-        'at'    => 'nothing found',
-        'be'    => 'Status: AVAILABLE',
-        'ca'    => 'Domain status: available',
-        'au'    => 'No Data Found',
-        'us'    => 'Not found',
-        'xyz'   => 'DOMAIN NOT FOUND',
-        'io'    => 'is available',
-        'app'   => 'Domain not found',
-        'dev'   => 'Domain not found',
-        'me'    => 'NOT FOUND',
-        'tv'    => 'No match for',
-    ];
-
-    $pattern = $notFoundPatterns[$tld] ?? 'No match';
-    return strpos($whoisData, $pattern) === false;
-}
-
-function getNameServers($domain)
-{
-    return dns_get_record($domain, DNS_NS);
+    return isset($whoisData['WhoisRecord']) && $whoisData['WhoisRecord']['dataError'] !== 'MISSING_WHOIS_DATA';
 }
 
 function getDnsRecords($domain)
@@ -132,13 +40,17 @@ function getDnsRecords($domain)
     return dns_get_record($domain, DNS_ALL);
 }
 
-$tld = getTld($domain);
-$whois = whoisQuery($domain);
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['domain'])) {
+    $domain = trim($_POST['domain']);
 
-if ($whois === false) {
-    echo "<p><strong>A TLD (.$tld) nem támogatott vagy hiba történt a lekérdezés során.</strong></p>";
-} else {
-    $registered = isRegistered($whois, $tld);
+    $whois = whoisQuery($domain);
+
+    if ($whois === false) {
+        echo "<p><strong>Hiba történt a WHOIS lekérdezés során.</strong></p>";
+        exit;
+    }
+
+    $registered = isRegistered($whois);
 
     $maindomain = $domain;
     if (strpos($domain, '.') !== false) {
@@ -148,26 +60,31 @@ if ($whois === false) {
 
     $nevelo = 'A';
     $msh = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y'];
-    if (!in_array(substr($maindomain, 0, 1), $msh)) {
+    if (!in_array(mb_strtolower(substr($maindomain, 0, 1)), $msh)) {
         $nevelo = 'Az';
     }
 
     if ($registered) {
-        echo "<h3 class='text-danger mb-3'><i class='fa fa-times-circle me-2'></i>$nevelo <a target='_blank' class='text-decoration-none text-danger' href='https://" . htmlspecialchars($maindomain) . "'><strong>" . htmlspecialchars($maindomain) . "</strong></a> domain foglalt!</h3>";
+        echo "<h3 class='text-danger mb-3'><i class='fa fa-times-circle me-2'></i>$nevelo <a target='_blank' class='text-decoration-none text-danger' href='https://" . htmlspecialchars($maindomain) . "'><strong>" . htmlspecialchars($maindomain) . "</strong></a> domain foglalt!</h3>
+        <p>Lekérdezés időpontja: <strong>" . $whois['WhoisRecord']['audit']['updatedDate'] . "</strong></p>";
 
-        // Névszerverek
-        $nsRecords = getNameServers($domain);
-        if (!empty($nsRecords)) {
+        if (isset($whois['WhoisRecord']['registrarName'])) {
+            echo "<h4>Regisztrátor adatok</h4>";
+            echo "<p><strong>Regisztrátor:</strong> " . htmlspecialchars($whois['WhoisRecord']['registrarName']);
+            if (isset($whois['WhoisRecord']['registryData']['registrant'])) echo "<br><strong>Tulajdonos:</strong> " . $whois['WhoisRecord']['registryData']['registrant']['name'];
+            if (isset($whois['WhoisRecord']['registryData']['technicalContact'])) echo "<br><strong>Technikai kapcsolattartó:</strong> " . $whois['WhoisRecord']['registryData']['technicalContact']['organization'] . " (<a href='mailto:" . htmlspecialchars($whois['WhoisRecord']['registryData']['technicalContact']['email']) . "'>" . htmlspecialchars($whois['WhoisRecord']['registryData']['technicalContact']['email']) . "</a>)";
+            echo "</p>";
+        }
+
+        if (isset($whois['WhoisRecord']['nameServers']['hostNames'])) {
             echo "<h4>Névszerverek</h4><ol>";
-            foreach ($nsRecords as $ns) {
-                echo "<li>{$ns['target']}</li>";
+            foreach ($whois['WhoisRecord']['nameServers']['hostNames'] as $ns) {
+                echo "<li>" . htmlspecialchars($ns) . "</li>";
             }
             echo "</ol>";
         }
 
-        // DNS rekordok
         $dnsRecords = getDnsRecords($domain);
-
         $subdomains = ['www', 'mail', 'ftp', 'webmail', 'smtp', 'ns1', 'ns2'];
         foreach ($subdomains as $sub) {
             $full = $sub . '.' . $domain;
@@ -176,41 +93,25 @@ if ($whois === false) {
         }
 
         echo "<h4>DNS rekordok</h4>";
-?>
-        <div class="table-responsive">
-            <table class="table table-hover table-striped">
-                <thead>
-                    <tr>
-                        <th>Hoszt</th>
-                        <th>Típus</th>
-                        <th>TTL</th>
-                        <th>Adat</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    foreach ($dnsRecords as $record) {
-                        echo "<tr>";
-                        echo "<td>" . htmlspecialchars($record['host']) . "</td>";
-                        echo "<td>" . htmlspecialchars($record['type']) . "</td>";
-                        echo "<td>" . htmlspecialchars($record['ttl']) . "</td>";
+        echo "<div class='table-responsive'>";
+        echo "<table class='table table-hover table-striped'><thead><tr><th>Hoszt</th><th>Típus</th><th>TTL</th><th>Adat</th></tr></thead><tbody>";
+        foreach ($dnsRecords as $record) {
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($record['host']) . "</td>";
+            echo "<td>" . htmlspecialchars($record['type']) . "</td>";
+            echo "<td>" . htmlspecialchars($record['ttl']) . "</td>";
 
-                        // Összes többi mezőt stringgé konvertálunk, kivéve a már megjelenítetteket
-                        $details = '';
-                        foreach ($record as $key => $value) {
-                            if (!in_array($key, ['host', 'type', 'ttl'])) {
-                                $details .= htmlspecialchars($key) . ': ' . htmlspecialchars((is_array($value) ? json_encode($value) : $value)) . "<br>";
-                            }
-                        }
+            $details = '';
+            foreach ($record as $key => $value) {
+                if (!in_array($key, ['host', 'type', 'ttl'])) {
+                    $details .= htmlspecialchars($key) . ': ' . htmlspecialchars((is_array($value) ? json_encode($value) : $value)) . "<br>";
+                }
+            }
 
-                        echo "<td>" . $details . "</td>";
-                        echo "</tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-<?php
+            echo "<td>" . $details . "</td>";
+            echo "</tr>";
+        }
+        echo "</tbody></table></div>";
     } else {
         echo "<h3 class='text-success mb-0'><i class='fa fa-check-circle me-2'></i>$nevelo <strong>" . htmlspecialchars($maindomain) . "</strong> domain szabad!</h3>";
     }

@@ -5,3 +5,4 @@ assets/img/profile/*
 .vscode
 assets/okapi-wp_latest.zip
 changes.txt
+lib/tfpdf/font
