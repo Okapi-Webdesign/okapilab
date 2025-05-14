@@ -78,7 +78,7 @@ $pageMeta = [
                     targets: [7]
                 },
             ],
-            order: [2, 'asc'],
+            order: [3, 'desc'],
             layout: {
                 topStart: {
                     buttons: [{
