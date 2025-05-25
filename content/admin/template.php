@@ -171,6 +171,10 @@ if (!isset($pageMeta['packages']) || $pageMeta['packages'] == null || !is_array(
         <?php
         }
 
+        if (!ENABLE_EMAILS) {
+            echo '<div class="alert alert-warning"><strong>Figyelem!</strong> Az e-mailek kiküldése le van tiltva.</div>';
+        }
+
         html_load('admin', $url, $data);
         ?>
     </div>
