@@ -71,13 +71,13 @@ drawCheckbox(106.75, 173, $tartalomkezelo == '_egyedi');
 drawCheckbox(144.25, 173, ($tartalomkezelo != '_wp' && $tartalomkezelo != '_egyedi'));
 
 // Technikai adatok
-drawCheckbox(69.25, 197.75, $webtarhely);
-drawCheckbox(94.25, 197.75, !$webtarhely);
+drawCheckbox(69.25, 197.75, !$webtarhely);
+drawCheckbox(94.25, 197.75, $webtarhely);
 drawCheckbox(157, 197.75, $cpanel);
 drawCheckbox(173, 197.75, !$cpanel);
 
-drawCheckbox(69.25, 202.75, $domain);
-drawCheckbox(94.25, 202.75, !$domain);
+drawCheckbox(69.25, 202.75, !$domain);
+drawCheckbox(94.25, 202.75, $domain);
 
 $pdf->SetFont('SourceSans3', '', 11);
 
