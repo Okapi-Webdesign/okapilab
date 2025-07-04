@@ -26,10 +26,10 @@ $trello = new TrelloTable();
                 </thead>
                 <tbody>
                     <?php
-                    $cards = [];
-                    $cards[] = $trello->getUserCards($user->getTrelloId(), 5, '1️⃣  Magas prioritás');
-                    $cards[] = $trello->getUserCards($user->getTrelloId(), 5, '2️⃣ Teendők');
-                    $cards[] = $trello->getUserCards($user->getTrelloId(), 5, '3️⃣ Hosszútávú feladat');
+                    $cards1 = $trello->getUserCards($user->getTrelloId(), 5, '1️⃣  Magas prioritás');
+                    $cards2 = $trello->getUserCards($user->getTrelloId(), 5, '2️⃣ Teendők');
+                    $cards3 = $trello->getUserCards($user->getTrelloId(), 5, '3️⃣ Hosszútávú feladat');
+                    $cards = array_merge($cards1, $cards2, $cards3);
                     foreach ($cards as $card) {
                         $status = $trello->getList($card['idList'])['name'];
                         switch ($status) {
