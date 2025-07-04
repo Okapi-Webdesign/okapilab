@@ -14,7 +14,7 @@ $project = new Project($_POST['project']);
     <?php
     $trello = new TrelloTable();
 
-    $cards = $trello->getProjectCards($project, 20, ['Teendő', 'Folyamatban', 'Visszajelzés / Felülvizsgálat']);
+    $cards = $trello->getProjectCards($project, 20, ['1️⃣  Magas prioritás', '2️⃣ Teendők', '3️⃣ Hosszútávú feladat', '⚠️ Felülvizsgálat']);
 
     if (empty($cards)) {
     ?>
@@ -31,16 +31,17 @@ $project = new Project($_POST['project']);
     foreach ($cards as $card) {
         $arrow = '<i class="fa fa-chevron-right text-primary me-2 mt-1"></i>';
         $border = 'primary';
-        if ($trello->getList($card['idList'])['name'] == 'Folyamatban') {
-            $arrow = '<i class="fa fa-chevron-right text-warning me-2 mt-1"></i>';
-            $border = 'warning';
+        if ($trello->getList($card['idList'])['name'] == '1️⃣  Magas prioritás') {
+            $arrow = '<i class="fa fa-angles-right text-danger me-2 mt-1"></i>';
+            $border = 'danger';
         }
-        if ($card['due'] != NULL) {
-            $due = strtotime($card['due']);
-            if ($due < time()) {
-                $arrow = '<i class="fa fa-angles-right text-danger mt-1 me-2"></i>';
-                $border = 'danger';
-            }
+        if ($trello->getList($card['idList'])['name'] == '3️⃣ Hosszútávú feladat') {
+            $arrow = '<i class="fa fa-chevron-right text-secondary me-2 mt-1"></i>';
+            $border = 'secondary';
+        }
+        if ($trello->getList($card['idList'])['name'] == '⚠️ Felülvizsgálat') {
+            $arrow = '<i class="fa fa-clock text-warning me-2 mt-1"></i>';
+            $border = 'warning';
         }
 
         $members = $card['idMembers'];
@@ -62,14 +63,17 @@ $project = new Project($_POST['project']);
                                 echo '<span class="badge bg-secondary">' . $list['name'] . '</span>';
                             } else {
                                 switch ($list['name']) {
-                                    case 'Teendő':
+                                    case '1️⃣  Magas prioritás':
+                                        echo '<span class="badge text-bg-danger">Fontos teendő</span>';
+                                        break;
+                                    case '2️⃣ Teendők':
                                         echo '<span class="badge text-bg-primary">Teendő</span>';
                                         break;
-                                    case 'Folyamatban':
-                                        echo '<span class="badge text-bg-warning">Folyamatban</span>';
+                                    case '3️⃣ Hosszútávú feladat':
+                                        echo '<span class="badge text-bg-secondary">Hosszútávú feladat</span>';
                                         break;
-                                    case 'Visszajelzés / Felülvizsgálat':
-                                        echo '<span class="badge text-bg-info">Visszajelzés / Felülvizsgálat</span>';
+                                    case '⚠️ Felülvizsgálat':
+                                        echo '<span class="badge text-bg-warning">Visszajelzésre vár</span>';
                                         break;
                                     default:
                                         echo '<span class="badge text-bg-secondary">' . $list['name'] . '</span>';

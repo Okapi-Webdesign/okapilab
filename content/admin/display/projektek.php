@@ -48,21 +48,18 @@ $pageMeta = [
                         echo '<td>' . $project->getId() . '</td>';
                         echo '<td data-sort="' . $project->getName() . '">' . $wpicon . $project->getName();
                         if ($project->getTrelloId() != false) {
-                            $card = $trello->getProjectCards($project, 1, ['Folyamatban', 'Teendő'], true);
+                            $card = $trello->getProjectCards($project, 1, ['1️⃣  Magas prioritás', '2️⃣ Teendők', '3️⃣ Hosszútávú feladat'], true);
                             if (!empty($card)) {
                                 $card = $card[0];
                                 $arrow = '<i class="fa fa-chevron-right text-primary mx-2"></i>';
                                 $border = 'primary';
-                                if ($trello->getList($card['idList'])['name'] == 'Folyamatban') {
-                                    $arrow = '<i class="fa fa-chevron-right text-warning mx-2"></i>';
-                                    $border = 'warning';
+                                if ($trello->getList($card['idList'])['name'] == '1️⃣  Magas prioritás') {
+                                    $arrow = '<i class="fa fa-angles-right text-danger mx-2"></i>';
+                                    $border = 'danger';
                                 }
-                                if ($card['due'] != NULL) {
-                                    $due = strtotime($card['due']);
-                                    if ($due < time()) {
-                                        $arrow = '<i class="fa fa-angles-right text-danger mx-2"></i>';
-                                        $border = 'danger';
-                                    }
+                                if ($trello->getList($card['idList'])['name'] == '3️⃣ Hosszútávú feladat') {
+                                    $arrow = '<i class="fa fa-chevron-right text-secondary mx-2"></i>';
+                                    $border = 'secondary';
                                 }
                                 echo '<br>';
                                 echo '<div data-card-id="' . $card['id'] . '" class="shadow-sm mt-1 projectTaskLabel bg-white border border-' . $border . ' rounded p-2 d-flex align-items-center gap-2"><span>' . $arrow . '</span><div class="lh-1">' . $card['name'];

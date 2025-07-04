@@ -26,23 +26,26 @@ $trello = new TrelloTable();
                 </thead>
                 <tbody>
                     <?php
-                    $cards = $trello->getUserCards($user->getTrelloId(), 5, 'Teendő');
+                    $cards = [];
+                    $cards[] = $trello->getUserCards($user->getTrelloId(), 5, '1️⃣  Magas prioritás');
+                    $cards[] = $trello->getUserCards($user->getTrelloId(), 5, '2️⃣ Teendők');
+                    $cards[] = $trello->getUserCards($user->getTrelloId(), 5, '3️⃣ Hosszútávú feladat');
                     foreach ($cards as $card) {
                         $status = $trello->getList($card['idList'])['name'];
                         switch ($status) {
-                            case 'Később':
-                                $statusBadge = '<span class="badge text-bg-secondary"><i class="fa fa-clock me-2"></i>Később</span>';
+                            case '1️⃣  Magas prioritás':
+                                $statusBadge = '<span class="badge text-bg-danger"><i class="fa fa-exclamation-triangle me-2"></i>Fontos</span>';
                                 break;
-                            case 'Teendő':
+                            case '2️⃣ Teendők':
                                 $statusBadge = '<span class="badge text-bg-warning"><i class="fa fa-exclamation-triangle me-2"></i>Teendő</span>';
                                 break;
-                            case 'Folyamatban':
-                                $statusBadge = '<span class="badge text-bg-info"><i class="fa fa-spinner me-2"></i>Folyamatban</span>';
+                            case '3️⃣ Hosszútávú feladat':
+                                $statusBadge = '<span class="badge text-bg-secondary"><i class="fa fa-clock me-2"></i>Halasztható</span>';
                                 break;
-                            case 'Kész':
+                            case '✅ Befejezett':
                                 $statusBadge = '<span class="badge text-bg-success"><i class="fa fa-check me-2"></i>Kész</span>';
                                 break;
-                            case 'Visszajelzés / Felülvizsgálat':
+                            case '⚠️ Felülvizsgálat':
                                 $statusBadge = '<span class="badge text-bg-primary"><i class="fa fa-eye me-2"></i>Visszajelzés / Felülvizsgálat</span>';
                                 break;
                             default:
