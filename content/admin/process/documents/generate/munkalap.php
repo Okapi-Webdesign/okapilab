@@ -135,7 +135,7 @@ $months = [
     12 => 'december'
 ];
 $month = $months[date('n')];
-$kelt = 'Körmend, ' . date('Y.') . " $month " . date('d.');
+$kelt = date('Y.') . " $month " . date('d.');
 $pdf->SetFont('SourceSans3', '', 11);
 $pdf->Cell(124.5, 5, $kelt, 0, 0, 'L');
 
